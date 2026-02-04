@@ -1,0 +1,289 @@
+const extraTrivia = [
+    // EXTRA EASY
+    {
+        difficulty: 'easy',
+        statement: "Elefanții pot sări foarte sus. 🐘",
+        isTrue: false,
+        explanation: "Elefanții sunt prea grei ca să sară.",
+        translation_hu: "Az elefántok nagyon magasra tudnak ugrani."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Apa este udă. 💧",
+        isTrue: true,
+        explanation: "Apa udă tot ce atinge.",
+        translation_hu: "A víz vizes."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Pisicile au aripi. 🐈",
+        isTrue: false,
+        explanation: "Pisicile au blană și coadă, nu aripi.",
+        translation_hu: "A macskáknak szárnyaik vannak."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Noaptea vedem stelele. ✨",
+        isTrue: true,
+        explanation: "Cerul este plin de stele strălucitoare noaptea.",
+        translation_hu: "Éjszaka látjuk a csillagokat."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Cărțile sunt bune de mâncat. 📚",
+        isTrue: false,
+        explanation: "Cărțile sunt pentru citit, nu pentru mâncat!",
+        translation_hu: "A könyvek ehetőek."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Porcii pot zbura. 🐷",
+        isTrue: false,
+        explanation: "Porcii merg pe pământ pe patru picioare.",
+        translation_hu: "A malacok tudnak repülni."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Putem vedea cu ochii. 👁️",
+        isTrue: true,
+        explanation: "Ochii ne ajută să vedem lumea.",
+        translation_hu: "Tudunk látni a szemünkkel."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Pălăria se pune pe picior. 🎩",
+        isTrue: false,
+        explanation: "Pălăria se pune pe cap.",
+        translation_hu: "A kalapot a lábra tesszük."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Florile au nevoie de apă. 🌻",
+        isTrue: true,
+        explanation: "Plantele beau apă ca să crească.",
+        translation_hu: "A virágoknak szükségük van vízre."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Luna este făcută din brânză. 🧀",
+        isTrue: false,
+        explanation: "Luna este făcută din rocă și praf.",
+        translation_hu: "A Hold sajtból van."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Focul stinge setea. 🔥",
+        isTrue: false,
+        explanation: "Apa stinge setea, focul arde.",
+        translation_hu: "A tűz oltja a szomjat."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Iarna facem om de zăpadă. ☃️",
+        isTrue: true,
+        explanation: "Folosim zăpada pentru a construi oameni de zăpadă.",
+        translation_hu: "Télen hóembert építünk."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Gheața este fierbinte. 🧊",
+        isTrue: false,
+        explanation: "Gheața este foarte rece.",
+        translation_hu: "A jég forró."
+    },
+    {
+        difficulty: 'easy',
+        statement: "Avionul zboară în aer. ✈️",
+        isTrue: true,
+        explanation: "Avionul are aripi mari ca să zboare.",
+        translation_hu: "A repülő a levegőben repül."
+    },
+
+    // EXTRA MEDIUM
+    {
+        difficulty: 'medium',
+        statement: "O zi are 24 de ore. ⏰",
+        isTrue: true,
+        explanation: "O zi completă include ziua și noaptea.",
+        translation_hu: "Egy nap 24 órából áll."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Pânza de păianjen este făcută din zahăr. 🕸️",
+        isTrue: false,
+        explanation: "Păianjenul produce mătase pentru pânză.",
+        translation_hu: "A pókháló cukorból készül."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Păsările au dinți în cioc. 🐦",
+        isTrue: false,
+        explanation: "Păsările nu au dinți, ele folosesc ciocul.",
+        translation_hu: "A madaraknak fogaik vannak a csőrükben."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Hainele ne apără de frig. 🧥",
+        isTrue: true,
+        explanation: "Hainele groase păstrează căldura corpului.",
+        translation_hu: "A ruhák megvédenek a hidegtől."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Toate păsările pot zbura. 🦜",
+        isTrue: false,
+        explanation: "Există păsări care nu zboară, ca struțul sau pinguinul.",
+        translation_hu: "Minden madár tud repülni."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Spălatul pe mâini ne scapă de microbi. 🧼",
+        isTrue: true,
+        explanation: "Igiena este importantă pentru sănătate.",
+        translation_hu: "A kézmosás megszabadít a mikrobáktól."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Zebra are dungi verzi și mov. 🦓",
+        isTrue: false,
+        explanation: "Zebra are dungi negre și albe.",
+        translation_hu: "A zebrának zöld és lila csíkjai vannak."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Rociile pot crește singure. 🪨",
+        isTrue: false,
+        explanation: "Pietrele nu sunt vii, deci nu cresc.",
+        translation_hu: "A kövek maguktól tudnak nőni."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Alimentele se păstrează proaspete în frigider. ❄️",
+        isTrue: true,
+        explanation: "Frigul oprește degradarea mâncării.",
+        translation_hu: "Az ételek frissek maradnak a hűtőben."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Eclipsa de soare se întâmplă când Luna trece în fața Soarelui. 🌑",
+        isTrue: true,
+        explanation: "Luna blochează lumina Soarelui pentru scurt timp.",
+        translation_hu: "A napfogyatkozás akkor történik, amikor a Hold a Nap elé kerül."
+    },
+    {
+        difficulty: 'medium',
+        statement: "În deșert este mereu ploaie multă. 🏜️",
+        isTrue: false,
+        explanation: "În deșert plouă foarte rar.",
+        translation_hu: "A sivatagban mindig sok eső esik."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Oamenii pot supraviețui fără să doarmă niciodată. 😴",
+        isTrue: false,
+        explanation: "Somnul este esențial pentru corp și creier.",
+        translation_hu: "Az emberek túlélhetnek, ha soha nem alszanak."
+    },
+    {
+        difficulty: 'medium',
+        statement: "Pământul se rotește în jurul Soarelui. 🌍",
+        isTrue: true,
+        explanation: "Această mișcare durează un an întreg.",
+        translation_hu: "A Föld a Nap körül forog."
+    },
+
+    // EXTRA HARD
+    {
+        difficulty: 'hard',
+        statement: "Limba română este o limbă slavă. 🇻🇳",
+        isTrue: false,
+        explanation: "Româna este o limbă latină (romanică).",
+        translation_hu: "A román nyelv szláv nyelv."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Vulturii pot vedea prada de la kilometri distanță. 🦅",
+        isTrue: true,
+        explanation: "Vulturii au o vedere foarte precisă.",
+        translation_hu: "A sasok kilométerekről is látják a zsákmányt."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Există vulcani sub apă. 🌋",
+        isTrue: true,
+        explanation: "Multe insule s-au format din vulcani submarini.",
+        translation_hu: "Vannak víz alatti vulkánok."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Creierul uman folosește mai multă energie decât orice alt organ. 🧠",
+        isTrue: true,
+        explanation: "Deși e mic, consumă cam 20% din energia corpului.",
+        translation_hu: "Az emberi agy több energiát használ, mint bármely más szerv."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Sângele este întotdeauna albastru în interiorul corpului. 🩸",
+        isTrue: false,
+        explanation: "Sângele este mereu roșu, dar venele pot părea albastre prin piele.",
+        translation_hu: "A vér a test belsejében mindig kék."
+    },
+    {
+        difficulty: 'hard',
+        statement: "O furnică poate ridica obiecte de 50 de ori mai grele decât ea. 🐜",
+        isTrue: true,
+        explanation: "Furnicile sunt extrem de puternice pentru mărimea lor.",
+        translation_hu: "Egy hangya a saját súlyánál 50-szer nehezebb tárgyakat is felemelhet."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Apa sărată îngheață la o temperatură mai mică decât apa dulce. ❄️",
+        isTrue: true,
+        explanation: "Sarea coboară punctul de îngheț al apei.",
+        translation_hu: "A sós víz alacsonyabb hőmérsékleten fagy meg, mint az édesvíz."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Liliecii sunt păsări nocturne. 🦇",
+        isTrue: false,
+        explanation: "Liliecii sunt singurele mamifere care pot zbura.",
+        translation_hu: "A denevérek éjszakai madarak."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Ochiul unui struț este mai mare decât creierul său. 🦩",
+        isTrue: true,
+        explanation: "Struțul are cei mai mari ochi dintre toate animalele de pe uscat.",
+        translation_hu: "A strucc szeme nagyobb, mint az agya."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Sunetul se transmite mai repede prin apă decât prin aer. 🔊",
+        isTrue: true,
+        explanation: "Apa este mai densă, deci sunetul circulă de 4 ori mai repede.",
+        translation_hu: "A hang gyorsabban terjed a vízben, mint a levegőben."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Vidrele de mare se țin de mână când dorm pe apă ca să nu se piardă. 🦦",
+        isTrue: true,
+        explanation: "Este un comportament adorabil și util familiei.",
+        translation_hu: "A tengeri vidrák fogják egymás kezét, amikor a vízen alszanak."
+    },
+    {
+        difficulty: 'hard',
+        statement: "În spațiu nu există sunete. 🌌",
+        isTrue: true,
+        explanation: "Sunetul nu poate circula prin vidul din spațiu.",
+        translation_hu: "Az űrben nincs hang."
+    },
+    {
+        difficulty: 'hard',
+        statement: "Pânza de păianjen este, de fapt, mai rezistentă decât oțelul la aceeași grosime. 🕸️",
+        isTrue: true,
+        explanation: "Mătasea de păianjen este o fibră naturală uimitoare.",
+        translation_hu: "A pókháló valójában erősebb, mint az acél, azonos vastagság esetén."
+    }
+];
+
+console.log(JSON.stringify(extraTrivia, null, 2));

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://vorbim-romaneste.ro/sitemap.xml
