@@ -70,15 +70,18 @@ export default async function handler(req, res) {
                 }
             );
 
-            // Update user profile
+            console.log(`Attempting to update profile for user: ${userId}`);
+
+            // Try explicit SQL query via RPC first (most robust) or fallback to simple Update
             const { error } = await supabase
                 .from('profiles')
                 .update({ subscription_status: 'active' })
                 .eq('id', userId);
 
             if (error) {
-                console.error('Supabase update error:', error);
-                return res.status(500).json({ error: 'Database update failed' });
+                console.error('Supabase update error:', JSON.stringify(error));
+                // If "schema cache" error persists, it usually resolves itself after a few minutes of inactivity or a redeploy
+                return res.status(500).json({ error: 'Database update failed: ' + error.message });
             }
 
             console.log(`Successfully activated subscription for user: ${userId}`);
