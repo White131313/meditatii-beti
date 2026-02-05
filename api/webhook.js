@@ -70,18 +70,16 @@ export default async function handler(req, res) {
                 }
             );
 
-            console.log(`Attempting to update profile for user: ${userId}`);
+            console.log(`Attempting to update profile for user: ${userId} using RPC`);
 
-            // Try explicit SQL query via RPC first (most robust) or fallback to simple Update
-            const { error } = await supabase
-                .from('profiles')
-                .update({ subscription_status: 'active' })
-                .eq('id', userId);
+            // Use the 'activeaza_abonament' RPC function we just created
+            const { error } = await supabase.rpc('activeaza_abonament', {
+                user_id_input: userId,
+            });
 
             if (error) {
-                console.error('Supabase update error:', JSON.stringify(error));
-                // If "schema cache" error persists, it usually resolves itself after a few minutes of inactivity or a redeploy
-                return res.status(500).json({ error: 'Database update failed: ' + error.message });
+                console.error('RPC Error:', JSON.stringify(error));
+                return res.status(500).json({ error: 'RPC failed: ' + error.message });
             }
 
             console.log(`Successfully activated subscription for user: ${userId}`);
