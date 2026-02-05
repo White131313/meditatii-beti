@@ -74,9 +74,9 @@ export const WORD_EMOJIS = {
     'autobuz': '🚌',
     'tren': '🚂',
 
-    // Obiecte
-    'masă': '🪑',
-    'masa': '🪑',
+    // Obiecte/Mobilier
+    'masă': '🪵',
+    'masa': '🪵',
     'scaun': '🪑',
     'soare': '☀️',
 
