@@ -86,17 +86,17 @@ const Header = ({ lang, setLang, user }) => {
                                 </span>
                                 <span className="text-brand-600">.ro</span>
                             </span>
-                            <span className="hidden min-[350px]:flex text-[7px] sm:text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] leading-none mt-1 sm:mt-1.5 px-0.5 opacity-80">
+                            <span className="hidden sm:flex text-[9px] font-black text-gray-400 uppercase tracking-[0.2em] leading-none mt-1.5 px-0.5 opacity-80">
                                 Meditații & Resurse Logice
                             </span>
                         </div>
                     </Link>
 
                     {/* Premium Language Switcher - Moved Next to Logo */}
-                    <div className="flex items-center p-0.5 bg-gray-100/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-inner mr-0.5 sm:mr-4 shrink-0 scale-90 sm:scale-100">
+                    <div className="flex items-center p-0.5 sm:p-1 bg-gray-100/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-inner mr-1 sm:mr-4 shrink-0">
                         <button
                             onClick={() => setLang('RO')}
-                            className={`flex items-center justify-center px-1.5 py-1 rounded-md text-[8px] sm:text-[9px] font-black transition-all duration-300 ${lang === 'RO'
+                            className={`flex items-center justify-center px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-[11px] font-black transition-all duration-300 ${lang === 'RO'
                                 ? 'bg-white text-brand-600 shadow-sm'
                                 : 'text-gray-400 hover:text-gray-600'
                                 }`}
@@ -105,7 +105,7 @@ const Header = ({ lang, setLang, user }) => {
                         </button>
                         <button
                             onClick={() => setLang('HU')}
-                            className={`flex items-center justify-center px-1.5 py-1 rounded-md text-[8px] sm:text-[9px] font-black transition-all duration-300 ${lang === 'HU'
+                            className={`flex items-center justify-center px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-[11px] font-black transition-all duration-300 ${lang === 'HU'
                                 ? 'bg-white text-brand-600 shadow-sm'
                                 : 'text-gray-400 hover:text-gray-600'
                                 }`}
@@ -147,20 +147,20 @@ const Header = ({ lang, setLang, user }) => {
                         {/* Login Button / User Profile - ALWAYS VISIBLE */}
                         {user ? (
                             <div className="flex items-center shrink-0">
-                                {/* Dashboard Cluster */}
-                                <div className="flex items-center gap-1.5 bg-white p-1 rounded-full border border-gray-100 shadow-sm">
+                                {/* Dashboard Cluster - Compact on mobile */}
+                                <div className="flex items-center gap-0.5 sm:gap-1.5 bg-white p-0.5 sm:p-1 rounded-full border border-gray-100 shadow-sm">
                                     {isAdmin && (
                                         <Link
                                             to="/admin"
-                                            className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition-all"
+                                            className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition-all"
                                             title="Admin"
                                         >
-                                            <Settings size={20} />
+                                            <Settings size={18} className="sm:w-5 sm:h-5" />
                                         </Link>
                                     )}
 
-                                    <div className="flex items-center gap-2 pl-1 pr-1 xl:pr-3 py-1 bg-gray-50/50 rounded-full group cursor-default border border-transparent hover:border-brand-100 transition-all">
-                                        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm shrink-0 flex items-center justify-center bg-brand-50">
+                                    <div className="flex items-center gap-1 sm:gap-2 pl-0.5 sm:pl-1 pr-0.5 sm:pr-1 xl:pr-3 py-0.5 sm:py-1 bg-gray-50/50 rounded-full group cursor-default border border-transparent hover:border-brand-100 transition-all">
+                                        <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm shrink-0 flex items-center justify-center bg-brand-50">
                                             {user.user_metadata?.avatar_url ? (
                                                 <img
                                                     src={user.user_metadata.avatar_url}
@@ -170,7 +170,7 @@ const Header = ({ lang, setLang, user }) => {
                                                 />
                                             ) : null}
                                             <div className={`${user.user_metadata?.avatar_url ? 'hidden' : 'flex'} items-center justify-center text-brand-600`}>
-                                                <User size={18} strokeWidth={3} />
+                                                <User size={14} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} />
                                             </div>
                                         </div>
                                         <span className="hidden min-[1500px]:inline text-xs font-black text-gray-700 tracking-tight max-w-[80px] truncate">
@@ -180,10 +180,10 @@ const Header = ({ lang, setLang, user }) => {
 
                                     <button
                                         onClick={() => signOut()}
-                                        className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
+                                        className="w-7 h-7 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                                         title={currentT.logout}
                                     >
-                                        <LogOut size={20} />
+                                        <LogOut size={16} className="sm:w-5 sm:h-5" />
                                     </button>
                                 </div>
                             </div>
