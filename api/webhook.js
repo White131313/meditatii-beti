@@ -66,17 +66,23 @@ export default async function handler(req, res) {
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
         const userId = session.client_reference_id;
+        const stripeCustomerId = session.customer; // Get the Stripe Customer ID
 
-        console.log(`Payment success for user: ${userId}`);
+        console.log(`Payment success for user: ${userId}, Stripe Customer: ${stripeCustomerId}`);
 
         if (userId) {
-            const { error } = await supabase.rpc('activeaza_abonament', {
-                user_id_input: userId,
-            });
+            // Activate subscription AND save Stripe Customer ID
+            const { error } = await supabase
+                .from('profiles')
+                .update({
+                    subscription_status: 'active',
+                    stripe_customer_id: stripeCustomerId
+                })
+                .eq('id', userId);
 
             if (error) {
-                console.error('RPC Error:', JSON.stringify(error));
-                return res.status(500).json({ error: 'RPC failed: ' + error.message });
+                console.error('Activation Error:', JSON.stringify(error));
+                return res.status(500).json({ error: 'Activation failed: ' + error.message });
             }
 
             console.log(`Successfully activated subscription for user: ${userId}`);
@@ -88,27 +94,20 @@ export default async function handler(req, res) {
         const subscription = event.data.object;
         const customerId = subscription.customer;
 
-        console.log(`Subscription deleted for customer: ${customerId}`);
+        console.log(`Subscription deleted for Stripe customer: ${customerId}`);
 
-        // Get customer email from Stripe
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-        const customer = await stripe.customers.retrieve(customerId);
-        const customerEmail = customer.email;
+        // Deactivate by stripe_customer_id (the link we saved at payment)
+        const { error } = await supabase
+            .from('profiles')
+            .update({ subscription_status: 'inactive' })
+            .eq('stripe_customer_id', customerId);
 
-        if (customerEmail) {
-            // Deactivate by email (since we don't have user_id in subscription)
-            const { error } = await supabase
-                .from('profiles')
-                .update({ subscription_status: 'inactive' })
-                .eq('email', customerEmail);
-
-            if (error) {
-                console.error('Deactivation Error:', JSON.stringify(error));
-                return res.status(500).json({ error: 'Deactivation failed: ' + error.message });
-            }
-
-            console.log(`Successfully deactivated subscription for: ${customerEmail}`);
+        if (error) {
+            console.error('Deactivation Error:', JSON.stringify(error));
+            return res.status(500).json({ error: 'Deactivation failed: ' + error.message });
         }
+
+        console.log(`Successfully deactivated subscription for Stripe customer: ${customerId}`);
     }
 
     // Handle SUBSCRIPTION UPDATED (status change to canceled, unpaid, etc.)
@@ -117,26 +116,20 @@ export default async function handler(req, res) {
         const status = subscription.status;
         const customerId = subscription.customer;
 
-        console.log(`Subscription updated for customer: ${customerId}, status: ${status}`);
+        console.log(`Subscription updated for Stripe customer: ${customerId}, status: ${status}`);
 
         // If subscription is no longer active
         if (status === 'canceled' || status === 'unpaid' || status === 'past_due') {
-            const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-            const customer = await stripe.customers.retrieve(customerId);
-            const customerEmail = customer.email;
+            const { error } = await supabase
+                .from('profiles')
+                .update({ subscription_status: 'inactive' })
+                .eq('stripe_customer_id', customerId);
 
-            if (customerEmail) {
-                const { error } = await supabase
-                    .from('profiles')
-                    .update({ subscription_status: 'inactive' })
-                    .eq('email', customerEmail);
-
-                if (error) {
-                    console.error('Status Update Error:', JSON.stringify(error));
-                }
-
-                console.log(`Deactivated subscription for: ${customerEmail} (status: ${status})`);
+            if (error) {
+                console.error('Status Update Error:', JSON.stringify(error));
             }
+
+            console.log(`Deactivated subscription for Stripe customer: ${customerId} (status: ${status})`);
         }
     }
 
