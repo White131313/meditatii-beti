@@ -40,23 +40,23 @@ const BookingSection = ({ lang = 'RO', isSubscribed = false }) => {
     };
 
     return (
-        <section className="py-24 bg-white relative overflow-hidden">
+        <section className="py-12 lg:py-24 bg-white relative overflow-hidden">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="relative p-1 bg-gradient-to-r from-brand-200 via-emerald-200 to-blue-200 rounded-[3rem]">
-                    <div className="bg-white rounded-[2.9rem] p-8 md:p-16 relative overflow-hidden">
+                <div className="relative p-1 bg-gradient-to-r from-brand-200 via-emerald-200 to-blue-200 rounded-[2rem] lg:rounded-[3rem]">
+                    <div className="bg-white rounded-[1.9rem] lg:rounded-[2.9rem] p-6 sm:p-8 md:p-16 relative overflow-hidden">
                         {/* Decorative background elements */}
                         <div className="absolute top-0 right-0 w-64 h-64 bg-brand-50 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2"></div>
 
                         <div className="grid lg:grid-cols-2 gap-16 items-center relative z-10">
                             <div>
-                                <h2 className="text-4xl md:text-5xl font-black text-gray-900 mb-6 leading-tight">
+                                <h2 className="text-2xl sm:text-3xl md:text-5xl font-black text-gray-900 mb-4 lg:mb-6 leading-tight">
                                     {currentT.title}
                                 </h2>
-                                <p className="text-xl text-gray-500 font-medium mb-10 leading-relaxed">
+                                <p className="text-base sm:text-lg lg:text-xl text-gray-500 font-medium mb-6 lg:mb-10 leading-relaxed">
                                     {currentT.subtitle}
                                 </p>
 
-                                <div className="space-y-6 mb-10">
+                                <div className="space-y-4 lg:space-y-6 mb-6 lg:mb-10">
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600">
                                             <Clock size={24} />
@@ -79,17 +79,17 @@ const BookingSection = ({ lang = 'RO', isSubscribed = false }) => {
 
                                 <button
                                     onClick={handleBooking}
-                                    className={`px-10 py-5 rounded-2xl font-black text-lg transition-all shadow-xl flex items-center gap-3 active:scale-95 ${isSubscribed
+                                    className={`w-full sm:w-auto px-6 sm:px-10 py-4 sm:py-5 rounded-2xl font-black text-base sm:text-lg transition-all shadow-xl flex items-center justify-center gap-3 active:scale-95 ${isSubscribed
                                         ? 'bg-gray-900 text-white hover:bg-brand-600 shadow-gray-200 hover:shadow-brand-500/40'
                                         : 'bg-white text-gray-400 border-2 border-gray-100 hover:border-brand-200 hover:text-brand-600'
                                         }`}
                                 >
-                                    {isSubscribed ? <Calendar size={24} /> : <Lock size={20} />}
+                                    {isSubscribed ? <Calendar size={20} /> : <Lock size={18} />}
                                     {isSubscribed ? currentT.cta : currentT.lockCta}
                                 </button>
                             </div>
 
-                            <div className="relative group">
+                            <div className="relative group hidden lg:block">
                                 <div className="absolute -inset-4 bg-gradient-to-tr from-brand-100 to-emerald-50 rounded-[2.5rem] blur-2xl opacity-50"></div>
                                 <div className="relative aspect-square rounded-[2.5rem] overflow-hidden border-8 border-white shadow-2xl">
                                     <img

@@ -51,11 +51,11 @@ const PricingSection = ({ lang = 'RO', user }) => {
     };
 
     return (
-        <section id="pricing-plan" className="py-24 relative overflow-hidden">
+        <section id="pricing-plan" className="py-12 lg:py-24 relative overflow-hidden">
             <div className="absolute inset-0 bg-gray-900 skew-y-3 transform origin-bottom-left -z-10 translate-y-24"></div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="bg-gradient-to-br from-brand-600 to-emerald-600 rounded-[3rem] p-8 md:p-16 text-white shadow-2xl relative overflow-hidden">
+                <div className="bg-gradient-to-br from-brand-600 to-emerald-600 rounded-[2rem] lg:rounded-[3rem] p-6 sm:p-8 md:p-16 text-white shadow-2xl relative overflow-hidden">
                     {/* Background Pattern */}
                     <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
 
@@ -66,18 +66,18 @@ const PricingSection = ({ lang = 'RO', user }) => {
                                 <span>Premium</span>
                             </div>
 
-                            <h2 className="text-4xl md:text-5xl font-black mb-6 leading-tight">
+                            <h2 className="text-2xl sm:text-3xl md:text-5xl font-black mb-4 lg:mb-6 leading-tight">
                                 {currentT.title}
                             </h2>
 
-                            <div className="flex items-baseline gap-2 mb-8">
-                                <span className="text-6xl font-black tracking-tighter">{currentT.price}</span>
-                                <span className="text-xl text-brand-100 font-medium">{currentT.period}</span>
+                            <div className="flex items-baseline gap-2 mb-6 lg:mb-8">
+                                <span className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter">{currentT.price}</span>
+                                <span className="text-lg sm:text-xl text-brand-100 font-medium">{currentT.period}</span>
                             </div>
 
                             <button
                                 onClick={handleSubscribe}
-                                className="w-full sm:w-auto px-10 py-5 bg-white text-brand-700 rounded-2xl font-black text-lg hover:bg-brand-50 transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group"
+                                className="w-full sm:w-auto px-8 sm:px-10 py-4 sm:py-5 bg-white text-brand-700 rounded-2xl font-black text-base sm:text-lg hover:bg-brand-50 transition-all shadow-xl hover:scale-105 active:scale-95 flex items-center justify-center gap-2 group"
                             >
                                 <span>{currentT.cta}</span>
                                 <Zap size={18} className="text-yellow-400 fill-current group-hover:scale-110 transition-transform" />
@@ -87,14 +87,14 @@ const PricingSection = ({ lang = 'RO', user }) => {
                             </p>
                         </div>
 
-                        <div className="bg-black/20 backdrop-blur-sm rounded-[2rem] p-8 border border-white/10">
-                            <ul className="space-y-4">
+                        <div className="bg-black/20 backdrop-blur-sm rounded-[1.5rem] lg:rounded-[2rem] p-6 sm:p-8 border border-white/10">
+                            <ul className="space-y-3 lg:space-y-4">
                                 {currentT.benefits.map((benefit, index) => (
-                                    <li key={index} className="flex items-start gap-4">
+                                    <li key={index} className="flex items-start gap-3 lg:gap-4">
                                         <div className="p-1 bg-emerald-400 rounded-full mt-1 shrink-0">
                                             <Check size={12} className="text-emerald-900 stroke-[3]" />
                                         </div>
-                                        <span className="font-bold text-lg leading-tight">{benefit}</span>
+                                        <span className="font-bold text-base sm:text-lg leading-tight">{benefit}</span>
                                     </li>
                                 ))}
                             </ul>
