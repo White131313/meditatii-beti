@@ -50,16 +50,16 @@ const Home = ({
         <main>
             <Hero lang={lang} />
 
-            <section className="py-16 relative overflow-hidden">
+            <section className="py-10 lg:py-16 relative overflow-hidden">
                 <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-50/50 rounded-full blur-[100px] -z-10 translate-x-1/2"></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-16">
+                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 mb-8 lg:mb-16">
                         <div className="max-w-2xl">
                             <div className="inline-block px-4 py-1.5 bg-brand-50 rounded-full text-[10px] font-black tracking-widest text-brand-600 uppercase mb-4">
                                 {currentT.digitalShop}
                             </div>
-                            <h2 className="text-4xl lg:text-6xl font-black tracking-tighter text-gray-900 mb-6 leading-tight">
+                            <h2 className="text-2xl sm:text-3xl lg:text-6xl font-black tracking-tighter text-gray-900 mb-4 lg:mb-6 leading-tight">
                                 {currentT.titleMain} <span className="text-brand-600 underline decoration-brand-200 decoration-8 underline-offset-8">{currentT.titleSpan}</span>
                             </h2>
                             <p className="text-lg text-gray-500 max-w-xl font-medium">
