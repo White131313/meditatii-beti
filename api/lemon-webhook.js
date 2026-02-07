@@ -26,23 +26,34 @@ export default async function handler(req, res) {
     const buf = await buffer(req);
     const rawBody = buf.toString('utf8');
 
+    console.log('=== LEMON WEBHOOK RECEIVED ===');
+    console.log('Headers:', JSON.stringify(req.headers));
+
     // 1. Verify Signature (Security)
     const secret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
     const hmac = crypto.createHmac('sha256', secret);
     const digest = hmac.update(rawBody).digest('hex');
-    const signature = req.headers['x-signature'] || '';
+    const signature = req.headers['x-signature'] || req.headers['X-Signature'] || '';
+
+    console.log('Expected digest:', digest);
+    console.log('Received signature:', signature);
 
     if (digest !== signature) {
-        console.error('Invalid signature');
+        console.error('Invalid signature - digest does not match');
         return res.status(401).send('Invalid signature');
     }
 
+    console.log('Signature verified OK!');
+
     const payload = JSON.parse(rawBody);
+    console.log('Payload meta:', JSON.stringify(payload.meta));
+    console.log('Payload data attributes:', JSON.stringify(payload.data?.attributes));
+
     const eventName = payload.meta.event_name;
-    const customData = payload.meta.custom_data; // Here we will get our user_id
+    const customData = payload.meta.custom_data;
     const userId = customData ? customData.user_id : null;
 
-    console.log(`Received Lemon Squeezy event: ${eventName} for user: ${userId}`);
+    console.log(`Event: ${eventName}, User ID: ${userId}, Custom Data: ${JSON.stringify(customData)}`);
 
     // Initialize Supabase Admin
     const supabase = createClient(
