@@ -39,15 +39,17 @@ const PricingSection = ({ lang = 'RO', user }) => {
 
     const handleSubscribe = () => {
         if (!user) {
-            alert(lang === 'RO' ? "Te rugăm să te loghezi înainte de a activa abonamentul." : "Kérjük, jelentkezzen be az előfizetés aktiválása előtt.");
+            alert(lang === 'RO' ? "Te rugăm să te loghezi înainte de a activa abonamentul." : "Kérjük, jelentkezzen be az előfizetés aktiválása înainte.");
             return;
         }
 
-        // Dynamic Stripe link with client_reference_id (Your user's ID)
-        const stripeBaseLink = "https://buy.stripe.com/fZu9AM0bF2P0cGy7pqffy00";
-        const stripeLink = `${stripeBaseLink}?client_reference_id=${user.id}`;
+        // Lemon Squeezy Checkout Link
+        const lemonBaseLink = "https://vorbim-romaneste.lemonsqueezy.com/checkout/buy/4eca1763-fea6-4cea-9893-0ccaedec2c2a";
 
-        window.open(stripeLink, '_blank');
+        // We pass the user.id through custom[user_id] parameter so Lemon Squeezy sends it back in the webhook
+        const checkoutUrl = `${lemonBaseLink}?checkout[custom][user_id]=${user.id}`;
+
+        window.open(checkoutUrl, '_blank');
     };
 
     return (
