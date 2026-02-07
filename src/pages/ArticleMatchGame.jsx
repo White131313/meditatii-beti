@@ -110,7 +110,7 @@ const ArticleMatchGame = ({ lang = 'RO' }) => {
         return (
             <div className="min-h-screen bg-red-50 flex flex-col items-center justify-center p-4">
                 <p className="text-2xl font-black text-red-800 mb-4">Eroare la încărcare</p>
-                <button onClick={fetchNewNoun} className="px-6 py-2 bg-red-500 text-white rounded-xl font-bold">Încearcă din nou</button>
+                <button onClick={() => fetchNewNoun()} className="px-6 py-2 bg-red-500 text-white rounded-xl font-bold">Încearcă din nou</button>
             </div>
         );
     }

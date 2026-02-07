@@ -177,7 +177,7 @@ const WordDetective = ({ lang = 'RO' }) => {
                         </button>
 
                         <button
-                            onClick={fetchNewPuzzle}
+                            onClick={() => fetchNewPuzzle()}
                             disabled={isLoading}
                             className="flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-5 sm:py-2.5 bg-gradient-to-r from-purple-400 to-indigo-500 text-white rounded-xl sm:rounded-2xl shadow-lg transition-all active:scale-95 disabled:opacity-50"
                         >

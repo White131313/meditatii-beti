@@ -83,7 +83,10 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     };
 
     const fetchNewSentence = (forcedDifficulty = null) => {
-        const targetDifficulty = forcedDifficulty || difficulty;
+        // IMPORTANT: If called from onClick directly, forcedDifficulty might be an event object.
+        // We only use it if it's a valid string.
+        const targetDifficulty = (typeof forcedDifficulty === 'string') ? forcedDifficulty : difficulty;
+
         setDropZone([]);
         setShowSuccess(false);
         setIsLoading(true);
@@ -94,7 +97,16 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
 
         // Use static sentences - all verified and correct!
         setTimeout(() => {
-            const sentence = getRandomSentence(targetDifficulty);
+            let sentence = getRandomSentence(targetDifficulty);
+
+            // Try up to 5 times to get a DIFFERENT sentence than current
+            let attempts = 0;
+            const currentAnswerStr = JSON.stringify(correctAnswer);
+            while (JSON.stringify(sentence.original) === currentAnswerStr && attempts < 5) {
+                sentence = getRandomSentence(targetDifficulty);
+                attempts++;
+            }
+
             setCorrectAnswer(sentence.original);
             setScrambledWords(shuffleArray(sentence.original));
             setHint(sentence.translation_hu);
@@ -186,7 +198,7 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
                             </button>
 
                             <button
-                                onClick={fetchNewSentence}
+                                onClick={() => fetchNewSentence()}
                                 disabled={isLoading}
                                 className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95 disabled:opacity-50"
                             >
