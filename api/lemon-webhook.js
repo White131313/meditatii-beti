@@ -1,11 +1,21 @@
 import { createClient } from '@supabase/supabase-js';
 import crypto from 'crypto';
 
+// Important: Disable body parsing so we can verify the raw signature
 export const config = {
     api: {
-        bodyParser: true, // Lemon Squeezy works fine with bodyParser
+        bodyParser: false,
     },
 };
+
+// Helper to read the raw body
+async function buffer(readable) {
+    const chunks = [];
+    for await (const chunk of readable) {
+        chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : chunk);
+    }
+    return Buffer.concat(chunks);
+}
 
 export default async function handler(req, res) {
     if (req.method !== 'POST') {
@@ -13,18 +23,21 @@ export default async function handler(req, res) {
         return res.status(405).end('Method Not Allowed');
     }
 
+    const buf = await buffer(req);
+    const rawBody = buf.toString('utf8');
+
     // 1. Verify Signature (Security)
     const secret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
     const hmac = crypto.createHmac('sha256', secret);
-    const digest = Buffer.from(hmac.update(JSON.stringify(req.body)).digest('hex'), 'utf8');
-    const signature = Buffer.from(req.headers['x-signature'] || '', 'utf8');
+    const digest = hmac.update(rawBody).digest('hex');
+    const signature = req.headers['x-signature'] || '';
 
-    if (!crypto.timingSafeEqual(digest, signature)) {
+    if (digest !== signature) {
         console.error('Invalid signature');
         return res.status(401).send('Invalid signature');
     }
 
-    const payload = req.body;
+    const payload = JSON.parse(rawBody);
     const eventName = payload.meta.event_name;
     const customData = payload.meta.custom_data; // Here we will get our user_id
     const userId = customData ? customData.user_id : null;
