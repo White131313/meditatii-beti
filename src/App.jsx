@@ -101,7 +101,11 @@ function App() {
       teacherLabel: "Mentor Dedicat",
       searchPlaceholder: "Caută o lecție (ex: verbul, pronumele...)",
       noResultsSearch: "Nu am găsit nicio lecție cu acest nume.",
-      allCategories: "Toate Categoriile"
+      searchPlaceholder: "Caută o lecție (ex: verbul, pronumele...)",
+      noResultsSearch: "Nu am găsit nicio lecție cu acest nume.",
+      allCategories: "Toate Categoriile",
+      terms: "Termeni și Condiții",
+      privacy: "Politica de Confidențialitate"
     },
     HU: {
       digitalShop: "Digitális Bolt",
@@ -127,7 +131,11 @@ function App() {
       teacherLabel: "Elkötelezett Mentor",
       searchPlaceholder: "Keress egy leckét (pl: ige, névmás...)",
       noResultsSearch: "Nem találtunk ilyen nevű leckét.",
-      allCategories: "Minden Kategória"
+      searchPlaceholder: "Keress egy leckét (pl: ige, névmás...)",
+      noResultsSearch: "Nem találtunk ilyen nevű leckét.",
+      allCategories: "Minden Kategória",
+      terms: "Felhasználási Feltételek",
+      privacy: "Adatvédelmi Irányelvek"
     }
   };
 
@@ -327,6 +335,8 @@ function App() {
                 <h4 className="text-sm font-black uppercase tracking-widest text-brand-500 mb-8 border-l-2 border-brand-600 pl-4">{currentT.support}</h4>
                 <ul className="space-y-4">
                   <li><Link to="/intrebari-frecvente" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.faq}</Link></li>
+                  <li><Link to="/termeni" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.terms}</Link></li>
+                  <li><Link to="/confidentialitate" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.privacy}</Link></li>
                   <li className="pt-2">
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{currentT.contact}</p>
                     <div className="flex flex-col gap-3">
