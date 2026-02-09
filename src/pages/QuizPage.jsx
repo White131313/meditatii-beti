@@ -17,6 +17,23 @@ const QuizPage = ({ lang }) => {
     const [userInput, setUserInput] = useState("");
     const [isTextCorrect, setIsTextCorrect] = useState(false);
 
+    // Refs for scrolling
+    const explanationRef = React.useRef(null);
+
+    // Force page to TOP when question or step changes
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'instant' });
+    }, [currentQuestionIdx, currentStep]);
+
+    // Scroll to EXPLANATION ONLY when answer is revealed
+    useEffect(() => {
+        if (isAnswered && explanationRef.current) {
+            setTimeout(() => {
+                explanationRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+        }
+    }, [isAnswered]);
+
     const t = {
         RO: {
             title: "Test de Verificare",
@@ -152,8 +169,8 @@ const QuizPage = ({ lang }) => {
     if (!lesson) return null;
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-32 pb-20">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6">
+        <div className="min-h-[85vh] flex flex-col justify-center py-20 sm:py-32 bg-gray-50">
+            <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
 
                 {/* Intro & Study Step */}
                 {currentStep === 0 && (
@@ -277,10 +294,12 @@ const QuizPage = ({ lang }) => {
 
                             {/* Explanation Feedback */}
                             {isAnswered && (
-                                <div className={`mt-10 p-8 rounded-[2rem] border-2 animate-in fade-in slide-in-from-top-4 duration-500 ${questions[currentQuestionIdx].type === 'text'
-                                    ? (isTextCorrect ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100')
-                                    : (selectedAnswer === questions[currentQuestionIdx].correct ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100')
-                                    }`}>
+                                <div
+                                    ref={explanationRef}
+                                    className={`mt-10 p-8 rounded-[2rem] border-2 animate-in fade-in slide-in-from-top-4 duration-500 ${questions[currentQuestionIdx].type === 'text'
+                                        ? (isTextCorrect ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100')
+                                        : (selectedAnswer === questions[currentQuestionIdx].correct ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100')
+                                        }`}>
                                     {questions[currentQuestionIdx].type === 'text' ? (
                                         <div className="space-y-6">
                                             <div className="flex items-center gap-3 font-black text-2xl italic mb-4">
