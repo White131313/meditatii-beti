@@ -63,30 +63,35 @@ export default async function handler(req, res) {
 
     // 2. Handle Subscription Events
     try {
-        if (eventName === 'subscription_created' || eventName === 'subscription_payment_success') {
-            if (userId) {
-                const customerId = payload.data.attributes.customer_id.toString();
+        const attributes = payload.data.attributes;
+        const status = attributes.status; // 'active', 'on_trial', 'cancelled', 'expired', 'past_due', 'unpaid'
+        const customerId = attributes.customer_id.toString();
 
+        console.log(`Processing subscription for Customer: ${customerId} with Status: ${status}`);
+
+        // Activation logic
+        if (eventName === 'subscription_created' || eventName === 'subscription_payment_success' || (eventName === 'subscription_updated' && status === 'active')) {
+            if (userId) {
                 await supabase
                     .from('profiles')
                     .update({
                         subscription_status: 'active',
-                        stripe_customer_id: customerId // Reusing the column for LS customer ID
+                        stripe_customer_id: customerId
                     })
                     .eq('id', userId);
-
-                console.log(`Activated subscription for user: ${userId}`);
+                console.log(`Activated/Updated subscription for user: ${userId}`);
             }
         }
 
-        if (eventName === 'subscription_cancelled' || eventName === 'subscription_expired' || eventName === 'subscription_payment_failed') {
-            const customerId = payload.data.attributes.customer_id.toString();
+        // Deactivation logic
+        const deactivationEvents = ['subscription_cancelled', 'subscription_expired', 'subscription_payment_failed'];
+        const isDeactivationStatus = ['cancelled', 'expired', 'unpaid', 'past_due'].includes(status);
 
+        if (deactivationEvents.includes(eventName) || (eventName === 'subscription_updated' && isDeactivationStatus)) {
             await supabase
                 .from('profiles')
                 .update({ subscription_status: 'inactive' })
                 .eq('stripe_customer_id', customerId);
-
             console.log(`Deactivated subscription for customer: ${customerId}`);
         }
 
