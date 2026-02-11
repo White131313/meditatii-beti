@@ -43,8 +43,8 @@ const PricingSection = ({ lang = 'RO', user }) => {
             return;
         }
 
-        // Lemon Squeezy Checkout Link
-        const lemonBaseLink = "https://vorbim-romaneste.lemonsqueezy.com/checkout/buy/4eca1763-fea6-4cea-9893-0ccaedec2c2a";
+        // Lemon Squeezy Checkout Link (LIVE - approved store)
+        const lemonBaseLink = "https://vorbim-romaneste.lemonsqueezy.com/checkout/buy/0853eb0b-e706-47fc-8aa6-830a1adbf90f";
 
         // We pass the user.id through custom[user_id] parameter so Lemon Squeezy sends it back in the webhook
         const checkoutUrl = `${lemonBaseLink}?checkout[custom][user_id]=${user.id}`;
