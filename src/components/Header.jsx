@@ -9,6 +9,7 @@ const Header = ({ lang, setLang, user }) => {
     const isAdmin = user && ADMIN_EMAILS.includes(user.email);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -27,7 +28,8 @@ const Header = ({ lang, setLang, user }) => {
             logout: 'Deconectare',
             auth: 'Autentificare',
             menuTitle: 'Meniu',
-            kidsGames: 'Jocuri Copii 🎲'
+            kidsGames: 'Jocuri Copii 🎲',
+            manageSub: 'Administrare Abonament'
         },
         HU: {
             nav1: 'Felnőtt Kommunikáció',
@@ -39,7 +41,8 @@ const Header = ({ lang, setLang, user }) => {
             logout: 'Kijelentkezés',
             auth: 'Bejelentkezés',
             menuTitle: 'Menü',
-            kidsGames: 'Gyerek Játékok 🎲'
+            kidsGames: 'Gyerek Játékok 🎲',
+            manageSub: 'Előfizetés Kezelése'
         }
     };
 
@@ -159,32 +162,75 @@ const Header = ({ lang, setLang, user }) => {
                                         </Link>
                                     )}
 
-                                    <div className="flex items-center gap-1 sm:gap-2 pl-0.5 sm:pl-1 pr-0.5 sm:pr-1 xl:pr-3 py-0.5 sm:py-1 bg-gray-50/50 rounded-full group cursor-default border border-transparent hover:border-brand-100 transition-all">
-                                        <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm shrink-0 flex items-center justify-center bg-brand-50">
-                                            {user.user_metadata?.avatar_url ? (
-                                                <img
-                                                    src={user.user_metadata.avatar_url}
-                                                    alt=""
-                                                    className="w-full h-full object-cover"
-                                                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
-                                                />
-                                            ) : null}
-                                            <div className={`${user.user_metadata?.avatar_url ? 'hidden' : 'flex'} items-center justify-center text-brand-600`}>
-                                                <User size={14} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} />
+                                    <div className="relative">
+                                        <button
+                                            onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                                            className="flex items-center gap-1 sm:gap-2 pl-0.5 sm:pl-1 pr-1 sm:pr-2 py-0.5 sm:py-1 bg-gray-50/50 rounded-full group cursor-pointer border border-transparent hover:border-brand-100 transition-all"
+                                        >
+                                            <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-full overflow-hidden border-2 border-white shadow-sm shrink-0 flex items-center justify-center bg-brand-50">
+                                                {user.user_metadata?.avatar_url ? (
+                                                    <img
+                                                        src={user.user_metadata.avatar_url}
+                                                        alt=""
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+                                                    />
+                                                ) : null}
+                                                <div className={`${user.user_metadata?.avatar_url ? 'hidden' : 'flex'} items-center justify-center text-brand-600`}>
+                                                    <User size={14} className="sm:w-[18px] sm:h-[18px]" strokeWidth={3} />
+                                                </div>
                                             </div>
-                                        </div>
-                                        <span className="hidden min-[1500px]:inline text-xs font-black text-gray-700 tracking-tight max-w-[80px] truncate">
-                                            {user.user_metadata?.full_name?.split(' ')[0] || 'User'}
-                                        </span>
-                                    </div>
+                                            <ChevronRight size={14} className={`text-gray-400 transition-transform ${isUserMenuOpen ? 'rotate-90' : ''}`} />
+                                        </button>
 
-                                    <button
-                                        onClick={() => signOut()}
-                                        className="w-7 h-7 sm:w-10 sm:h-10 flex items-center justify-center text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
-                                        title={currentT.logout}
-                                    >
-                                        <LogOut size={16} className="sm:w-5 sm:h-5" />
-                                    </button>
+                                        {/* User Dropdown Menu */}
+                                        {isUserMenuOpen && (
+                                            <>
+                                                <div
+                                                    className="fixed inset-0 z-10"
+                                                    onClick={() => setIsUserMenuOpen(false)}
+                                                ></div>
+                                                <div className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-2xl border border-gray-100 py-2 z-20 animate-in fade-in slide-in-from-top-2 duration-200">
+                                                    <div className="px-4 py-3 border-b border-gray-50">
+                                                        <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">{user.user_metadata?.full_name || 'User'}</p>
+                                                        <p className="text-[11px] font-bold text-gray-500 truncate">{user.email}</p>
+                                                    </div>
+
+                                                    {isAdmin && (
+                                                        <Link
+                                                            to="/admin"
+                                                            onClick={() => setIsUserMenuOpen(false)}
+                                                            className="flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+                                                        >
+                                                            <Settings size={16} className="text-gray-400" />
+                                                            Panou Admin
+                                                        </Link>
+                                                    )}
+
+                                                    <a
+                                                        href="https://vorbim-romaneste.lemonsqueezy.com/billing"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors"
+                                                    >
+                                                        <Globe size={16} className="text-brand-500" />
+                                                        {currentT.manageSub}
+                                                    </a>
+
+                                                    <button
+                                                        onClick={() => {
+                                                            setIsUserMenuOpen(false);
+                                                            signOut();
+                                                        }}
+                                                        className="w-full flex items-center gap-3 px-4 py-3 text-xs font-bold text-red-500 hover:bg-red-50 transition-colors border-t border-gray-50 mt-1"
+                                                    >
+                                                        <LogOut size={16} />
+                                                        {currentT.logout}
+                                                    </button>
+                                                </div>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
                         ) : (
