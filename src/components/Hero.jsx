@@ -30,9 +30,9 @@ const Hero = ({ lang = 'RO' }) => {
     return (
         <section className="relative pt-24 pb-12 lg:pt-48 lg:pb-32 overflow-hidden bg-[#fafbfc]">
             {/* Dynamic Background Elements */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-100/40 rounded-full blur-[120px] animate-pulse"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50/50 rounded-full blur-[120px]"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-10 bg-[#fafbfc]">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-100/40 rounded-full blur-[60px] md:blur-[120px] md:animate-pulse"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-50/50 rounded-full blur-[60px] md:blur-[120px]"></div>
             </div>
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -91,7 +91,7 @@ const Hero = ({ lang = 'RO' }) => {
                                 />
 
                                 {/* Floating Info Card */}
-                                <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/90 backdrop-blur-xl rounded-2xl border border-white/50 shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
+                                <div className="absolute bottom-6 left-6 right-6 p-6 bg-white/95 md:bg-white/90 md:backdrop-blur-xl rounded-2xl border border-white/50 shadow-2xl transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
                                     <div className="flex items-center justify-between">
                                         <div>
                                             <p className="text-sm font-bold text-brand-600 mb-0.5">{currentT.teacherLabel}</p>
@@ -106,8 +106,8 @@ const Hero = ({ lang = 'RO' }) => {
                         </div>
 
                         {/* Geometric Accents */}
-                        <div className="absolute -top-6 -right-6 w-24 h-24 bg-brand-500/10 rounded-full blur-2xl"></div>
-                        <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
+                        <div className="hidden md:block absolute -top-6 -right-6 w-24 h-24 bg-brand-500/10 rounded-full blur-2xl"></div>
+                        <div className="hidden md:block absolute -bottom-10 -left-10 w-32 h-32 bg-blue-500/10 rounded-full blur-3xl"></div>
                     </div>
                 </div>
             </div>

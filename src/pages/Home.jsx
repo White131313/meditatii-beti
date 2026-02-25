@@ -51,7 +51,7 @@ const Home = ({
             <Hero lang={lang} />
 
             <section className="py-10 lg:py-16 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-50/50 rounded-full blur-[100px] -z-10 translate-x-1/2"></div>
+                <div className="absolute top-0 right-0 w-[300px] h-[300px] md:w-[500px] md:h-[500px] bg-brand-50/50 rounded-full blur-[50px] md:blur-[100px] -z-10 translate-x-1/2"></div>
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-8 mb-8 lg:mb-16">

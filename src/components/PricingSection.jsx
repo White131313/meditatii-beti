@@ -59,11 +59,11 @@ const PricingSection = ({ lang = 'RO', user }) => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="bg-gradient-to-br from-brand-600 to-emerald-600 rounded-[2rem] lg:rounded-[3rem] p-6 sm:p-8 md:p-16 text-white shadow-2xl relative overflow-hidden">
                     {/* Background Pattern */}
-                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-white/10 rounded-full blur-xl md:blur-3xl -translate-y-1/2 translate-x-1/3"></div>
 
                     <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
                         <div>
-                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 backdrop-blur-md rounded-full text-sm font-bold mb-6 border border-white/10">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/20 md:backdrop-blur-md rounded-full text-sm font-bold mb-6 border border-white/10">
                                 <Zap size={16} className="text-yellow-300 fill-current" />
                                 <span>Premium</span>
                             </div>
@@ -89,7 +89,7 @@ const PricingSection = ({ lang = 'RO', user }) => {
                             </p>
                         </div>
 
-                        <div className="bg-black/20 backdrop-blur-sm rounded-[1.5rem] lg:rounded-[2rem] p-6 sm:p-8 border border-white/10">
+                        <div className="bg-black/20 md:backdrop-blur-sm rounded-[1.5rem] lg:rounded-[2rem] p-6 sm:p-8 border border-white/10">
                             <ul className="space-y-3 lg:space-y-4">
                                 {currentT.benefits.map((benefit, index) => (
                                     <li key={index} className="flex items-start gap-3 lg:gap-4">

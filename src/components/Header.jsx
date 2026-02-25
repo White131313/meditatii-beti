@@ -61,7 +61,7 @@ const Header = ({ lang, setLang, user }) => {
             }`}>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className={`relative flex items-center justify-between gap-1 px-1.5 sm:px-4 rounded-[1.2rem] sm:rounded-[2rem] transition-all duration-500 ${isScrolled || isMenuOpen
-                    ? 'bg-white/90 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] border border-white/50'
+                    ? 'bg-white/95 md:bg-white/90 md:backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.05)] border border-white/50'
                     : 'bg-transparent'
                     }`}>
 
@@ -96,7 +96,7 @@ const Header = ({ lang, setLang, user }) => {
                     </Link>
 
                     {/* Premium Language Switcher - Moved Next to Logo */}
-                    <div className="flex items-center p-0.5 sm:p-1 bg-gray-100/80 backdrop-blur-md rounded-lg border border-gray-200 shadow-inner mr-1 sm:mr-4 shrink-0">
+                    <div className="flex items-center p-0.5 sm:p-1 bg-gray-100 md:bg-gray-100/80 md:backdrop-blur-md rounded-lg border border-gray-200 shadow-inner mr-1 sm:mr-4 shrink-0">
                         <button
                             onClick={() => setLang('RO')}
                             className={`flex items-center justify-center px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-[11px] font-black transition-all duration-300 ${lang === 'RO'

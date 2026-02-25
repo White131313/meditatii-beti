@@ -169,18 +169,18 @@ const QuizPage = ({ lang }) => {
     if (!lesson) return null;
 
     return (
-        <div className="min-h-[85vh] flex flex-col justify-center py-20 sm:py-32 bg-gray-50">
+        <div className="min-h-[85vh] flex flex-col justify-center py-12 sm:py-32 bg-gray-50">
             <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
 
                 {/* Intro & Study Step */}
                 {currentStep === 0 && (
                     <div className="space-y-6">
-                        <div className="bg-white rounded-[3rem] p-12 shadow-xl border border-gray-100">
-                            <div className="w-20 h-20 bg-brand-50 rounded-3xl flex items-center justify-center text-brand-600 mx-auto mb-8">
-                                <Award size={40} />
+                        <div className="bg-white rounded-3xl sm:rounded-[3rem] p-6 sm:p-12 shadow-xl border border-gray-100">
+                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-50 rounded-2xl sm:rounded-3xl flex items-center justify-center text-brand-600 mx-auto mb-6 sm:mb-8">
+                                <Award className="w-8 h-8 sm:w-10 sm:h-10" />
                             </div>
-                            <h1 className="text-3xl font-black text-gray-900 mb-4">{currentT.title}</h1>
-                            <p className="text-gray-500 font-medium mb-10 text-lg">
+                            <h1 className="text-2xl sm:text-3xl font-black text-gray-900 mb-3 sm:mb-4">{currentT.title}</h1>
+                            <p className="text-gray-500 font-medium mb-8 sm:mb-10 text-base sm:text-lg">
                                 {lesson.title}
                             </p>
 
@@ -190,7 +190,7 @@ const QuizPage = ({ lang }) => {
                                         <CheckCircle2 size={24} />
                                         <h3 className="font-extrabold uppercase tracking-widest text-sm">{currentT.studyTitle}</h3>
                                     </div>
-                                    <div className="bg-gray-50 p-8 rounded-3xl border border-gray-100 text-gray-700 leading-relaxed font-bold whitespace-pre-wrap text-lg italic">
+                                    <div className="bg-gray-50 p-5 sm:p-8 rounded-2xl sm:rounded-3xl border border-gray-100 text-gray-800 leading-relaxed font-medium sm:font-bold whitespace-pre-wrap text-[15px] sm:text-lg italic">
                                         {sourceText}
                                     </div>
                                 </div>
@@ -199,7 +199,7 @@ const QuizPage = ({ lang }) => {
                             {questions.length > 0 ? (
                                 <button
                                     onClick={() => setCurrentStep(1)}
-                                    className="w-full py-5 bg-gray-900 text-white rounded-[1.5rem] font-black text-xl hover:bg-brand-600 transition-all shadow-xl shadow-gray-200"
+                                    className="w-full py-4 sm:py-5 bg-gray-900 text-white rounded-[1.5rem] font-black text-lg sm:text-xl hover:bg-brand-600 transition-all shadow-xl shadow-gray-200"
                                 >
                                     {sourceText ? currentT.readyToTest : currentT.start}
                                 </button>
@@ -229,8 +229,8 @@ const QuizPage = ({ lang }) => {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-[3rem] p-8 md:p-12 shadow-xl border border-gray-100">
-                            <h2 className="text-2xl font-black text-gray-900 mb-10 leading-tight">
+                        <div className="bg-white rounded-3xl sm:rounded-[3rem] p-6 sm:p-12 shadow-xl border border-gray-100">
+                            <h2 className="text-xl sm:text-2xl font-black text-gray-900 mb-6 sm:mb-10 leading-tight">
                                 {questions[currentQuestionIdx].question}
                             </h2>
 
@@ -256,14 +256,14 @@ const QuizPage = ({ lang }) => {
                                                 if (correct) setScore(score + 1);
                                             }}
                                             disabled={!userInput.trim()}
-                                            className="w-full py-5 bg-brand-600 text-white rounded-2xl font-black text-xl shadow-xl shadow-brand-100 hover:bg-brand-700 transition-all disabled:opacity-50"
+                                            className="w-full py-4 sm:py-5 bg-brand-600 text-white rounded-xl sm:rounded-2xl font-black text-lg sm:text-xl shadow-xl shadow-brand-100 hover:bg-brand-700 transition-all disabled:opacity-50"
                                         >
                                             {currentT.check}
                                         </button>
                                     )}
                                 </div>
                             ) : (
-                                <div className="grid gap-4">
+                                <div className="grid gap-2 sm:gap-4">
                                     {(questions[currentQuestionIdx].options || []).map((option, idx) => {
                                         let variantClasses = "border-2 border-gray-100 hover:border-brand-200 text-gray-700";
                                         if (isAnswered) {
@@ -281,7 +281,7 @@ const QuizPage = ({ lang }) => {
                                                 key={idx}
                                                 onClick={() => handleAnswerClick(idx)}
                                                 disabled={isAnswered}
-                                                className={`w-full p-5 rounded-2xl text-left font-bold text-lg transition-all flex items-center justify-between group ${variantClasses}`}
+                                                className={`w-full p-3 sm:p-5 rounded-xl sm:rounded-2xl text-left font-bold text-[15px] sm:text-lg transition-all flex items-center justify-between group ${variantClasses}`}
                                             >
                                                 <span>{option}</span>
                                                 {isAnswered && idx === questions[currentQuestionIdx].correct && <Check size={20} className="text-emerald-500" />}
@@ -296,7 +296,7 @@ const QuizPage = ({ lang }) => {
                             {isAnswered && (
                                 <div
                                     ref={explanationRef}
-                                    className={`mt-10 p-8 rounded-[2rem] border-2 animate-in fade-in slide-in-from-top-4 duration-500 ${questions[currentQuestionIdx].type === 'text'
+                                    className={`mt-8 sm:mt-10 p-6 sm:p-8 rounded-2xl sm:rounded-[2rem] border-2 animate-in fade-in slide-in-from-top-4 duration-500 ${questions[currentQuestionIdx].type === 'text'
                                         ? (isTextCorrect ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100')
                                         : (selectedAnswer === questions[currentQuestionIdx].correct ? 'bg-emerald-50 border-emerald-100' : 'bg-red-50 border-red-100')
                                         }`}>
@@ -353,7 +353,7 @@ const QuizPage = ({ lang }) => {
 
                                     <button
                                         onClick={nextQuestion}
-                                        className="mt-8 w-full py-5 bg-gray-900 text-white rounded-2xl font-black text-xl shadow-xl hover:bg-brand-600 transition-all flex items-center justify-center gap-2"
+                                        className="mt-6 sm:mt-8 w-full py-4 sm:py-5 bg-gray-900 text-white rounded-xl sm:rounded-2xl font-black text-lg sm:text-xl shadow-xl hover:bg-brand-600 transition-all flex items-center justify-center gap-2"
                                     >
                                         {currentQuestionIdx === questions.length - 1 ? currentT.finish : currentT.next}
                                     </button>
@@ -365,10 +365,10 @@ const QuizPage = ({ lang }) => {
 
                 {/* Results Step */}
                 {currentStep === 2 && (
-                    <div className="bg-white rounded-[3rem] p-12 text-center shadow-2xl border border-gray-100">
-                        <div className="relative inline-block mb-10">
-                            <div className="w-32 h-32 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-500">
-                                <Award size={64} />
+                    <div className="bg-white rounded-3xl sm:rounded-[3rem] p-8 sm:p-12 text-center shadow-2xl border border-gray-100">
+                        <div className="relative inline-block mb-8 sm:mb-10">
+                            <div className="w-24 h-24 sm:w-32 sm:h-32 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-500">
+                                <Award className="w-12 h-12 sm:w-16 sm:h-16" />
                             </div>
                             <div className="absolute -top-2 -right-2 bg-emerald-500 text-white p-2 rounded-full border-4 border-white">
                                 <Check size={24} />
@@ -380,17 +380,17 @@ const QuizPage = ({ lang }) => {
                             {currentT.score}: <span className="text-brand-600 text-3xl font-black">{score} / {questions.length}</span>
                         </p>
 
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
                             <button
                                 onClick={restartQuiz}
-                                className="px-8 py-4 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
+                                className="px-6 py-3 sm:px-8 sm:py-4 bg-gray-100 text-gray-700 rounded-xl font-bold hover:bg-gray-200 transition-all flex items-center justify-center gap-2"
                             >
                                 <RefreshCcw size={18} />
                                 {currentT.retry}
                             </button>
                             <Link
                                 to="/"
-                                className="px-8 py-4 bg-gray-900 text-white rounded-xl font-black hover:bg-brand-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-gray-200"
+                                className="px-6 py-3 sm:px-8 sm:py-4 bg-gray-900 text-white rounded-xl font-black hover:bg-brand-600 transition-all flex items-center justify-center gap-2 shadow-xl shadow-gray-200"
                             >
                                 {currentT.back}
                             </Link>
