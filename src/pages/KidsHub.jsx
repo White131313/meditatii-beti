@@ -42,6 +42,16 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
 
     const games = [
         {
+            id: 'article-match',
+            title: currentT.game4Title,
+            description: currentT.game4Desc,
+            icon: Puzzle,
+            color: 'from-blue-500 to-red-500',
+            path: '/copii/articole',
+            available: true,
+            isFree: true
+        },
+        {
             id: 'sentence-builder',
             title: currentT.game1Title,
             description: currentT.game1Desc,
@@ -68,16 +78,6 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             icon: Sparkles,
             color: 'from-green-400 to-emerald-500',
             path: '/copii/adevarat-fals',
-            available: true,
-            isFree: false
-        },
-        {
-            id: 'article-match',
-            title: currentT.game4Title,
-            description: currentT.game4Desc,
-            icon: Puzzle,
-            color: 'from-blue-500 to-red-500',
-            path: '/copii/articole',
             available: true,
             isFree: false
         }
