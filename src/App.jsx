@@ -17,6 +17,7 @@ import Privacy from './pages/Privacy';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ScrollToTop from './components/ScrollToTop';
+import SEOWrapper from './components/SEOWrapper';
 import { mockMaterials } from './data/mockMaterials';
 import { supabase } from './lib/supabaseClient';
 
@@ -211,6 +212,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
+      <SEOWrapper />
       <div className="min-h-screen bg-[#fafbfc] font-sans text-gray-900 selection:bg-brand-100 selection:text-brand-900 scroll-smooth flex flex-col">
         <Header lang={lang} setLang={setLang} user={user} />
 

@@ -16,11 +16,20 @@
   <meta name="robots" content="index, follow" />
   <meta name="google-site-verification" content="hVRy9Khe2QaPAJe8RKpEDpEaMkUBMjVOtt60EyHB2J8" />
 
-  <!-- Canonical & Languages -->
-  <link rel="canonical" href="https://vorbim-romaneste.ro/" />
-  <link rel="alternate" hreflang="ro" href="https://vorbim-romaneste.ro/" />
-  <link rel="alternate" hreflang="hu" href="https://vorbim-romaneste.ro/?lang=HU" />
-  <link rel="alternate" hreflang="x-default" href="https://vorbim-romaneste.ro/" />
+  <!-- Dynamic Canonical -->
+  <script>
+    const canonicalUrl = window.location.origin + window.location.pathname;
+    const link = document.createElement('link');
+    link.rel = 'canonical';
+    link.href = canonicalUrl;
+    document.head.appendChild(link);
+    
+    const altHu = document.createElement('link');
+    altHu.rel = 'alternate';
+    altHu.hreflang = 'hu';
+    altHu.href = canonicalUrl + '?lang=HU';
+    document.head.appendChild(altHu);
+  </script>
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
