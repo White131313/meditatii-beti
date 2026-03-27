@@ -6,12 +6,13 @@ import { BookOpen, Download, Lock, CheckCircle, ChevronLeft } from 'lucide-react
 // Sub-component for a single lesson row
 const LessonCard = ({ lesson, idx, categoryId, isSubscribed, user, currentT }) => {
     const isAdmin = user && ['bernad.beatrice23@gmail.com', 'bernad.beatrice23@gamil.com', 'cristian.balasa@gmail.com'].includes(user?.email);
-    const hasAccess = isSubscribed || isAdmin || lesson.demo_file_url;
+    const isFree = lesson.demo_file_url || lesson.title?.toLowerCase().includes('model evaluare naționala 1');
+    const hasAccess = isSubscribed || isAdmin || isFree;
 
     return (
         <div className="bg-white rounded-[2rem] p-6 md:p-8 shadow-lg shadow-gray-100 border border-transparent hover:border-brand-200 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6 group">
             <div className="flex items-center gap-6">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 font-black text-lg transition-colors ${lesson.demo_file_url ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-50 text-gray-400 group-hover:bg-brand-50 group-hover:text-brand-600'}`}>
+                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 font-black text-lg transition-colors ${isFree ? 'bg-emerald-50 text-emerald-600' : 'bg-gray-50 text-gray-400 group-hover:bg-brand-50 group-hover:text-brand-600'}`}>
                     {idx + 1}
                 </div>
                 <div>
@@ -49,7 +50,7 @@ const LessonCard = ({ lesson, idx, categoryId, isSubscribed, user, currentT }) =
                         href={lesson.full_file_url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`px-6 py-3 text-white rounded-xl font-bold text-sm transition-all shadow-lg flex items-center gap-2 ${lesson.demo_file_url ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-100' : 'bg-brand-600 hover:bg-brand-700 shadow-brand-100'}`}
+                        className={`px-6 py-3 text-white rounded-xl font-bold text-sm transition-all shadow-lg flex items-center gap-2 ${isFree ? 'bg-emerald-600 hover:bg-emerald-700 shadow-emerald-100' : 'bg-brand-600 hover:bg-brand-700 shadow-brand-100'}`}
                     >
                         <Download size={18} />
                         {currentT.download}
@@ -166,17 +167,21 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                     ) : lessons.length > 0 ? (
                         <>
                             {/* DEMO SECTION */}
-                            {lessons.some(l => l.demo_file_url) && (
+                            {lessons.some(l => l.demo_file_url || l.title?.toLowerCase().includes('model evaluare naționala 1')) && (
                                 <div>
                                     <div className="flex items-center gap-3 mb-8">
                                         <div className="w-2 h-8 bg-emerald-500 rounded-full"></div>
                                         <h2 className="text-2xl font-black text-gray-900 tracking-tight">Materiale Demo (Gratis)</h2>
                                     </div>
                                     <div className="space-y-4">
-                                        {lessons.filter(l => l.demo_file_url).map((lesson, idx) => (
+                                        {lessons.filter(l => l.demo_file_url || l.title?.toLowerCase().includes('model evaluare naționala 1')).map((lesson, idx) => (
                                             <LessonCard
                                                 key={lesson.id}
-                                                lesson={lesson}
+                                                lesson={{
+                                                    ...lesson,
+                                                    // Ensure the PDF link works even if demo_file_url is missing in DB
+                                                    demo_file_url: lesson.demo_file_url || lesson.full_file_url 
+                                                }}
                                                 idx={idx}
                                                 categoryId={categoryId}
                                                 isSubscribed={isSubscribed}
@@ -189,14 +194,14 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                             )}
 
                             {/* PREMIUM SECTION */}
-                            {lessons.some(l => !l.demo_file_url) && (
+                            {lessons.some(l => !l.demo_file_url && !l.title?.toLowerCase().includes('model evaluare naționala 1')) && (
                                 <div>
                                     <div className="flex items-center gap-3 mb-8">
                                         <div className="w-2 h-8 bg-brand-600 rounded-full"></div>
                                         <h2 className="text-2xl font-black text-gray-900 tracking-tight">Materiale Premium (Pro)</h2>
                                     </div>
                                     <div className="space-y-4">
-                                        {lessons.filter(l => !l.demo_file_url).map((lesson, idx) => (
+                                        {lessons.filter(l => !l.demo_file_url && !l.title?.toLowerCase().includes('model evaluare naționala 1')).map((lesson, idx) => (
                                             <LessonCard
                                                 key={lesson.id}
                                                 lesson={lesson}
