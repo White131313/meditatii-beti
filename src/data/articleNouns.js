@@ -1,8 +1,92 @@
 // Database of Romanian nouns with their correct indefinite articles
-// For teaching kids the difference between "Un" (masculine) and "O" (feminine)
+// For teaching kids the difference between "Un" (masculine/neuter) and "O" (feminine)
 
 export const ARTICLE_NOUNS = [
-    // EASY - Common everyday objects and animals
+    // NIVELUL 1: FOARTE UȘOARE (Cuvinte scurte)
+    {
+        difficulty: 'easy',
+        noun: 'Cal',
+        translation_hu: 'Ló',
+        correct_article: 'Un',
+        gender_explanation: 'Cal este un substantiv masculin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Pat',
+        translation_hu: 'Ágy',
+        correct_article: 'Un',
+        gender_explanation: 'Pat este un substantiv neutru.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Sac',
+        translation_hu: 'Zsák',
+        correct_article: 'Un',
+        gender_explanation: 'Sac este un substantiv masculin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Ac',
+        translation_hu: 'Tű',
+        correct_article: 'Un',
+        gender_explanation: 'Ac este un substantiv neutru.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Nor',
+        translation_hu: 'Felhő',
+        correct_article: 'Un',
+        gender_explanation: 'Nor este un substantiv masculin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Melc',
+        translation_hu: 'Csiga',
+        correct_article: 'Un',
+        gender_explanation: 'Melc este un substantiv masculin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Bec',
+        translation_hu: 'Lámpa/Izzó',
+        correct_article: 'Un',
+        gender_explanation: 'Bec este un substantiv neutru.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Porc',
+        translation_hu: 'Malac/Disznó',
+        correct_article: 'Un',
+        gender_explanation: 'Porc este un substantiv masculin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Lup',
+        translation_hu: 'Farkas',
+        correct_article: 'Un',
+        gender_explanation: 'Lup este un substantiv masculin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Cană',
+        translation_hu: 'Bögre',
+        correct_article: 'O',
+        gender_explanation: 'Cană este un substantiv feminin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Masă',
+        translation_hu: 'Asztal',
+        correct_article: 'O',
+        gender_explanation: 'Masă este un substantiv feminin.'
+    },
+    {
+        difficulty: 'easy',
+        noun: 'Casă',
+        translation_hu: 'Ház',
+        correct_article: 'O',
+        gender_explanation: 'Casă este un substantiv feminin.'
+    },
     {
         difficulty: 'easy',
         noun: 'Pisică',
@@ -19,153 +103,48 @@ export const ARTICLE_NOUNS = [
     },
     {
         difficulty: 'easy',
-        noun: 'Carte',
-        translation_hu: 'Könyv',
+        noun: 'Rață',
+        translation_hu: 'Kacsa',
         correct_article: 'O',
-        gender_explanation: 'Carte este un substantiv feminin.'
+        gender_explanation: 'Rață este un substantiv feminin.'
     },
     {
         difficulty: 'easy',
         noun: 'Măr',
         translation_hu: 'Alma',
         correct_article: 'Un',
-        gender_explanation: 'Măr este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Măr este un substantiv neutru.'
     },
     {
         difficulty: 'easy',
-        noun: 'Casă',
-        translation_hu: 'Ház',
+        noun: 'Apă',
+        translation_hu: 'Víz',
         correct_article: 'O',
-        gender_explanation: 'Casă este un substantiv feminin.'
+        gender_explanation: 'Apă este un substantiv feminin.'
     },
     {
         difficulty: 'easy',
-        noun: 'Copil',
-        translation_hu: 'Gyerek',
+        noun: 'Pui',
+        translation_hu: 'Csirke',
         correct_article: 'Un',
-        gender_explanation: 'Copil este un substantiv masculin.'
+        gender_explanation: 'Pui este un substantiv masculin.'
     },
     {
         difficulty: 'easy',
-        noun: 'Floare',
-        translation_hu: 'Virág',
-        correct_article: 'O',
-        gender_explanation: 'Floare este un substantiv feminin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Copac',
-        translation_hu: 'Fa',
+        noun: 'Urs',
+        translation_hu: 'Medve',
         correct_article: 'Un',
-        gender_explanation: 'Copac este un substantiv masculin.'
+        gender_explanation: 'Urs este un substantiv masculin.'
     },
     {
         difficulty: 'easy',
-        noun: 'Minge',
-        translation_hu: 'Labda',
+        noun: 'Oaie',
+        translation_hu: 'Bárány/Juh',
         correct_article: 'O',
-        gender_explanation: 'Minge este un substantiv feminin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Soare',
-        translation_hu: 'Nap',
-        correct_article: 'Un',
-        gender_explanation: 'Soare este un substantiv neutru (masculin la singular).'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Ușă',
-        translation_hu: 'Ajtó',
-        correct_article: 'O',
-        gender_explanation: 'Ușă este un substantiv feminin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Băiat',
-        translation_hu: 'Fiú',
-        correct_article: 'Un',
-        gender_explanation: 'Băiat este un substantiv masculin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Fată',
-        translation_hu: 'Lány',
-        correct_article: 'O',
-        gender_explanation: 'Fată este un substantiv feminin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Ou',
-        translation_hu: 'Tojás',
-        correct_article: 'Un',
-        gender_explanation: 'Ou este un substantiv neutru (masculin la singular).'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Pasăre',
-        translation_hu: 'Madár',
-        correct_article: 'O',
-        gender_explanation: 'Pasăre este un substantiv feminin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Pește',
-        translation_hu: 'Hal',
-        correct_article: 'Un',
-        gender_explanation: 'Pește este un substantiv masculin.'
-    },
-    {
-        difficulty: 'easy',
-        noun: 'Lampă',
-        translation_hu: 'Lámpa',
-        correct_article: 'O',
-        gender_explanation: 'Lampă este un substantiv feminin.'
+        gender_explanation: 'Oaie este un substantiv feminin.'
     },
 
-    // MEDIUM - Less common but still familiar words
-    {
-        difficulty: 'medium',
-        noun: 'Elefant',
-        translation_hu: 'Elefánt',
-        correct_article: 'Un',
-        gender_explanation: 'Elefant este un substantiv masculin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Zebră',
-        translation_hu: 'Zebra',
-        correct_article: 'O',
-        gender_explanation: 'Zebră este un substantiv feminin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Vulpe',
-        translation_hu: 'Róka',
-        correct_article: 'O',
-        gender_explanation: 'Vulpe este un substantiv feminin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Lup',
-        translation_hu: 'Farkas',
-        correct_article: 'Un',
-        gender_explanation: 'Lup este un substantiv masculin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Girafă',
-        translation_hu: 'Zsiráf',
-        correct_article: 'O',
-        gender_explanation: 'Girafă este un substantiv feminin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Calculator',
-        translation_hu: 'Számítógép',
-        correct_article: 'Un',
-        gender_explanation: 'Calculator este un substantiv neutru (masculin la singular).'
-    },
+    // NIVELUL 2: MEDII (Cuvinte uzuale)
     {
         difficulty: 'medium',
         noun: 'Fereastră',
@@ -175,208 +154,208 @@ export const ARTICLE_NOUNS = [
     },
     {
         difficulty: 'medium',
-        noun: 'Tablou',
-        translation_hu: 'Kép',
+        noun: 'Pantof',
+        translation_hu: 'Cipő',
         correct_article: 'Un',
-        gender_explanation: 'Tablou este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Pantof este un substantiv masculin.'
     },
     {
         difficulty: 'medium',
-        noun: 'Cutie',
-        translation_hu: 'Doboz',
+        noun: 'Creion',
+        translation_hu: 'Ceruza',
+        correct_article: 'Un',
+        gender_explanation: 'Creion este un substantiv neutru.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Dulap',
+        translation_hu: 'Szekrény',
+        correct_article: 'Un',
+        gender_explanation: 'Dulap este un substantiv neutru.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Mașină',
+        translation_hu: 'Autó',
         correct_article: 'O',
-        gender_explanation: 'Cutie este un substantiv feminin.'
+        gender_explanation: 'Mașină este un substantiv feminin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Floare',
+        translation_hu: 'Virág',
+        correct_article: 'O',
+        gender_explanation: 'Floare este un substantiv feminin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Grădină',
+        translation_hu: 'Kert',
+        correct_article: 'O',
+        gender_explanation: 'Grădină este un substantiv feminin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Fluture',
+        translation_hu: 'Pillangó',
+        correct_article: 'Un',
+        gender_explanation: 'Fluture este un substantiv masculin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Iepure',
+        translation_hu: 'Nyúl',
+        correct_article: 'Un',
+        gender_explanation: 'Iepure este un substantiv masculin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Găină',
+        translation_hu: 'Tyúk',
+        correct_article: 'O',
+        gender_explanation: 'Găină este un substantiv feminin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Pahar',
+        translation_hu: 'Pohár',
+        correct_article: 'Un',
+        gender_explanation: 'Pahar este un substantiv neutru.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Scaun',
+        translation_hu: 'Szék',
+        correct_article: 'Un',
+        gender_explanation: 'Scaun este un substantiv neutru.'
     },
     {
         difficulty: 'medium',
         noun: 'Telefon',
         translation_hu: 'Telefon',
         correct_article: 'Un',
-        gender_explanation: 'Telefon este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Telefon este un substantiv neutru.'
     },
     {
         difficulty: 'medium',
-        noun: 'Bufniță',
-        translation_hu: 'Bagoly',
+        noun: 'Căruță',
+        translation_hu: 'Szekér',
         correct_article: 'O',
-        gender_explanation: 'Bufniță este un substantiv feminin.'
+        gender_explanation: 'Căruță este un substantiv feminin.'
     },
     {
         difficulty: 'medium',
-        noun: 'Urs',
-        translation_hu: 'Medve',
+        noun: 'Caiet',
+        translation_hu: 'Füzet',
         correct_article: 'Un',
-        gender_explanation: 'Urs este un substantiv masculin.'
+        gender_explanation: 'Caiet este un substantiv neutru.'
     },
     {
         difficulty: 'medium',
-        noun: 'Broască',
-        translation_hu: 'Béka',
+        noun: 'Pătură',
+        translation_hu: 'Takaró',
         correct_article: 'O',
-        gender_explanation: 'Broască este un substantiv feminin.'
+        gender_explanation: 'Pătură este un substantiv feminin.'
     },
     {
         difficulty: 'medium',
-        noun: 'Crocodil',
-        translation_hu: 'Krokodil',
+        noun: 'Perină',
+        translation_hu: 'Párna',
+        correct_article: 'O',
+        gender_explanation: 'Perină este un substantiv feminin.'
+    },
+    {
+        difficulty: 'medium',
+        noun: 'Tractor',
+        translation_hu: 'Traktor',
         correct_article: 'Un',
-        gender_explanation: 'Crocodil este un substantiv masculin.'
+        gender_explanation: 'Tractor este un substantiv neutru.'
     },
     {
         difficulty: 'medium',
-        noun: 'Bicicletă',
-        translation_hu: 'Kerékpár',
-        correct_article: 'O',
-        gender_explanation: 'Bicicletă este un substantiv feminin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Avion',
-        translation_hu: 'Repülő',
+        noun: 'Copac',
+        translation_hu: 'Fa',
         correct_article: 'Un',
-        gender_explanation: 'Avion este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Copac este un substantiv masculin.'
     },
     {
         difficulty: 'medium',
-        noun: 'Statuie',
-        translation_hu: 'Szobor',
+        noun: 'Pasăre',
+        translation_hu: 'Madár',
         correct_article: 'O',
-        gender_explanation: 'Statuie este un substantiv feminin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Munte',
-        translation_hu: 'Hegy',
-        correct_article: 'Un',
-        gender_explanation: 'Munte este un substantiv masculin.'
-    },
-    {
-        difficulty: 'medium',
-        noun: 'Insula',
-        translation_hu: 'Sziget',
-        correct_article: 'O',
-        gender_explanation: 'Insulă este un substantiv feminin.'
+        gender_explanation: 'Pasăre este un substantiv feminin.'
     },
 
-    // HARD - Abstract concepts and less common words
+    // NIVELUL 3: DIFICILE (Cuvinte cu grupuri de litere, consoane duble sau structură complexă)
     {
         difficulty: 'hard',
-        noun: 'Curcubeu',
-        translation_hu: 'Szivárvány',
+        noun: 'Ghiocel',
+        translation_hu: 'Hóvirág',
         correct_article: 'Un',
-        gender_explanation: 'Curcubeu este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Ghiocel este un substantiv masculin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Furtună',
-        translation_hu: 'Vihar',
-        correct_article: 'O',
-        gender_explanation: 'Furtună este un substantiv feminin.'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Sentiment',
-        translation_hu: 'Érzés',
+        noun: 'Gândăcel',
+        translation_hu: 'Bogárka',
         correct_article: 'Un',
-        gender_explanation: 'Sentiment este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Gândăcel este un substantiv masculin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Memorie',
-        translation_hu: 'Emlék',
-        correct_article: 'O',
-        gender_explanation: 'Memorie este un substantiv feminin.'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Vis',
-        translation_hu: 'Álom',
+        noun: 'Bujor',
+        translation_hu: 'Pünkösdi rózsa',
         correct_article: 'Un',
-        gender_explanation: 'Vis este un substantiv neutru (masculin la singular).'
+        gender_explanation: 'Bujor este un substantiv masculin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Poveste',
-        translation_hu: 'Mese',
+        noun: 'Genunchieră',
+        translation_hu: 'Térdvédő',
         correct_article: 'O',
-        gender_explanation: 'Poveste este un substantiv feminin.'
+        gender_explanation: 'Genunchieră este un substantiv feminin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Ghetar',
-        translation_hu: 'Gleccser',
+        noun: 'Ghepard',
+        translation_hu: 'Gepárd',
         correct_article: 'Un',
-        gender_explanation: 'Ghețar este un substantiv masculin.'
+        gender_explanation: 'Ghepard este un substantiv masculin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Peșteră',
-        translation_hu: 'Barlang',
+        noun: 'Încălțăminte',
+        translation_hu: 'Lábbeli',
         correct_article: 'O',
-        gender_explanation: 'Peșteră este un substantiv feminin.'
+        gender_explanation: 'Încălțăminte este un substantiv feminin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Vulcan',
-        translation_hu: 'Vulkán',
-        correct_article: 'Un',
-        gender_explanation: 'Vulcan este un substantiv masculin.'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Gaură',
-        translation_hu: 'Lyuk',
+        noun: 'Oglindă',
+        translation_hu: 'Tükör',
         correct_article: 'O',
-        gender_explanation: 'Gaură este un substantiv feminin.'
+        gender_explanation: 'Oglindă este un substantiv feminin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Univers',
-        translation_hu: 'Univerzum',
-        correct_article: 'Un',
-        gender_explanation: 'Univers este un substantiv neutru (masculin la singular).'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Constelație',
-        translation_hu: 'Csillagkép',
+        noun: 'Veveriță',
+        translation_hu: 'Mókus',
         correct_article: 'O',
-        gender_explanation: 'Constelație este un substantiv feminin.'
+        gender_explanation: 'Veveriță este un substantiv feminin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Meteorit',
-        translation_hu: 'Meteorit',
-        correct_article: 'Un',
-        gender_explanation: 'Meteorit este un substantiv masculin.'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Eclipsă',
-        translation_hu: 'Napfogyatkozás',
+        noun: 'Pânză',
+        translation_hu: 'Vászon',
         correct_article: 'O',
-        gender_explanation: 'Eclipsă este un substantiv feminin.'
+        gender_explanation: 'Pânză este un substantiv feminin.'
     },
     {
         difficulty: 'hard',
-        noun: 'Telescop',
-        translation_hu: 'Távcső',
-        correct_article: 'Un',
-        gender_explanation: 'Telescop este un substantiv neutru (masculin la singular).'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Galaxie',
-        translation_hu: 'Galaxis',
+        noun: 'Șopârlă',
+        translation_hu: 'Gyík',
         correct_article: 'O',
-        gender_explanation: 'Galaxie este un substantiv feminin.'
-    },
-    {
-        difficulty: 'hard',
-        noun: 'Planet',
-        translation_hu: 'Bolygó',
-        correct_article: 'O',
-        gender_explanation: 'Planetă este un substantiv feminin.'
+        gender_explanation: 'Șopârlă este un substantiv feminin.'
     }
 ];
 
