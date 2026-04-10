@@ -252,7 +252,7 @@ export const SENTENCE_BUILDER_PUZZLES = [
         translation_hu: "A nővér énekel egy dallamot"
     },
     {
-        difficult: 'medium',
+        difficulty: 'medium',
         original: ["Profesoara", "explică", "lecția", "nouă"],
         scrambled: ["nouă", "lecția", "Profesoara", "explică"],
         translation_hu: "A tanárnő elmagyarázza az új leckét"
@@ -279,7 +279,7 @@ export const SENTENCE_BUILDER_PUZZLES = [
         difficulty: 'medium',
         original: ["Bunicul", "lucrează", "în", "grădină"],
         scrambled: ["grădină", "în", "Bunicul", "lucrează"],
-        translation_hu: "A nagybácsi dolgozik a kertben"
+        translation_hu: "A nagypapa dolgozik a kertben"
     },
     {
         difficulty: 'medium',
@@ -403,9 +403,9 @@ export const SENTENCE_BUILDER_PUZZLES = [
     },
     {
         difficulty: 'medium',
-        original: ["Fratele", "se", "joacă", "mingea"],
-        scrambled: ["mingea", "joacă", "se", "Fratele"],
-        translation_hu: "A fiútestvér játszik a labdával"
+        original: ["Fratele", "se", "joacă", "cu", "mingea"],
+        scrambled: ["mingea", "cu", "se", "joacă", "Fratele"],
+        translation_hu: "A fiútestvér a labdával játszik"
     },
 
     // ========== HARD (68-100) - 5 cuvinte ==========
@@ -485,7 +485,7 @@ export const SENTENCE_BUILDER_PUZZLES = [
         difficulty: 'hard',
         original: ["Bunicul", "lucrează", "în", "grădina", "mare"],
         scrambled: ["mare", "grădina", "în", "lucrează", "Bunicul"],
-        translation_hu: "A nagybácsi dolgozik a nagy kertben"
+        translation_hu: "A nagypapa dolgozik a nagy kertben"
     },
     {
         difficulty: 'hard',

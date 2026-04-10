@@ -36,7 +36,7 @@ export const KID_SENTENCES = [
     },
     {
         original: ["Luna", "este", "sus", "pe", "cer"],
-        scrambled: ["cer", " Luna", "pe", "este", "sus"],
+        scrambled: ["cer", "Luna", "pe", "este", "sus"],
         translation_hu: "A hold magasan van az égen"
     },
     {

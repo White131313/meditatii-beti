@@ -14,6 +14,22 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     const [currentSentenceIndex, setCurrentSentenceIndex] = useState(-1);
     const [difficulty, setDifficulty] = useState('easy');
     const [recentResults, setRecentResults] = useState([]); // Track last 3 attempts
+    const [score, setScore] = useState(() => {
+        const saved = localStorage.getItem('sentenceBuilderScore');
+        return saved ? parseInt(saved, 10) : 0;
+    });
+    const [totalPlayed, setTotalPlayed] = useState(() => {
+        const saved = localStorage.getItem('sentenceBuilderTotal');
+        return saved ? parseInt(saved, 10) : 0;
+    });
+
+    useEffect(() => {
+        localStorage.setItem('sentenceBuilderScore', score);
+    }, [score]);
+
+    useEffect(() => {
+        localStorage.setItem('sentenceBuilderTotal', totalPlayed);
+    }, [totalPlayed]);
 
     const t = {
         RO: {
@@ -26,7 +42,9 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             success: "Bravo! Ai reușit! 🎉",
             loading: "Se încarcă...",
             back: "Înapoi",
-            empty: "Trage sau apasă pe cuvinte aici..."
+            empty: "Trage sau apasă pe cuvinte aici...",
+            score: "Scor",
+            progress: "Progres"
         },
         HU: {
             title: "Mondatépítő",
@@ -38,7 +56,9 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             success: "Szuper! Sikerült! 🎉",
             loading: "Betöltés...",
             back: "Vissza",
-            empty: "Húzd vagy kattints ide..."
+            empty: "Húzd vagy kattints ide...",
+            score: "Pontszám",
+            progress: "Haladás"
         }
     };
 
@@ -47,6 +67,11 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     const adjustDifficulty = (wasCorrect) => {
         const newResults = [...recentResults, wasCorrect].slice(-3);
         setRecentResults(newResults);
+
+        if (wasCorrect) {
+            setScore(prev => prev + (difficulty === 'easy' ? 10 : difficulty === 'medium' ? 20 : 30));
+        }
+        setTotalPlayed(prev => prev + 1);
 
         if (newResults.length === 3) {
             const correctCount = newResults.filter(r => r).length;
@@ -186,6 +211,29 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             {/* Main container with proportional spacing - OPTIMIZED */}
             <div className="min-h-[100dvh] flex flex-col pt-20 sm:pt-28 lg:pt-32 pb-6 sm:pb-8">
                 <div className="flex-1 flex flex-col max-w-3xl mx-auto px-4 w-full relative z-10">
+                    {/* Stats Header */}
+                    <div className="flex justify-between items-center mb-6 px-2">
+                        <div className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-sm border border-orange-100 flex items-center gap-3">
+                            <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
+                                <span className="text-lg">⭐</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-orange-400 uppercase tracking-tighter leading-none">{currentT.score}</p>
+                                <p className="text-lg font-black text-gray-800 leading-none">{score}</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-2xl shadow-sm border border-blue-100 flex items-center gap-3">
+                            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                                <span className="text-lg">📚</span>
+                            </div>
+                            <div>
+                                <p className="text-[10px] font-black text-blue-400 uppercase tracking-tighter leading-none">{currentT.progress}</p>
+                                <p className="text-lg font-black text-gray-800 leading-none">{totalPlayed}</p>
+                            </div>
+                        </div>
+                    </div>
+
                     {/* Header - Compact and professional */}
                     <div className="grid grid-cols-1 gap-4 sm:gap-6 mb-4 sm:mb-12">
                         <div className="flex items-center justify-between">
@@ -197,14 +245,23 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
                                 <span className="font-bold text-xs uppercase tracking-wider">{currentT.back}</span>
                             </button>
 
-                            <button
-                                onClick={() => fetchNewSentence()}
-                                disabled={isLoading}
-                                className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95 disabled:opacity-50"
-                            >
-                                <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
-                                <span className="font-bold text-xs uppercase tracking-widest">{currentT.newSentence}</span>
-                            </button>
+                            <div className="flex items-center gap-2">
+                                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${
+                                    difficulty === 'easy' ? 'bg-green-100 text-green-600' :
+                                    difficulty === 'medium' ? 'bg-orange-100 text-orange-600' :
+                                    'bg-red-100 text-red-600'
+                                }`}>
+                                    {difficulty}
+                                </span>
+                                <button
+                                    onClick={() => fetchNewSentence()}
+                                    disabled={isLoading}
+                                    className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-xl shadow-lg shadow-blue-200 hover:bg-blue-600 transition-all active:scale-95 disabled:opacity-50"
+                                >
+                                    <RefreshCw size={16} className={isLoading ? 'animate-spin' : ''} />
+                                    <span className="font-bold text-xs uppercase tracking-widest">{currentT.newSentence}</span>
+                                </button>
+                            </div>
                         </div>
 
                         {/* Title & Instruction - More integrated */}
