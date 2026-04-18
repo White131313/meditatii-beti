@@ -58,11 +58,14 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
         setRecentResults(newResults);
 
         if (wasCorrect) {
-            setScore(prev => prev + (difficulty === 'easy' ? 10 : difficulty === 'medium' ? 20 : 30));
+            setScore(prev => prev + 10);
             setTotalPlayed(prev => prev + 1);
         } else {
             setScore(0);
             setTotalPlayed(0);
+            setDifficulty('easy');
+            setRecentResults([]);
+            return 'easy';
         }
 
         if (newResults.length === 3) {
