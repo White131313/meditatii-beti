@@ -73,6 +73,8 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
 
         if (wasCorrect) {
             setScore(prev => prev + (difficulty === 'easy' ? 10 : difficulty === 'medium' ? 20 : 30));
+        } else {
+            setScore(0);
         }
         setTotalPlayed(prev => prev + 1);
 
