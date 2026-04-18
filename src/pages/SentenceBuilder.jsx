@@ -9,6 +9,7 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     const [dropZone, setDropZone] = useState([]);
     const [correctAnswer, setCorrectAnswer] = useState([]);
     const [hint, setHint] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
     const [currentSentenceIndex, setCurrentSentenceIndex] = useState(-1);
@@ -44,7 +45,8 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             back: "Înapoi",
             empty: "Trage sau apasă pe cuvinte aici...",
             score: "Scor",
-            progress: "Progres"
+            progress: "Progres",
+            correctPositionsHint: "Ai așezat corect {count} din {total} cuvinte. Mai încearcă!"
         },
         HU: {
             title: "Mondatépítő",
@@ -58,7 +60,8 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             back: "Vissza",
             empty: "Húzd vagy kattints ide...",
             score: "Pontszám",
-            progress: "Haladás"
+            progress: "Haladás",
+            correctPositionsHint: "{count} / {total} szó a megfelelő helyen van. Próbáld újra!"
         }
     };
 
@@ -119,6 +122,7 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
         setCorrectAnswer([]);
         setScrambledWords([]);
         setHint('');
+        setErrorMsg('');
 
         // Use static sentences - all verified and correct!
         setTimeout(() => {
@@ -143,7 +147,7 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     useEffect(() => {
         fetchNewSentence();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [difficulty]); // Re-fetch when difficulty changes
+    }, []); // Only fetch once on mount, we manually fetch on difficulty change to avoid interrupting a current puzzle
 
     const handleWordClick = (word, index) => {
         if (showSuccess || isLoading) return;
@@ -161,20 +165,29 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
         const isCorrect = JSON.stringify(dropZone) === JSON.stringify(correctAnswer);
 
         if (isCorrect) {
+            setErrorMsg('');
             const nextDiff = adjustDifficulty(true);
             setShowSuccess(true);
             setTimeout(() => {
                 setShowSuccess(false);
-                // If the difficulty changed, the useEffect[difficulty] will trigger fetchNewSentence
-                // If it DID NOT change, we must trigger it manually
-                if (nextDiff === difficulty) {
-                    fetchNewSentence(nextDiff);
-                }
+                // We must always trigger it manually now
+                fetchNewSentence(nextDiff);
             }, 2500);
         } else {
             adjustDifficulty(false);
             const dropZoneEl = document.getElementById('drop-zone');
             dropZoneEl?.classList.add('shake');
+            
+            let correctPositions = 0;
+            dropZone.forEach((word, index) => {
+                if (word === correctAnswer[index]) correctPositions++;
+            });
+            const hintText = currentT.correctPositionsHint
+                .replace('{count}', correctPositions)
+                .replace('{total}', correctAnswer.length);
+            
+            setErrorMsg(hintText);
+            
             setTimeout(() => {
                 dropZoneEl?.classList.remove('shake');
             }, 500);
@@ -186,6 +199,7 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
         // Use our new shuffle function
         setScrambledWords(shuffleArray(correctAnswer));
         setShowSuccess(false);
+        setErrorMsg('');
     };
 
     return (
@@ -321,6 +335,15 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
                                     ))
                                 )}
                             </div>
+
+                            {/* Error Message Hint */}
+                            {errorMsg && (
+                                <div className="text-center mt-2 animate-bounce">
+                                    <p className="inline-block px-4 py-2 bg-red-100 text-red-600 font-bold rounded-xl border border-red-200">
+                                        {errorMsg}
+                                    </p>
+                                </div>
+                            )}
 
                             {/* Word Pool */}
                             <div className="bg-white/60 backdrop-blur-sm rounded-xl sm:rounded-3xl p-3 sm:p-6 shadow-inner border border-white">
