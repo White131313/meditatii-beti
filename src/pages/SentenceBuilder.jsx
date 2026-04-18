@@ -15,22 +15,8 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     const [currentSentenceIndex, setCurrentSentenceIndex] = useState(-1);
     const [difficulty, setDifficulty] = useState('easy');
     const [recentResults, setRecentResults] = useState([]); // Track last 3 attempts
-    const [score, setScore] = useState(() => {
-        const saved = localStorage.getItem('sentenceBuilderScore');
-        return saved ? parseInt(saved, 10) : 0;
-    });
-    const [totalPlayed, setTotalPlayed] = useState(() => {
-        const saved = localStorage.getItem('sentenceBuilderTotal');
-        return saved ? parseInt(saved, 10) : 0;
-    });
-
-    useEffect(() => {
-        localStorage.setItem('sentenceBuilderScore', score);
-    }, [score]);
-
-    useEffect(() => {
-        localStorage.setItem('sentenceBuilderTotal', totalPlayed);
-    }, [totalPlayed]);
+    const [score, setScore] = useState(0);
+    const [totalPlayed, setTotalPlayed] = useState(0);
 
     const t = {
         RO: {
@@ -73,10 +59,11 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
 
         if (wasCorrect) {
             setScore(prev => prev + (difficulty === 'easy' ? 10 : difficulty === 'medium' ? 20 : 30));
+            setTotalPlayed(prev => prev + 1);
         } else {
             setScore(0);
+            setTotalPlayed(0);
         }
-        setTotalPlayed(prev => prev + 1);
 
         if (newResults.length === 3) {
             const correctCount = newResults.filter(r => r).length;
