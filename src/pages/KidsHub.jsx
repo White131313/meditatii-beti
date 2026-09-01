@@ -93,7 +93,7 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             color: 'from-purple-500 to-pink-500',
             path: '/copii/vorbeste',
             available: true,
-            isFree: false
+            isFree: true
         }
     ];
 
