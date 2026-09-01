@@ -17,6 +17,11 @@ const isIOS = typeof navigator !== 'undefined' && (
 );
 
 const LISTEN_TIMEOUT_MS = 7000;
+// Daca nu mai vin rezultate interimediare noi timp de atat, consideram ca a terminat
+// de vorbit si evaluam cu ce avem, in loc sa asteptam finalizarea proprie a motorului
+// (care poate mai dura 1-2s dupa ultimul cuvant rostit - exact intarzierea reclamata
+// la un raspuns gresit).
+const SILENCE_SETTLE_MS = 900;
 
 const normalize = (str) => (str || '')
     .toLowerCase()
@@ -145,11 +150,13 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
 
     const recognitionRef = useRef(null);
     const listenTimeoutRef = useRef(null);
+    const silenceTimeoutRef = useRef(null);
 
     const t = {
         RO: {
             title: "Spune în Română!",
             instruction: "Apasă pe microfon și spune cu voce tare cuvântul în română!",
+            instructionTyped: "Scrie traducerea corectă în română!",
             back: "Înapoi",
             score: "Scor",
             rounds: "Runde",
@@ -181,6 +188,7 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
         HU: {
             title: "Mondd Románul!",
             instruction: "Nyomd meg a mikrofont és mondd ki hangosan a szót románul!",
+            instructionTyped: "Írd be a helyes román fordítást!",
             back: "Vissza",
             score: "Pontszám",
             rounds: "Kör",
@@ -233,6 +241,7 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
             recognition.onend = null;
             try { recognition.abort(); } catch { /* noop */ }
             if (listenTimeoutRef.current) clearTimeout(listenTimeoutRef.current);
+            if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -241,6 +250,10 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
         if (listenTimeoutRef.current) {
             clearTimeout(listenTimeoutRef.current);
             listenTimeoutRef.current = null;
+        }
+        if (silenceTimeoutRef.current) {
+            clearTimeout(silenceTimeoutRef.current);
+            silenceTimeoutRef.current = null;
         }
     };
 
@@ -290,10 +303,21 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                     return;
                 }
             }
-            // Niciun rezultat (interimediar sau final) nu se potriveste inca -
-            // daca engine-ul a ajuns totusi la un rezultat final, evaluam ca gresit;
-            // altfel mai asteptam (poate mai vorbeste).
-            if (hasFinal) resolveWith(bestSoFar);
+            // Niciun rezultat (interimediar sau final) nu se potriveste inca.
+            if (hasFinal) {
+                // Engine-ul a hotarat singur ca a terminat - evaluam ca gresit direct.
+                resolveWith(bestSoFar);
+                return;
+            }
+            // Inca interimediar: resetam un cronometru scurt - daca nu mai vine niciun
+            // rezultat nou in SILENCE_SETTLE_MS, presupunem ca a terminat de vorbit si
+            // evaluam cu ce avem, fara sa mai asteptam finalizarea proprie a motorului.
+            if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
+            const captured = bestSoFar;
+            silenceTimeoutRef.current = setTimeout(() => {
+                try { recognition.stop(); } catch { /* noop */ }
+                resolveWith(captured);
+            }, SILENCE_SETTLE_MS);
         };
         recognition.onerror = (event) => {
             if (resolved) return;
@@ -450,7 +474,9 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                     {/* Title */}
                     <div className="text-center mb-4 sm:mb-6">
                         <h1 className="text-2xl sm:text-4xl font-black text-gray-800 mb-2 tracking-tight">{currentT.title}</h1>
-                        <p className="text-sm sm:text-base text-gray-500 font-bold max-w-sm mx-auto">{currentT.instruction}</p>
+                        <p className="text-sm sm:text-base text-gray-500 font-bold max-w-sm mx-auto">
+                            {inputMode === 'mic' ? currentT.instruction : currentT.instructionTyped}
+                        </p>
                     </div>
 
                     {/* Progress dots */}
@@ -609,7 +635,10 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                                                 {currentT.next}
                                             </button>
                                         )}
-                                        {micAvailable && status !== 'revealed' && (
+                                        {/* Pe iOS Safari, recunoasterea vocala e nefunctionala in practica
+                                            (raportat real: butonul de microfon "nu aude nimic" niciodata),
+                                            asa ca nu mai oferim deloc optiunea acolo. */}
+                                        {micAvailable && !isIOS && status !== 'revealed' && (
                                             <button
                                                 onClick={switchToMic}
                                                 className="flex items-center gap-1.5 px-3 py-1.5 text-gray-400 rounded-xl font-black text-[11px] uppercase tracking-wider hover:text-purple-500 transition-all"
