@@ -73,6 +73,58 @@ const isCorrectAnswer = (heard, word) => {
     return accepted.some(normExpected => matchesOneAnswer(normHeard, normExpected));
 };
 
+// Sunete sintetizate din mers (Web Audio API) - fara fisiere audio de gestionat.
+// AudioContext se creeaza abia la prima folosire (dupa un tap/click, ca sa respecte
+// politica de autoplay a browserelor) si e refolosit dupa aceea.
+let sharedAudioCtx = null;
+const getAudioCtx = () => {
+    if (typeof window === 'undefined') return null;
+    const Ctx = window.AudioContext || window.webkitAudioContext;
+    if (!Ctx) return null;
+    if (!sharedAudioCtx) sharedAudioCtx = new Ctx();
+    if (sharedAudioCtx.state === 'suspended') sharedAudioCtx.resume().catch(() => { /* noop */ });
+    return sharedAudioCtx;
+};
+
+const playTone = (ctx, freq, startTime, duration, type, volume) => {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type;
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(0.0001, startTime);
+    gain.gain.linearRampToValueAtTime(volume, startTime + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(startTime);
+    osc.stop(startTime + duration + 0.02);
+};
+
+const playCorrectSound = () => {
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    // arpegiu vesel, ascendent: Do5 - Mi5 - Sol5
+    playTone(ctx, 523.25, now, 0.13, 'sine', 0.22);
+    playTone(ctx, 659.25, now + 0.1, 0.13, 'sine', 0.22);
+    playTone(ctx, 783.99, now + 0.2, 0.22, 'sine', 0.22);
+};
+
+const playWrongSound = () => {
+    const ctx = getAudioCtx();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+    // bâzâit scurt, coborâtor - clar diferit de sunetul de succes, dar blând
+    playTone(ctx, 220, now, 0.14, 'square', 0.12);
+    playTone(ctx, 164.81, now + 0.13, 0.2, 'square', 0.12);
+};
+
+const vibrate = (pattern) => {
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+        try { navigator.vibrate(pattern); } catch { /* noop */ }
+    }
+};
+
 const ROUND_SIZE = 5;
 
 const VoiceSpeakGame = ({ lang = 'RO' }) => {
@@ -196,10 +248,13 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
         setLastHeard(heardText);
         if (isCorrectAnswer(heardText, word)) {
             setStatus('correct');
+            playCorrectSound();
             setScore(s => s + 10);
             setTimeout(() => goToNext(), 1600);
         } else {
             setStatus('wrong');
+            playWrongSound();
+            vibrate([80, 40, 80]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cardIndex, roundWords]);
