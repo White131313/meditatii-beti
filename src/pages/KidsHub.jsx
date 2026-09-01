@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Puzzle, Sparkles, ArrowRight, Search, Lock } from 'lucide-react';
+import { Puzzle, Sparkles, ArrowRight, Search, Lock, Mic } from 'lucide-react';
 
 const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
     const navigate = useNavigate();
@@ -17,6 +17,8 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             game3Desc: "Ai 10 secunde! Este corect sau nu?",
             game4Title: "Un sau O? 🔴🔵",
             game4Desc: "Potrivește cuvântul cu articolul corect!",
+            game5Title: "Spune în Română! 🎤",
+            game5Desc: "Vezi cuvântul, spune-l cu voce tare!",
             play: "Joacă Acum",
             locked: "Joc Premium (Pro)",
             comingSoon: "În curând mai multe jocuri..."
@@ -32,6 +34,8 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             game3Desc: "10 másodperced van! Igaz vagy sem?",
             game4Title: "Un vagy O? 🔴🔵",
             game4Desc: "Válaszd ki a helyes névelőt a szóhoz!",
+            game5Title: "Mondd Románul! 🎤",
+            game5Desc: "Nézd meg a szót, mondd ki hangosan!",
             play: "Játssz most",
             locked: "Prémium Játék (Pro)",
             comingSoon: "Hamarosan még több játék..."
@@ -78,6 +82,16 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             icon: Sparkles,
             color: 'from-green-400 to-emerald-500',
             path: '/copii/adevarat-fals',
+            available: true,
+            isFree: false
+        },
+        {
+            id: 'voice-speak',
+            title: currentT.game5Title,
+            description: currentT.game5Desc,
+            icon: Mic,
+            color: 'from-purple-500 to-pink-500',
+            path: '/copii/vorbeste',
             available: true,
             isFree: false
         }

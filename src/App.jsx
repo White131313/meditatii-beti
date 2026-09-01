@@ -10,6 +10,7 @@ import SentenceBuilder from './pages/SentenceBuilder';
 import WordDetective from './pages/WordDetective';
 import TrueFalseGame from './pages/TrueFalseGame';
 import ArticleMatchGame from './pages/ArticleMatchGame';
+import VoiceSpeakGame from './pages/VoiceSpeakGame';
 import FAQ from './pages/FAQ';
 import Contact from './pages/Contact';
 import Terms from './pages/Terms';
@@ -257,6 +258,10 @@ function App() {
 
           <Route path="/copii/adevarat-fals" element={
             <TrueFalseGame lang={lang} />
+          } />
+
+          <Route path="/copii/vorbeste" element={
+            <VoiceSpeakGame lang={lang} />
           } />
 
           <Route path="/copii/articole" element={
