@@ -7,6 +7,17 @@ const SpeechRecognitionAPI = typeof window !== 'undefined'
     ? (window.SpeechRecognition || window.webkitSpeechRecognition)
     : null;
 
+// iOS Safari expose webkitSpeechRecognition dar implementarea e adesea nefunctionala
+// (butonul de microfon "nu face nimic" - nu apare nicio eroare, nu se intampla nimic).
+// Din acest motiv nu ne bazam doar pe feature-detection: pe iOS pornim direct in modul scris,
+// dar lasam optiunea de a incerca microfonul manual daca API-ul exista.
+const isIOS = typeof navigator !== 'undefined' && (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+);
+
+const LISTEN_TIMEOUT_MS = 7000;
+
 const normalize = (str) => (str || '')
     .toLowerCase()
     .normalize('NFD')
@@ -15,20 +26,58 @@ const normalize = (str) => (str || '')
     .trim()
     .replace(/\s+/g, ' ');
 
-const isCorrectAnswer = (heard, expected) => {
-    const normExpected = normalize(expected);
-    const normHeard = normalize(heard);
-    if (!normHeard) return false;
+// Distanta Levenshtein, pt tolerarea micilor greseli de recunoastere vocala
+// (ex: "casa" auzit in loc de "casă" dupa normalizare ar da deja match exact,
+// dar "mắr"/"maar" sau alte usoare deformari trebuie tolerate).
+const levenshtein = (a, b) => {
+    if (a === b) return 0;
+    if (!a.length) return b.length;
+    if (!b.length) return a.length;
+    const prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+    for (let i = 1; i <= a.length; i++) {
+        let prevDiag = prev[0];
+        prev[0] = i;
+        for (let j = 1; j <= b.length; j++) {
+            const tmp = prev[j];
+            prev[j] = a[i - 1] === b[j - 1]
+                ? prevDiag
+                : 1 + Math.min(prevDiag, prev[j], prev[j - 1]);
+            prevDiag = tmp;
+        }
+    }
+    return prev[b.length];
+};
+
+// Cat de tolerant suntem la o singura varianta acceptata, in functie de lungimea ei -
+// cuvintele scurte (nas, cal) raman pe potrivire exacta ca sa nu accepte orice,
+// cele mai lungi tolereaza 1-2 litere diferite (utile mai ales pe Android, unde
+// recunoasterea vocala e adesea mai putin precisa decat pe desktop).
+const matchesOneAnswer = (normHeard, normExpected) => {
+    if (!normExpected) return false;
     if (normHeard === normExpected) return true;
     const tokens = normHeard.split(' ').filter(Boolean);
-    return tokens.includes(normExpected);
+    if (tokens.includes(normExpected)) return true;
+    const maxDistance = normExpected.length <= 3 ? 0 : normExpected.length <= 6 ? 1 : 2;
+    if (maxDistance === 0) return false;
+    return tokens.some(tok => Math.abs(tok.length - normExpected.length) <= maxDistance
+        && levenshtein(tok, normExpected) <= maxDistance);
+};
+
+// `word` e o intrare din SPEAKING_WORDS ({ answer, alt }) - acceptam raspunsul canonic
+// plus orice varianta din `alt` (ex: cifra "6" pt "șase", pt ca motoarele de
+// recunoastere vocala transcriu adesea numerele rostite ca cifre).
+const isCorrectAnswer = (heard, word) => {
+    const normHeard = normalize(heard);
+    if (!normHeard) return false;
+    const accepted = [word.answer, ...(word.alt || [])].map(normalize);
+    return accepted.some(normExpected => matchesOneAnswer(normHeard, normExpected));
 };
 
 const ROUND_SIZE = 5;
 
 const VoiceSpeakGame = ({ lang = 'RO' }) => {
     const navigate = useNavigate();
-    const isSupported = !!SpeechRecognitionAPI;
+    const micAvailable = !!SpeechRecognitionAPI;
 
     const [roundWords, setRoundWords] = useState(() => getRandomRound(ROUND_SIZE));
     const [cardIndex, setCardIndex] = useState(0);
@@ -39,8 +88,11 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
     const [roundsWon, setRoundsWon] = useState(0);
     const [roundComplete, setRoundComplete] = useState(false);
     const [typedAnswer, setTypedAnswer] = useState('');
+    // iOS porneste direct in modul scris (microfonul e nesigur acolo); altfel, mic daca exista API-ul.
+    const [inputMode, setInputMode] = useState(micAvailable && !isIOS ? 'mic' : 'typed');
 
     const recognitionRef = useRef(null);
+    const listenTimeoutRef = useRef(null);
 
     const t = {
         RO: {
@@ -67,8 +119,12 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
             genericError: "Ceva nu a mers bine. Mai încearcă!",
             unsupportedTitle: "Microfonul nu e disponibil aici",
             unsupportedDesc: "Browserul acesta nu suportă recunoașterea vocală (funcționează cel mai bine în Chrome). Poți totuși scrie răspunsul:",
+            typePrompt: "Scrie răspunsul în română:",
             typePlaceholder: "Scrie răspunsul în română...",
-            check: "Verifică"
+            check: "Verifică",
+            switchToTyped: "✏️ Scrie răspunsul în loc",
+            switchToMic: "🎤 Încearcă microfonul",
+            timeoutError: "Nu am reușit să te aud. Încearcă din nou sau scrie răspunsul."
         },
         HU: {
             title: "Mondd Románul!",
@@ -94,20 +150,29 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
             genericError: "Valami nem sikerült. Próbáld újra!",
             unsupportedTitle: "A mikrofon itt nem elérhető",
             unsupportedDesc: "Ez a böngésző nem támogatja a hangfelismerést (Chrome-ban működik legjobban). Beírhatod a választ:",
+            typePrompt: "Írd be a választ románul:",
             typePlaceholder: "Írd be a választ románul...",
-            check: "Ellenőrzés"
+            check: "Ellenőrzés",
+            switchToTyped: "✏️ Írd be inkább a választ",
+            switchToMic: "🎤 Próbáld a mikrofont",
+            timeoutError: "Nem sikerült meghallanom. Próbáld újra, vagy írd be a választ."
         }
     };
     const currentT = t[lang] || t.RO;
     const currentWord = roundWords[cardIndex];
 
-    // Configurare SpeechRecognition o singura data
+    // Configurare SpeechRecognition o singura data (chiar daca pornim in modul scris,
+    // ca sa fie gata instant daca utilizatorul comuta pe microfon)
     useEffect(() => {
-        if (!isSupported) return undefined;
+        if (!micAvailable) return undefined;
         const recognition = new SpeechRecognitionAPI();
         recognition.lang = 'ro-RO';
         recognition.continuous = false;
-        recognition.interimResults = false;
+        // interimResults=true: motorul trimite ipoteze pe masura ce copilul vorbeste,
+        // nu doar la final. Validam de indata ce o ipoteza se potriveste, in loc sa
+        // asteptam finalizarea completa (care pe Android poate dura 1-2s in plus
+        // dupa ce a incetat sa vorbeasca) - raspunde vizibil mai repede la un raspuns corect.
+        recognition.interimResults = true;
         recognition.maxAlternatives = 5;
         recognitionRef.current = recognition;
         return () => {
@@ -115,12 +180,21 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
             recognition.onerror = null;
             recognition.onend = null;
             try { recognition.abort(); } catch { /* noop */ }
+            if (listenTimeoutRef.current) clearTimeout(listenTimeoutRef.current);
         };
-    }, [isSupported]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-    const evaluate = useCallback((heardText, expected) => {
+    const clearListenTimeout = () => {
+        if (listenTimeoutRef.current) {
+            clearTimeout(listenTimeoutRef.current);
+            listenTimeoutRef.current = null;
+        }
+    };
+
+    const evaluate = useCallback((heardText, word) => {
         setLastHeard(heardText);
-        if (isCorrectAnswer(heardText, expected)) {
+        if (isCorrectAnswer(heardText, word)) {
             setStatus('correct');
             setScore(s => s + 10);
             setTimeout(() => goToNext(), 1600);
@@ -131,28 +205,64 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
     }, [cardIndex, roundWords]);
 
     const startListening = () => {
-        if (!isSupported || !recognitionRef.current || status === 'listening') return;
+        if (!micAvailable || !recognitionRef.current || status === 'listening') return;
         const recognition = recognitionRef.current;
         setErrorType(null);
         setLastHeard('');
         setStatus('listening');
 
+        // Evita evaluarea de doua ori (o data pe un rezultat interimediar potrivit,
+        // o data pe onend/rezultatul final care mai poate veni dupa ce am oprit deja).
+        let resolved = false;
+        const resolveWith = (heardText) => {
+            if (resolved) return;
+            resolved = true;
+            clearListenTimeout();
+            evaluate(heardText, currentWord);
+        };
+
         recognition.onresult = (event) => {
-            const alternatives = Array.from(event.results[0] || []).map(r => r.transcript);
-            const best = alternatives[0] || '';
-            const anyMatch = alternatives.some(alt => isCorrectAnswer(alt, currentWord.answer));
-            evaluate(anyMatch ? currentWord.answer : best, currentWord.answer);
+            let bestSoFar = '';
+            let hasFinal = false;
+            for (let i = 0; i < event.results.length; i++) {
+                const result = event.results[i];
+                const alternatives = Array.from(result).map(r => r.transcript);
+                if (alternatives[0]) bestSoFar = alternatives[0];
+                if (result.isFinal) hasFinal = true;
+                if (alternatives.some(alt => isCorrectAnswer(alt, currentWord))) {
+                    try { recognition.stop(); } catch { /* noop */ }
+                    resolveWith(currentWord.answer);
+                    return;
+                }
+            }
+            // Niciun rezultat (interimediar sau final) nu se potriveste inca -
+            // daca engine-ul a ajuns totusi la un rezultat final, evaluam ca gresit;
+            // altfel mai asteptam (poate mai vorbeste).
+            if (hasFinal) resolveWith(bestSoFar);
         };
         recognition.onerror = (event) => {
+            if (resolved) return;
+            clearListenTimeout();
             setErrorType(event.error);
             setStatus('error');
         };
         recognition.onend = () => {
+            clearListenTimeout();
             setStatus(prev => (prev === 'listening' ? 'idle' : prev));
         };
 
         try {
             recognition.start();
+            // Plasa de siguranta: pe unele browsere (mai ales iOS Safari) start() nu da
+            // niciodata eroare si nici nu raporteaza rezultat - butonul ar ramane "blocat"
+            // in starea de ascultare la nesfarsit. Daca nu se intampla nimic in timp util,
+            // il tratam ca eroare si oferim alternativa de a scrie raspunsul.
+            listenTimeoutRef.current = setTimeout(() => {
+                if (resolved) return;
+                try { recognition.abort(); } catch { /* noop */ }
+                setErrorType('timeout');
+                setStatus('error');
+            }, LISTEN_TIMEOUT_MS);
         } catch {
             setStatus('idle');
         }
@@ -182,7 +292,7 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
     };
 
     const handleTypedCheck = () => {
-        evaluate(typedAnswer, currentWord.answer);
+        evaluate(typedAnswer, currentWord);
     };
 
     const startNewRound = () => {
@@ -200,7 +310,24 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
         if (errorType === 'not-allowed' || errorType === 'permission-denied') return currentT.notAllowed;
         if (errorType === 'no-speech') return currentT.noSpeech;
         if (errorType === 'network') return currentT.networkError;
+        if (errorType === 'timeout') return currentT.timeoutError;
         return currentT.genericError;
+    };
+
+    const switchToTyped = () => {
+        clearListenTimeout();
+        if (recognitionRef.current) { try { recognitionRef.current.abort(); } catch { /* noop */ } }
+        setInputMode('typed');
+        setStatus('idle');
+        setErrorType(null);
+        setLastHeard('');
+    };
+
+    const switchToMic = () => {
+        setInputMode('mic');
+        setStatus('idle');
+        setErrorType(null);
+        setTypedAnswer('');
     };
 
     if (roundComplete) {
@@ -323,7 +450,7 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                                 )}
 
                                 {/* Mic / typed input controls */}
-                                {isSupported ? (
+                                {inputMode === 'mic' ? (
                                     <div className="flex flex-col items-center gap-3">
                                         {(status === 'idle' || status === 'listening' || status === 'error') && (
                                             <button
@@ -369,21 +496,38 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                                                 {currentT.next}
                                             </button>
                                         )}
+                                        {status !== 'listening' && (
+                                            <button
+                                                onClick={switchToTyped}
+                                                className="flex items-center gap-1.5 px-3 py-1.5 text-gray-400 rounded-xl font-black text-[11px] uppercase tracking-wider hover:text-purple-500 transition-all mt-1"
+                                            >
+                                                <Keyboard size={13} />
+                                                {currentT.switchToTyped}
+                                            </button>
+                                        )}
                                     </div>
                                 ) : (
                                     <div className="w-full max-w-xs flex flex-col items-center gap-3">
-                                        <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-wider">
-                                            <Keyboard size={14} />
-                                            {currentT.unsupportedDesc}
-                                        </div>
+                                        {!micAvailable && (
+                                            <div className="flex items-center gap-2 text-gray-400 text-xs font-bold uppercase tracking-wider text-center">
+                                                <Keyboard size={14} className="shrink-0" />
+                                                {currentT.unsupportedDesc}
+                                            </div>
+                                        )}
                                         {(status === 'idle' || status === 'wrong') && (
                                             <>
+                                                {micAvailable && (
+                                                    <p className="text-xs font-black text-gray-400 uppercase tracking-widest">
+                                                        {currentT.typePrompt}
+                                                    </p>
+                                                )}
                                                 <input
                                                     type="text"
                                                     value={typedAnswer}
                                                     onChange={(e) => setTypedAnswer(e.target.value)}
                                                     onKeyDown={(e) => e.key === 'Enter' && handleTypedCheck()}
                                                     placeholder={currentT.typePlaceholder}
+                                                    autoFocus
                                                     className="w-full px-4 py-3 rounded-xl border-2 border-purple-100 font-bold text-center focus:outline-none focus:border-purple-300"
                                                 />
                                                 <button
@@ -408,6 +552,15 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                                                 className="px-6 py-2.5 bg-purple-500 text-white rounded-xl font-black text-sm shadow-md active:scale-95 transition-all"
                                             >
                                                 {currentT.next}
+                                            </button>
+                                        )}
+                                        {micAvailable && status !== 'revealed' && (
+                                            <button
+                                                onClick={switchToMic}
+                                                className="flex items-center gap-1.5 px-3 py-1.5 text-gray-400 rounded-xl font-black text-[11px] uppercase tracking-wider hover:text-purple-500 transition-all"
+                                            >
+                                                <Mic size={13} />
+                                                {currentT.switchToMic}
                                             </button>
                                         )}
                                     </div>

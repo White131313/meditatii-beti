@@ -69,16 +69,18 @@ export const SPEAKING_WORDS = [
     { id: 'gri', hu: 'szürke', answer: 'gri', emoji: '🩶', category: 'culori' },
 
     // ===== NUMERE =====
-    { id: 'unu', hu: 'egy', answer: 'unu', emoji: '1️⃣', category: 'numere' },
-    { id: 'doi', hu: 'kettő', answer: 'doi', emoji: '2️⃣', category: 'numere' },
-    { id: 'trei', hu: 'három', answer: 'trei', emoji: '3️⃣', category: 'numere' },
-    { id: 'patru', hu: 'négy', answer: 'patru', emoji: '4️⃣', category: 'numere' },
-    { id: 'cinci', hu: 'öt', answer: 'cinci', emoji: '5️⃣', category: 'numere' },
-    { id: 'sase', hu: 'hat', answer: 'șase', emoji: '6️⃣', category: 'numere' },
-    { id: 'sapte', hu: 'hét', answer: 'șapte', emoji: '7️⃣', category: 'numere' },
-    { id: 'opt', hu: 'nyolc', answer: 'opt', emoji: '8️⃣', category: 'numere' },
-    { id: 'noua', hu: 'kilenc', answer: 'nouă', emoji: '9️⃣', category: 'numere' },
-    { id: 'zece', hu: 'tíz', answer: 'zece', emoji: '🔟', category: 'numere' },
+    // "alt" contine forme alternative acceptate - recunoasterea vocala transcrie des
+    // un numar rostit ca cifra ("6") in loc de cuvant ("șase"), asa ca acceptam ambele.
+    { id: 'unu', hu: 'egy', answer: 'unu', alt: ['1', 'una'], emoji: '1️⃣', category: 'numere' },
+    { id: 'doi', hu: 'kettő', answer: 'doi', alt: ['2', 'două'], emoji: '2️⃣', category: 'numere' },
+    { id: 'trei', hu: 'három', answer: 'trei', alt: ['3'], emoji: '3️⃣', category: 'numere' },
+    { id: 'patru', hu: 'négy', answer: 'patru', alt: ['4'], emoji: '4️⃣', category: 'numere' },
+    { id: 'cinci', hu: 'öt', answer: 'cinci', alt: ['5'], emoji: '5️⃣', category: 'numere' },
+    { id: 'sase', hu: 'hat', answer: 'șase', alt: ['6'], emoji: '6️⃣', category: 'numere' },
+    { id: 'sapte', hu: 'hét', answer: 'șapte', alt: ['7'], emoji: '7️⃣', category: 'numere' },
+    { id: 'opt', hu: 'nyolc', answer: 'opt', alt: ['8'], emoji: '8️⃣', category: 'numere' },
+    { id: 'noua', hu: 'kilenc', answer: 'nouă', alt: ['9'], emoji: '9️⃣', category: 'numere' },
+    { id: 'zece', hu: 'tíz', answer: 'zece', alt: ['10'], emoji: '🔟', category: 'numere' },
 
     // ===== CORP =====
     { id: 'ochi', hu: 'szem', answer: 'ochi', emoji: '👀', category: 'corp' },
