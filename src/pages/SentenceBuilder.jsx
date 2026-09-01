@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { X, Check, RefreshCw, ArrowLeft } from 'lucide-react';
+import { X, Check, RefreshCw, ArrowLeft, Users, Clock, ChevronDown } from 'lucide-react';
 import { getRandomSentence } from '../data/sentenceBuilderPuzzles';
 import { PERSONS, TENSES } from '../data/sentenceBuilderConjugated';
 
@@ -310,39 +310,51 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
                         </div>
 
                         {/* Person & Tense selectors */}
-                        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
-                            <div className="flex flex-col items-center gap-1.5">
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{currentT.person}</span>
-                                <select
-                                    value={person}
-                                    onChange={(e) => handlePersonChange(e.target.value)}
-                                    disabled={isLoading}
-                                    className="px-3 py-1.5 bg-white rounded-xl shadow-sm border border-gray-200 font-bold text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
-                                >
-                                    <option value="amestecat">{currentT.mixed}</option>
-                                    {PERSONS.map(p => (
-                                        <option key={p.key} value={p.key}>
-                                            {lang === 'HU' ? p.label_hu : p.label_ro}
-                                        </option>
-                                    ))}
-                                </select>
+                        <div className="flex flex-wrap items-center justify-center gap-3">
+                            <div className="relative flex items-center gap-2.5 bg-white/80 backdrop-blur-sm pl-3 pr-8 py-2 rounded-2xl shadow-sm border border-purple-100">
+                                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center shrink-0">
+                                    <Users size={16} className="text-purple-500" />
+                                </div>
+                                <div className="flex flex-col leading-none">
+                                    <span className="text-[9px] font-black text-purple-400 uppercase tracking-tighter mb-1">{currentT.person}</span>
+                                    <select
+                                        value={person}
+                                        onChange={(e) => handlePersonChange(e.target.value)}
+                                        disabled={isLoading}
+                                        className="appearance-none bg-transparent font-black text-sm text-gray-800 leading-none focus:outline-none cursor-pointer disabled:opacity-50"
+                                    >
+                                        <option value="amestecat">{currentT.mixed}</option>
+                                        {PERSONS.map(p => (
+                                            <option key={p.key} value={p.key}>
+                                                {lang === 'HU' ? p.label_hu : p.label_ro}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-purple-300 pointer-events-none" />
                             </div>
 
-                            <div className="flex flex-col items-center gap-1.5">
-                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{currentT.tense}</span>
-                                <select
-                                    value={tense}
-                                    onChange={(e) => handleTenseChange(e.target.value)}
-                                    disabled={isLoading}
-                                    className="px-3 py-1.5 bg-white rounded-xl shadow-sm border border-gray-200 font-bold text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
-                                >
-                                    <option value="amestecat">{currentT.mixed}</option>
-                                    {TENSES.map(tOpt => (
-                                        <option key={tOpt.key} value={tOpt.key}>
-                                            {lang === 'HU' ? tOpt.label_hu : tOpt.label_ro}
-                                        </option>
-                                    ))}
-                                </select>
+                            <div className="relative flex items-center gap-2.5 bg-white/80 backdrop-blur-sm pl-3 pr-8 py-2 rounded-2xl shadow-sm border border-teal-100">
+                                <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center shrink-0">
+                                    <Clock size={16} className="text-teal-500" />
+                                </div>
+                                <div className="flex flex-col leading-none">
+                                    <span className="text-[9px] font-black text-teal-400 uppercase tracking-tighter mb-1">{currentT.tense}</span>
+                                    <select
+                                        value={tense}
+                                        onChange={(e) => handleTenseChange(e.target.value)}
+                                        disabled={isLoading}
+                                        className="appearance-none bg-transparent font-black text-sm text-gray-800 leading-none focus:outline-none cursor-pointer disabled:opacity-50"
+                                    >
+                                        <option value="amestecat">{currentT.mixed}</option>
+                                        {TENSES.map(tOpt => (
+                                            <option key={tOpt.key} value={tOpt.key}>
+                                                {lang === 'HU' ? tOpt.label_hu : tOpt.label_ro}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-teal-300 pointer-events-none" />
                             </div>
                         </div>
                     </div>
