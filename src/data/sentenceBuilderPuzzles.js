@@ -1,6 +1,8 @@
 // 100 de propoziții statice pentru "Constructorul de Propoziții"
 // Organizate pe niveluri: easy (3 cuvinte), medium (4 cuvinte), hard (5 cuvinte)
 
+import { getRandomConjugatedSentence } from './sentenceBuilderConjugated';
+
 export const SENTENCE_BUILDER_PUZZLES = [
     // ========== EASY (1-33) - 3 cuvinte simple ==========
     {
@@ -614,7 +616,16 @@ export const getPuzzlesByDifficulty = (difficulty) => {
     return SENTENCE_BUILDER_PUZZLES.filter(p => p.difficulty === difficulty);
 };
 
-export const getRandomSentence = (difficulty) => {
-    const puzzles = getPuzzlesByDifficulty(difficulty);
-    return puzzles[Math.floor(Math.random() * puzzles.length)];
+// person/tense === 'amestecat' (sau lipsa) => setul clasic, cu subiecte variate (Mama, Pisica, etc.)
+// person/tense specifice => setul de 900 de propozitii conjugate pe persoana + timp ales
+export const getRandomSentence = (difficulty, person = 'amestecat', tense = 'amestecat') => {
+    if (person === 'amestecat' && tense === 'amestecat') {
+        const puzzles = getPuzzlesByDifficulty(difficulty);
+        return puzzles[Math.floor(Math.random() * puzzles.length)];
+    }
+    return getRandomConjugatedSentence(
+        difficulty,
+        person === 'amestecat' ? null : person,
+        tense === 'amestecat' ? null : tense
+    );
 };

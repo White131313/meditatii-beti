@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Check, RefreshCw, ArrowLeft } from 'lucide-react';
 import { getRandomSentence } from '../data/sentenceBuilderPuzzles';
+import { PERSONS, TENSES } from '../data/sentenceBuilderConjugated';
 
 const SentenceBuilder = ({ lang = 'RO' }) => {
     const navigate = useNavigate();
@@ -14,6 +15,8 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
     const [showSuccess, setShowSuccess] = useState(false);
     const [currentSentenceIndex, setCurrentSentenceIndex] = useState(-1);
     const [difficulty, setDifficulty] = useState('easy');
+    const [person, setPerson] = useState('amestecat');
+    const [tense, setTense] = useState('amestecat');
     const [recentResults, setRecentResults] = useState([]); // Track last 3 attempts
     const [score, setScore] = useState(0);
     const [totalPlayed, setTotalPlayed] = useState(0);
@@ -32,7 +35,10 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             empty: "Trage sau apasă pe cuvinte aici...",
             score: "Scor",
             progress: "Progres",
-            correctPositionsHint: "Ai așezat corect {count} din {total} cuvinte. Mai încearcă!"
+            correctPositionsHint: "Ai așezat corect {count} din {total} cuvinte. Mai încearcă!",
+            person: "Persoană",
+            tense: "Timp",
+            mixed: "Amestecat"
         },
         HU: {
             title: "Mondatépítő",
@@ -47,7 +53,10 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             empty: "Húzd vagy kattints ide...",
             score: "Pontszám",
             progress: "Haladás",
-            correctPositionsHint: "{count} / {total} szó a megfelelő helyen van. Próbáld újra!"
+            correctPositionsHint: "{count} / {total} szó a megfelelő helyen van. Próbáld újra!",
+            person: "Személy",
+            tense: "Idő",
+            mixed: "Vegyes"
         }
     };
 
@@ -102,10 +111,12 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
         return shuffled;
     };
 
-    const fetchNewSentence = (forcedDifficulty = null) => {
+    const fetchNewSentence = (forcedDifficulty = null, forcedPerson = null, forcedTense = null) => {
         // IMPORTANT: If called from onClick directly, forcedDifficulty might be an event object.
         // We only use it if it's a valid string.
         const targetDifficulty = (typeof forcedDifficulty === 'string') ? forcedDifficulty : difficulty;
+        const targetPerson = forcedPerson || person;
+        const targetTense = forcedTense || tense;
 
         setDropZone([]);
         setShowSuccess(false);
@@ -118,13 +129,13 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
 
         // Use static sentences - all verified and correct!
         setTimeout(() => {
-            let sentence = getRandomSentence(targetDifficulty);
+            let sentence = getRandomSentence(targetDifficulty, targetPerson, targetTense);
 
             // Try up to 5 times to get a DIFFERENT sentence than current
             let attempts = 0;
             const currentAnswerStr = JSON.stringify(correctAnswer);
             while (JSON.stringify(sentence.original) === currentAnswerStr && attempts < 5) {
-                sentence = getRandomSentence(targetDifficulty);
+                sentence = getRandomSentence(targetDifficulty, targetPerson, targetTense);
                 attempts++;
             }
 
@@ -134,6 +145,24 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
             setCurrentSentenceIndex(0); // Track that we loaded
             setIsLoading(false);
         }, 300);
+    };
+
+    const handlePersonChange = (newPerson) => {
+        setPerson(newPerson);
+        setScore(0);
+        setTotalPlayed(0);
+        setDifficulty('easy');
+        setRecentResults([]);
+        fetchNewSentence('easy', newPerson, tense);
+    };
+
+    const handleTenseChange = (newTense) => {
+        setTense(newTense);
+        setScore(0);
+        setTotalPlayed(0);
+        setDifficulty('easy');
+        setRecentResults([]);
+        fetchNewSentence('easy', person, newTense);
     };
 
     useEffect(() => {
@@ -278,6 +307,43 @@ const SentenceBuilder = ({ lang = 'RO' }) => {
                             <p className="text-sm sm:text-base text-gray-500 font-bold max-w-sm mx-auto">
                                 {currentT.instruction}
                             </p>
+                        </div>
+
+                        {/* Person & Tense selectors */}
+                        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6">
+                            <div className="flex flex-col items-center gap-1.5">
+                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{currentT.person}</span>
+                                <select
+                                    value={person}
+                                    onChange={(e) => handlePersonChange(e.target.value)}
+                                    disabled={isLoading}
+                                    className="px-3 py-1.5 bg-white rounded-xl shadow-sm border border-gray-200 font-bold text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
+                                >
+                                    <option value="amestecat">{currentT.mixed}</option>
+                                    {PERSONS.map(p => (
+                                        <option key={p.key} value={p.key}>
+                                            {lang === 'HU' ? p.label_hu : p.label_ro}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            <div className="flex flex-col items-center gap-1.5">
+                                <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">{currentT.tense}</span>
+                                <select
+                                    value={tense}
+                                    onChange={(e) => handleTenseChange(e.target.value)}
+                                    disabled={isLoading}
+                                    className="px-3 py-1.5 bg-white rounded-xl shadow-sm border border-gray-200 font-bold text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
+                                >
+                                    <option value="amestecat">{currentT.mixed}</option>
+                                    {TENSES.map(tOpt => (
+                                        <option key={tOpt.key} value={tOpt.key}>
+                                            {lang === 'HU' ? tOpt.label_hu : tOpt.label_ro}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
                         </div>
                     </div>
 
