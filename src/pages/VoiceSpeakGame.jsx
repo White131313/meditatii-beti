@@ -7,15 +7,6 @@ const SpeechRecognitionAPI = typeof window !== 'undefined'
     ? (window.SpeechRecognition || window.webkitSpeechRecognition)
     : null;
 
-// iOS Safari expose webkitSpeechRecognition dar implementarea e adesea nefunctionala
-// (butonul de microfon "nu face nimic" - nu apare nicio eroare, nu se intampla nimic).
-// Din acest motiv nu ne bazam doar pe feature-detection: pe iOS pornim direct in modul scris,
-// dar lasam optiunea de a incerca microfonul manual daca API-ul exista.
-const isIOS = typeof navigator !== 'undefined' && (
-    /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
-);
-
 const LISTEN_TIMEOUT_MS = 7000;
 // Daca nu mai vin rezultate interimediare noi timp de atat, consideram ca a terminat
 // de vorbit si evaluam cu ce avem, in loc sa asteptam finalizarea proprie a motorului
@@ -145,8 +136,7 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
     const [roundsWon, setRoundsWon] = useState(0);
     const [roundComplete, setRoundComplete] = useState(false);
     const [typedAnswer, setTypedAnswer] = useState('');
-    // iOS porneste direct in modul scris (microfonul e nesigur acolo); altfel, mic daca exista API-ul.
-    const [inputMode, setInputMode] = useState(micAvailable && !isIOS ? 'mic' : 'typed');
+    const [inputMode, setInputMode] = useState(micAvailable ? 'mic' : 'typed');
 
     const recognitionRef = useRef(null);
     const listenTimeoutRef = useRef(null);
@@ -221,29 +211,23 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
     const currentT = t[lang] || t.RO;
     const currentWord = roundWords[cardIndex];
 
-    // Configurare SpeechRecognition o singura data (chiar daca pornim in modul scris,
-    // ca sa fie gata instant daca utilizatorul comuta pe microfon)
+    // Nota: NU cream o singura instanta SpeechRecognition refolosita pe toata durata
+    // paginii. Pe iOS Safari, reutilizarea aceleiasi instante dupa primul start()/stop()
+    // esueaza silentios la a doua folosire (butonul pare "mort" - fara nicio eroare).
+    // Cream deci o instanta noua de fiecare data cand incepem sa ascultam (in startListening),
+    // iar aici doar ne asiguram ca orice ascultare ramasa activa se opreste la demontare.
     useEffect(() => {
-        if (!micAvailable) return undefined;
-        const recognition = new SpeechRecognitionAPI();
-        recognition.lang = 'ro-RO';
-        recognition.continuous = false;
-        // interimResults=true: motorul trimite ipoteze pe masura ce copilul vorbeste,
-        // nu doar la final. Validam de indata ce o ipoteza se potriveste, in loc sa
-        // asteptam finalizarea completa (care pe Android poate dura 1-2s in plus
-        // dupa ce a incetat sa vorbeasca) - raspunde vizibil mai repede la un raspuns corect.
-        recognition.interimResults = true;
-        recognition.maxAlternatives = 5;
-        recognitionRef.current = recognition;
         return () => {
-            recognition.onresult = null;
-            recognition.onerror = null;
-            recognition.onend = null;
-            try { recognition.abort(); } catch { /* noop */ }
+            if (recognitionRef.current) {
+                const recognition = recognitionRef.current;
+                recognition.onresult = null;
+                recognition.onerror = null;
+                recognition.onend = null;
+                try { recognition.abort(); } catch { /* noop */ }
+            }
             if (listenTimeoutRef.current) clearTimeout(listenTimeoutRef.current);
             if (silenceTimeoutRef.current) clearTimeout(silenceTimeoutRef.current);
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const clearListenTimeout = () => {
@@ -273,8 +257,17 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
     }, [cardIndex, roundWords]);
 
     const startListening = () => {
-        if (!micAvailable || !recognitionRef.current || status === 'listening') return;
-        const recognition = recognitionRef.current;
+        if (!micAvailable || status === 'listening') return;
+
+        // Instanta noua de fiecare data (nu refolosim una veche) - vezi nota de mai sus
+        // despre bug-ul de pe iOS Safari cu instantele refolosite.
+        const recognition = new SpeechRecognitionAPI();
+        recognition.lang = 'ro-RO';
+        recognition.continuous = false;
+        recognition.interimResults = true;
+        recognition.maxAlternatives = 5;
+        recognitionRef.current = recognition;
+
         setErrorType(null);
         setLastHeard('');
         setStatus('listening');
@@ -635,10 +628,7 @@ const VoiceSpeakGame = ({ lang = 'RO' }) => {
                                                 {currentT.next}
                                             </button>
                                         )}
-                                        {/* Pe iOS Safari, recunoasterea vocala e nefunctionala in practica
-                                            (raportat real: butonul de microfon "nu aude nimic" niciodata),
-                                            asa ca nu mai oferim deloc optiunea acolo. */}
-                                        {micAvailable && !isIOS && status !== 'revealed' && (
+                                        {micAvailable && status !== 'revealed' && (
                                             <button
                                                 onClick={switchToMic}
                                                 className="flex items-center gap-1.5 px-3 py-1.5 text-gray-400 rounded-xl font-black text-[11px] uppercase tracking-wider hover:text-purple-500 transition-all"
