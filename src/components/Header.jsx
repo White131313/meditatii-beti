@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { User, Menu, X, ChevronRight, Globe, LogOut, Settings } from 'lucide-react';
 import { signInWithGoogle, signOut } from '../lib/auth';
 import { Link } from 'react-router-dom';
+import { BILLING_URL } from '../lib/payments';
 
 const ADMIN_EMAILS = ['bernad.beatrice23@gmail.com', 'bernad.beatrice23@gamil.com', 'cristian.balasa@gmail.com', 'balancionchrys13@gmail.com'];
 
@@ -208,7 +209,7 @@ const Header = ({ lang, setLang, user }) => {
                                                     )}
 
                                                     <a
-                                                        href="https://vorbim-romaneste.lemonsqueezy.com/billing"
+                                                        href={BILLING_URL}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
                                                         className="flex items-center gap-3 px-4 py-3 text-xs font-bold text-gray-700 hover:bg-gray-50 transition-colors"

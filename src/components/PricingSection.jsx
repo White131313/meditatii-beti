@@ -1,5 +1,6 @@
 import React from 'react';
 import { Check, Zap } from 'lucide-react';
+import { buildCheckoutUrl } from '../lib/payments';
 
 const PricingSection = ({ lang = 'RO', user }) => {
     const t = {
@@ -43,13 +44,7 @@ const PricingSection = ({ lang = 'RO', user }) => {
             return;
         }
 
-        // Lemon Squeezy Checkout Link (LIVE - approved store)
-        const lemonBaseLink = "https://vorbim-romaneste.lemonsqueezy.com/checkout/buy/0853eb0b-e706-47fc-8aa6-830a1adbf90f";
-
-        // We pass the user.id through custom[user_id] parameter so Lemon Squeezy sends it back in the webhook
-        const checkoutUrl = `${lemonBaseLink}?checkout[custom][user_id]=${user.id}`;
-
-        window.open(checkoutUrl, '_blank');
+        window.open(buildCheckoutUrl(user.id), '_blank');
     };
 
     return (
