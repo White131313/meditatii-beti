@@ -53,7 +53,7 @@ const Header = ({ lang, setLang, user }) => {
         { label: currentT.nav2, href: '/course/gymnasium_curriculum' },
         { label: currentT.nav3, href: '/course/national_exam_prep' },
         { label: currentT.nav5, href: '/course/practice_exercises' },
-        { label: currentT.nav4, href: '/#contact' }
+        { label: currentT.nav4, href: '/contact' }
     ];
 
     return (

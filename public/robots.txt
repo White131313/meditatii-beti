@@ -1,6 +1,15 @@
+# https://vorbim-romaneste.ro/robots.txt
 User-agent: *
 Allow: /
+
+# Zone private sau tranzacționale — nu au ce căuta în index
 Disallow: /admin
+Disallow: /login
+Disallow: /register
 Disallow: /api/
+
+# Parametri de urmărire care ar genera duplicate
+Disallow: /*?utm_
+Disallow: /*?fbclid=
 
 Sitemap: https://vorbim-romaneste.ro/sitemap.xml

@@ -1,151 +1,169 @@
-import React, { useState } from 'react';
-import { Mail, Send, CheckCircle, MessageSquare } from 'lucide-react';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Mail, Phone, MessageCircle, Clock, MapPin, ArrowRight } from 'lucide-react';
+import { legalEntity } from '../lib/legalEntity';
 
 const Contact = ({ lang = 'RO' }) => {
-    const [sent, setSent] = useState(false);
-    const [loading, setLoading] = useState(false);
-
     const t = {
         RO: {
-            hero: "Contactează-ne",
-            subtitle: "Suntem aici să te ajutăm. Trimite-ne un mesaj și îți vom răspunde cât mai curând posibil.",
-            name: "Nume Complet",
-            email: "Adresa de Email",
-            message: "Mesajul Tău",
-            send: "Trimite Mesaj",
-            sending: "Se trimite...",
-            success: "Mesaj trimis cu succes! Te vom contacta în curând.",
-            supportEmail: "Suport Email:",
-            emailAddress: "bernad.beatrice23@gmail.com"
+            hero: 'Contact',
+            subtitle:
+                'Scrie-mi sau sună-mă direct — îți răspund personal, de obicei în aceeași zi. Discutăm despre nivelul tău, obiective și cum putem lucra împreună.',
+            emailTitle: 'Email',
+            emailNote: 'Cel mai bun canal pentru întrebări detaliate.',
+            phoneTitle: 'Telefon',
+            phoneNote: 'Luni – Vineri, între 09:00 și 19:00.',
+            whatsappTitle: 'WhatsApp',
+            whatsappNote: 'Cel mai rapid răspuns, pentru întrebări scurte.',
+            whatsappCta: 'Scrie-mi pe WhatsApp',
+            scheduleTitle: 'Program de răspuns',
+            scheduleText:
+                'Răspund la mesaje de luni până vineri, între 09:00 și 19:00. Mesajele primite în weekend primesc răspuns luni.',
+            areaTitle: 'Unde predau',
+            areaText:
+                'Ședințele se desfășoară exclusiv online, prin Google Meet sau Zoom, așa că putem lucra din orice localitate. Majoritatea elevilor mei sunt din Harghita, Covasna și Mureș.',
+            faqTitle: 'Poate ai deja răspunsul',
+            faqText:
+                'Cum se desfășoară ședințele, ce niveluri acopăr, ce include abonamentul și cum se face plata — sunt explicate pe larg în pagina de întrebări frecvente.',
+            faqCta: 'Vezi întrebările frecvente',
+            motto: '„Limba română nu este o barieră, ci un pod. Hai să-l construim împreună."',
         },
         HU: {
-            hero: "Kapcsolat",
-            subtitle: "Itt vagyunk, hogy segítsünk. Küldj nekünk üzenetet, és a lehető leghamarabb válaszolunk.",
-            name: "Teljes Név",
-            email: "Email Cím",
-            message: "Üzeneted",
-            send: "Üzenet Küldése",
-            sending: "Küldés...",
-            success: "Üzenet sikeresen elküldve! Hamarosan felvesszük veled a kapcsolatot.",
-            supportEmail: "Email Támogatás:",
-            emailAddress: "bernad.beatrice23@gmail.com"
-        }
+            hero: 'Kapcsolat',
+            subtitle:
+                'Írj vagy hívj közvetlenül — személyesen válaszolok, általában még aznap. Megbeszéljük a szintedet, a céljaidat és azt, hogyan dolgozhatunk együtt.',
+            emailTitle: 'E-mail',
+            emailNote: 'Részletes kérdésekhez ez a legjobb csatorna.',
+            phoneTitle: 'Telefon',
+            phoneNote: 'Hétfőtől péntekig, 09:00 és 19:00 között.',
+            whatsappTitle: 'WhatsApp',
+            whatsappNote: 'A leggyorsabb válasz, rövid kérdésekhez.',
+            whatsappCta: 'Írj WhatsApp-on',
+            scheduleTitle: 'Válaszadási idő',
+            scheduleText:
+                'Hétfőtől péntekig válaszolok, 09:00 és 19:00 között. A hétvégén érkező üzenetekre hétfőn válaszolok.',
+            areaTitle: 'Hol tanítok',
+            areaText:
+                'Az órák kizárólag online zajlanak, Google Meet vagy Zoom platformon, így bárhonnan dolgozhatunk. A diákjaim többsége Hargita, Kovászna és Maros megyéből való.',
+            faqTitle: 'Talán már megvan a válasz',
+            faqText:
+                'Hogyan zajlanak az órák, milyen szinteket vállalok, mit tartalmaz az előfizetés és hogyan lehet fizetni — mindezt részletesen elmagyarázom a gyakori kérdéseknél.',
+            faqCta: 'Gyakori kérdések',
+            motto: '„A román nyelv nem akadály, hanem híd. Építsük fel együtt!"',
+        },
     };
 
-    const currentT = t[lang] || t['RO'];
+    const currentT = t[lang] || t.RO;
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setLoading(true);
-        // Simulate sending
-        setTimeout(() => {
-            setLoading(false);
-            setSent(true);
-        }, 1500);
-    };
+    const channels = [
+        {
+            icon: Mail,
+            title: currentT.emailTitle,
+            value: legalEntity.email,
+            note: currentT.emailNote,
+            href: `mailto:${legalEntity.email}`,
+            accent: 'bg-brand-50 text-brand-600',
+        },
+        {
+            icon: Phone,
+            title: currentT.phoneTitle,
+            value: legalEntity.phone,
+            note: currentT.phoneNote,
+            href: `tel:${legalEntity.phoneHref}`,
+            accent: 'bg-blue-50 text-blue-600',
+        },
+        {
+            icon: MessageCircle,
+            title: currentT.whatsappTitle,
+            value: currentT.whatsappCta,
+            note: currentT.whatsappNote,
+            href: `https://wa.me/${legalEntity.phoneHref.replace('+', '')}`,
+            external: true,
+            accent: 'bg-emerald-50 text-emerald-600',
+        },
+    ];
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-32 pb-20 px-4">
+        <main className="min-h-screen bg-[#fafbfc] pt-28 sm:pt-36 pb-24 px-4 sm:px-6">
             <div className="max-w-4xl mx-auto">
-                <div className="text-center mb-16">
-                    <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-6">{currentT.hero}</h1>
-                    <p className="text-xl text-gray-500 font-medium max-w-2xl mx-auto">
+                <div className="text-center mb-14">
+                    <h1 className="text-4xl sm:text-6xl font-black text-gray-900 tracking-tight mb-6">
+                        {currentT.hero}
+                    </h1>
+                    <p className="text-lg sm:text-xl text-gray-500 font-medium max-w-2xl mx-auto leading-relaxed">
                         {currentT.subtitle}
                     </p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-                    {/* Contact Info */}
-                    <div className="bg-white rounded-[3rem] p-10 shadow-xl shadow-gray-200/50">
-                        <div className="flex items-center gap-4 mb-8">
-                            <div className="w-12 h-12 bg-brand-50 rounded-2xl flex items-center justify-center text-brand-600">
-                                <Mail size={24} />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-black text-gray-900">{currentT.supportEmail}</h3>
-                                <p className="text-brand-600 font-bold">{currentT.emailAddress}</p>
-                            </div>
-                        </div>
+                {/* Canale de contact reale — fiecare este un link funcțional */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-12">
+                    {channels.map((channel) => {
+                        const Icon = channel.icon;
+                        return (
+                            <a
+                                key={channel.title}
+                                href={channel.href}
+                                {...(channel.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                                className="group bg-white rounded-[2rem] p-7 shadow-lg shadow-gray-100/70 border border-gray-100 hover:shadow-xl hover:border-brand-200 hover:-translate-y-1 transition-all flex flex-col"
+                            >
+                                <span
+                                    className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${channel.accent}`}
+                                >
+                                    <Icon size={22} />
+                                </span>
+                                <span className="text-xs font-black uppercase tracking-widest text-gray-400 mb-2">
+                                    {channel.title}
+                                </span>
+                                <span className="font-black text-gray-900 break-words mb-2 group-hover:text-brand-600 transition-colors">
+                                    {channel.value}
+                                </span>
+                                <span className="text-sm text-gray-500 leading-relaxed mt-auto">{channel.note}</span>
+                            </a>
+                        );
+                    })}
+                </div>
 
-                        <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600">
-                                <MessageSquare size={24} />
-                            </div>
-                            <div>
-                                <h3 className="text-lg font-black text-gray-900">Social Media</h3>
-                                <p className="text-gray-500 font-bold">Facebook & Instagram</p>
-                            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-12">
+                    <div className="bg-white rounded-[2rem] p-8 shadow-lg shadow-gray-100/70 border border-gray-100">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="w-10 h-10 bg-gray-100 text-gray-600 rounded-xl flex items-center justify-center">
+                                <Clock size={19} />
+                            </span>
+                            <h2 className="text-lg font-black text-gray-900">{currentT.scheduleTitle}</h2>
                         </div>
-
-                        <div className="mt-12 p-8 bg-gray-50 rounded-[2.5rem] border border-gray-100">
-                            <p className="text-gray-400 font-bold uppercase tracking-widest text-[10px] mb-4">Motto</p>
-                            <p className="text-gray-600 font-black italic text-xl">
-                                "Limba română nu este o barieră, ci un pod. Hai să-l construim împreună."
-                            </p>
-                        </div>
+                        <p className="text-gray-600 leading-relaxed">{currentT.scheduleText}</p>
                     </div>
 
-                    {/* Contact Form */}
-                    <div className="bg-white rounded-[3rem] p-10 shadow-xl shadow-gray-200/50 border border-brand-50">
-                        {sent ? (
-                            <div className="h-full flex flex-col items-center justify-center text-center py-10">
-                                <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-6 animate-bounce">
-                                    <CheckCircle size={40} />
-                                </div>
-                                <h3 className="text-2xl font-black text-gray-900 mb-4">{currentT.success}</h3>
-                            </div>
-                        ) : (
-                            <form onSubmit={handleSubmit} className="space-y-6">
-                                <div>
-                                    <label className="block text-sm font-black text-gray-700 uppercase tracking-widest mb-2 px-2">
-                                        {currentT.name}
-                                    </label>
-                                    <input
-                                        required
-                                        type="text"
-                                        placeholder="Popescu Andrei"
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-gray-900"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-black text-gray-700 uppercase tracking-widest mb-2 px-2">
-                                        {currentT.email}
-                                    </label>
-                                    <input
-                                        required
-                                        type="email"
-                                        placeholder="andrei@email.com"
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-gray-900"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-black text-gray-700 uppercase tracking-widest mb-2 px-2">
-                                        {currentT.message}
-                                    </label>
-                                    <textarea
-                                        required
-                                        rows="4"
-                                        placeholder="..."
-                                        className="w-full px-6 py-4 bg-gray-50 border-2 border-transparent focus:border-brand-500 focus:bg-white rounded-2xl outline-none transition-all font-bold text-gray-900 resize-none"
-                                    />
-                                </div>
-
-                                <button
-                                    disabled={loading}
-                                    type="submit"
-                                    className="w-full py-5 bg-gray-900 text-white rounded-2xl font-black text-lg hover:bg-brand-600 transition-all shadow-xl flex items-center justify-center gap-3 disabled:opacity-50"
-                                >
-                                    {loading ? currentT.sending : currentT.send}
-                                    <Send size={20} />
-                                </button>
-                            </form>
-                        )}
+                    <div className="bg-white rounded-[2rem] p-8 shadow-lg shadow-gray-100/70 border border-gray-100">
+                        <div className="flex items-center gap-3 mb-4">
+                            <span className="w-10 h-10 bg-gray-100 text-gray-600 rounded-xl flex items-center justify-center">
+                                <MapPin size={19} />
+                            </span>
+                            <h2 className="text-lg font-black text-gray-900">{currentT.areaTitle}</h2>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed">{currentT.areaText}</p>
                     </div>
                 </div>
+
+                <div className="bg-gradient-to-r from-brand-600 to-blue-600 rounded-[2.5rem] p-8 sm:p-12 text-white mb-12">
+                    <h2 className="text-2xl sm:text-3xl font-black mb-4">{currentT.faqTitle}</h2>
+                    <p className="text-brand-50 font-medium text-lg mb-8 max-w-xl leading-relaxed">
+                        {currentT.faqText}
+                    </p>
+                    <Link
+                        to="/intrebari-frecvente"
+                        className="inline-flex items-center gap-2 px-7 py-4 bg-white text-brand-700 rounded-2xl font-black hover:bg-brand-50 transition-all shadow-lg"
+                    >
+                        {currentT.faqCta}
+                        <ArrowRight size={20} />
+                    </Link>
+                </div>
+
+                <p className="text-center text-gray-500 font-black italic text-lg sm:text-xl max-w-2xl mx-auto">
+                    {currentT.motto}
+                </p>
             </div>
-        </div>
+        </main>
     );
 };
 

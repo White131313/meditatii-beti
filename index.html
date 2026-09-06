@@ -3,52 +3,48 @@
 
 <head>
   <meta charset="UTF-8" />
-  <link rel="icon" type="image/png" href="/logo_vr.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- SEO Core -->
-  <title>Vorbim Românește - Meditații și Resurse Logice pt. Maghiari</title>
-  <meta name="description"
-    content="Învață limba română logic. Pregătire Evaluare Națională, materiale PDF, fișe de lucru și jocuri interactive special create pentru vorbitorii de limba maghiară din Harghita, Covasna, Mureș." />
-  <meta name="keywords"
-    content="invata romana, meditatii romana maghiari, evaluare nationala romana, gramatica romana logica, harghita, covasna, mures, jocuri educative romana, beatrice bernad, invață româna logic" />
-  <meta name="author" content="Beatrice Bernad" />
-  <meta name="robots" content="index, follow" />
-  <meta name="google-site-verification" content="hVRy9Khe2QaPAJe8RKpEDpEaMkUBMjVOtt60EyHB2J8" />
+  <!-- Icons -->
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+  <meta name="theme-color" content="#0f172a" />
 
-  <!-- Dynamic Canonical -->
-  <script>
-    const canonicalUrl = window.location.origin + window.location.pathname;
-    const link = document.createElement('link');
-    link.rel = 'canonical';
-    link.href = canonicalUrl;
-    document.head.appendChild(link);
-    
-    const altHu = document.createElement('link');
-    altHu.rel = 'alternate';
-    altHu.hreflang = 'hu';
-    altHu.href = canonicalUrl + '?lang=HU';
-    document.head.appendChild(altHu);
-  </script>
+  <!--
+    SEO note: the tags below are the crawl-time defaults for the home page.
+    At build time, scripts/generate-seo.mjs writes a dedicated HTML file per route
+    with its own title/description/canonical, and at runtime SEOWrapper (Helmet)
+    keeps them in sync during client-side navigation.
+  -->
+  <title>Meditații Limba Română pentru Maghiari | Vorbim Românește</title>
+  <meta name="description"
+    content="Meditații online de limba română pentru vorbitorii de maghiară din Harghita, Covasna și Mureș. Pregătire Evaluare Națională, fișe PDF, exerciții și jocuri interactive explicate logic." />
+  <meta name="author" content="Beatrice Bernad" />
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
+  <link rel="canonical" href="https://vorbim-romaneste.ro/" />
+  <meta name="google-site-verification" content="hVRy9Khe2QaPAJe8RKpEDpEaMkUBMjVOtt60EyHB2J8" />
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://vorbim-romaneste.ro/" />
-  <meta property="og:title" content="Vorbim Românește - Meditații și Resurse Logice" />
+  <meta property="og:title" content="Meditații Limba Română pentru Maghiari | Vorbim Românește" />
   <meta property="og:description"
-    content="Învață limba română logic cu Beatrice. Pregătire intensivă Evaluare Națională și materiale educative explicate pe înțelesul vorbitorilor de maghiară." />
+    content="Învață limba română logic, cu Beatrice: pregătire Evaluare Națională, materiale PDF și jocuri interactive explicate pe înțelesul vorbitorilor de maghiară." />
   <meta property="og:image" content="https://vorbim-romaneste.ro/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta property="og:locale" content="ro_RO" />
   <meta property="og:locale:alternate" content="hu_HU" />
   <meta property="og:site_name" content="Vorbim Românește" />
 
   <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://vorbim-romaneste.ro/" />
-  <meta property="twitter:title" content="Vorbim Românește - Meditații și Resurse Logice" />
-  <meta property="twitter:description"
-    content="Învață limba română logic. Pregătire Evaluare Națională și jocuri interactive." />
-  <meta property="twitter:image" content="https://vorbim-romaneste.ro/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Meditații Limba Română pentru Maghiari | Vorbim Românește" />
+  <meta name="twitter:description"
+    content="Învață limba română logic. Pregătire Evaluare Națională, materiale PDF și jocuri interactive." />
+  <meta name="twitter:image" content="https://vorbim-romaneste.ro/og-image.png" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,51 +53,41 @@
     rel="stylesheet">
 
   <!-- PDF.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    window.pdfjsLib = window['pdfjs-dist/build/pdf'];
-    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-  </script>
-
-  <!-- Structured Data (JSON-LD) -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "EducationalOrganization",
-      "name": "Vorbim Românește",
-      "url": "https://vorbim-romaneste.ro",
-      "logo": "https://vorbim-romaneste.ro/logo_vr.png",
-      "description": "Platformă educațională pentru învățarea limbii române, dedicată vorbitorilor de limba maghiară.",
-      "founder": {
-        "@type": "Person",
-        "name": "Beatrice Bernad"
-      },
-      "areaServed": ["Harghita", "Covasna", "Mureș", "Romania"],
-      "sameAs": [
-        "https://www.facebook.com/vorbimromaneste"
-      ],
-      "offers": {
-        "@type": "Offer",
-        "price": "49",
-        "priceCurrency": "RON",
-        "availability": "https://schema.org/InStock"
+    // pdf.js is deferred, so wire the worker once it has actually parsed.
+    window.addEventListener('DOMContentLoaded', function () {
+      if (window['pdfjs-dist/build/pdf']) {
+        window.pdfjsLib = window['pdfjs-dist/build/pdf'];
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
       }
-    }
+    });
   </script>
 
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-C2HS2R9WQM"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', 'G-C2HS2R9WQM');
-  </script>
+  <!--
+    Google Analytics is NOT loaded here on purpose. It is injected by
+    src/lib/analytics.js only after the visitor accepts analytics cookies (GDPR).
+  -->
 </head>
 
 <body>
   <div id="root"></div>
+  <noscript>
+    <div style="max-width:42rem;margin:4rem auto;padding:0 1.5rem;font-family:system-ui,sans-serif;line-height:1.6">
+      <h1>Vorbim Românește – meditații și resurse de limba română</h1>
+      <p>
+        Platformă educațională pentru învățarea limbii române, dedicată vorbitorilor de limba maghiară din Harghita,
+        Covasna și Mureș: meditații online, pregătire pentru Evaluarea Națională, fișe de lucru PDF, teste grilă și
+        jocuri interactive pentru copii.
+      </p>
+      <p>Pentru a folosi platforma, activează JavaScript în browser. Ne poți contacta și direct:</p>
+      <ul>
+        <li>Telefon: <a href="tel:+40757947933">+40 757 947 933</a></li>
+        <li>E-mail: <a href="mailto:bernad.beatrice23@gmail.com">bernad.beatrice23@gmail.com</a></li>
+      </ul>
+    </div>
+  </noscript>
   <script type="module" src="/src/main.jsx"></script>
 </body>
 

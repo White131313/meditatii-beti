@@ -120,6 +120,12 @@ const ArticleMatchGame = ({ lang = 'RO' }) => {
             feedback === 'wrong' ? 'bg-gradient-to-br from-red-100 to-orange-200' :
                 'bg-gradient-to-br from-blue-100 via-purple-50 to-red-100'
             }`}>
+            <h1 className="sr-only">
+                {lang === 'HU'
+                    ? 'Játék: a román határozott és határozatlan névelő'
+                    : 'Joc: articolul hotărât și nehotărât în limba română'}
+            </h1>
+
             {/* Header */}
             <div className="max-w-3xl mx-auto px-4 flex items-center justify-between gap-3 mb-4 sm:mb-6">
                 <button

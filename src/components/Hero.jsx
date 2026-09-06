@@ -86,7 +86,7 @@ const Hero = ({ lang = 'RO' }) => {
                             <div className="relative rounded-[2rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.15)] border-8 border-white group-hover:scale-[1.02] transition-transform duration-700 ease-out max-w-[500px]">
                                 <img
                                     src="/profile.jpg"
-                                    alt="Profesoara B. Beatrice"
+                                    alt="Beatrice Bernad, profesoară de limba română pentru vorbitori de limba maghiară"
                                     className="w-full aspect-[4/5] object-cover scale-110 group-hover:scale-100 transition-transform duration-1000"
                                 />
 

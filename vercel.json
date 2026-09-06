@@ -1,8 +1,43 @@
 {
-    "rewrites": [
-        {
-            "source": "/((?!api/).*)",
-            "destination": "/"
-        }
-    ]
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/copii", "destination": "/copii.html" },
+    { "source": "/copii/propozitii", "destination": "/copii/propozitii.html" },
+    { "source": "/copii/intrusul", "destination": "/copii/intrusul.html" },
+    { "source": "/copii/adevarat-fals", "destination": "/copii/adevarat-fals.html" },
+    { "source": "/copii/articole", "destination": "/copii/articole.html" },
+    { "source": "/copii/vorbeste", "destination": "/copii/vorbeste.html" },
+    { "source": "/intrebari-frecvente", "destination": "/intrebari-frecvente.html" },
+    { "source": "/contact", "destination": "/contact.html" },
+    { "source": "/termeni", "destination": "/termeni.html" },
+    { "source": "/confidentialitate", "destination": "/confidentialitate.html" },
+    { "source": "/cookies", "destination": "/cookies.html" },
+    { "source": "/course/adults_communication", "destination": "/course/adults_communication.html" },
+    { "source": "/course/gymnasium_curriculum", "destination": "/course/gymnasium_curriculum.html" },
+    { "source": "/course/national_exam_prep", "destination": "/course/national_exam_prep.html" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
+      ]
+    },
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/sitemap.xml",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600" }
+      ]
+    }
+  ]
 }

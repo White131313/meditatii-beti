@@ -66,6 +66,16 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             isFree: true
         },
         {
+            id: 'voice-speak',
+            title: currentT.game5Title,
+            description: currentT.game5Desc,
+            icon: Mic,
+            color: 'from-purple-500 to-pink-500',
+            path: '/copii/vorbeste',
+            available: true,
+            isFree: true
+        },
+        {
             id: 'word-detective',
             title: currentT.game2Title,
             description: currentT.game2Desc,
@@ -84,16 +94,6 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             path: '/copii/adevarat-fals',
             available: true,
             isFree: false
-        },
-        {
-            id: 'voice-speak',
-            title: currentT.game5Title,
-            description: currentT.game5Desc,
-            icon: Mic,
-            color: 'from-purple-500 to-pink-500',
-            path: '/copii/vorbeste',
-            available: true,
-            isFree: true
         }
     ];
 

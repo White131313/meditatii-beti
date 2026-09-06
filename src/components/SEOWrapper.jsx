@@ -1,84 +1,170 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import {
+    SITE_URL,
+    SITE_NAME,
+    OG_IMAGE,
+    AUTHOR,
+    CONTACT_EMAIL,
+    CONTACT_PHONE,
+    resolveSeo,
+    canonicalFor,
+} from '../lib/seoRoutes';
+import { faqs } from '../data/faqs';
 
-const routeSeoMap = {
-  '/': {
-    title: 'Vorbim Românește - Meditații și Resurse Logice pt. Maghiari',
-    description: 'Învață limba română logic. Pregătire Evaluare Națională, materiale PDF, fișe de lucru și jocuri interactive special create pentru vorbitorii de limba maghiară din Harghita, Covasna, Mureș.',
-  },
-  '/copii': {
-    title: 'Hub Copii - Resurse și Jocuri | Vorbim Românește',
-    description: 'Descoperă jocuri educative și interactive în limba română, create special pentru copiii vorbitori de limba maghiară. Învățare distractivă și eficientă.',
-  },
-  '/intrebari-frecvente': {
-    title: 'Întrebări Frecvente (FAQ) | Vorbim Românește',
-    description: 'Găsește răspunsuri la cele mai frecvente întrebări despre cursurile noastre, platformă și modul de învățare.',
-  },
-  '/contact': {
-    title: 'Contact - Ia legătura cu noi | Vorbim Românește',
-    description: 'Contactează mentorul tău de limba română, Beatrice. Pentru detalii despre meditații, cursuri sau orice alte informații.',
-  },
-  '/termeni': {
-    title: 'Termeni și Condiții | Vorbim Românește',
-    description: 'Termenii și condițiile de utilizare a platformei Vorbim Românește. Citește despre regulile de utilizare și politica noastră.',
-  },
-  '/confidentialitate': {
-    title: 'Politica de Confidențialitate | Vorbim Românește',
-    description: 'Cum prelucrăm și protejăm datele tale personale la Vorbim Românește. Politica completă de confidențialitate.',
-  },
-  '/login': {
-    title: 'Autentificare cont | Vorbim Românește',
-    description: 'Intră în contul tău Vorbim Românește pentru a avea acces la bibliotecă, jocuri, exerciții și resurse PDF explicite.',
-  },
-  '/register': {
-    title: 'Creează un cont nou | Vorbim Românește',
-    description: 'Alătură-te comunității noastre și începe să înveți limba română logic. Cont nou pentru acces la resurse.',
-  }
+const organizationLd = {
+    '@context': 'https://schema.org',
+    '@type': 'EducationalOrganization',
+    '@id': `${SITE_URL}/#organization`,
+    name: SITE_NAME,
+    alternateName: 'Vorbim-Romaneste.ro',
+    url: SITE_URL,
+    logo: `${SITE_URL}/logo_vr.png`,
+    image: OG_IMAGE,
+    email: CONTACT_EMAIL,
+    telephone: CONTACT_PHONE,
+    description:
+        'Platformă educațională și meditații online de limba română, dedicate vorbitorilor de limba maghiară din România.',
+    founder: { '@type': 'Person', name: AUTHOR },
+    knowsLanguage: ['ro', 'hu'],
+    areaServed: [
+        { '@type': 'AdministrativeArea', name: 'Harghita' },
+        { '@type': 'AdministrativeArea', name: 'Covasna' },
+        { '@type': 'AdministrativeArea', name: 'Mureș' },
+        { '@type': 'Country', name: 'România' },
+    ],
+    sameAs: ['https://www.facebook.com/vorbimromaneste'],
 };
 
-const SEOWrapper = () => {
-  const location = useLocation();
-  const path = location.pathname;
+const websiteLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${SITE_URL}/#website`,
+    url: SITE_URL,
+    name: SITE_NAME,
+    inLanguage: 'ro-RO',
+    publisher: { '@id': `${SITE_URL}/#organization` },
+};
 
-  // Find exact exact matches, or fallback to sensible defaults for dynamic routes
-  let seoData = routeSeoMap[path];
+const serviceLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Meditații online de limba română pentru vorbitori de limba maghiară',
+    serviceType: 'Meditații limba română',
+    provider: { '@id': `${SITE_URL}/#organization` },
+    areaServed: { '@type': 'Country', name: 'România' },
+    offers: {
+        '@type': 'Offer',
+        price: '49',
+        priceCurrency: 'RON',
+        url: `${SITE_URL}/#pricing-plan`,
+        availability: 'https://schema.org/InStock',
+    },
+};
 
-  if (!seoData) {
-    if (path.startsWith('/course/')) {
-      seoData = {
-        title: 'Cursuri și Materiale | Vorbim Românește',
-        description: 'Explorează biblioteca noastră de lecții video și PDF-uri pentru diverse grupe de vârstă: preșcolari, școlari, Evaluare Națională și adulți.',
-      };
-    } else if (path.startsWith('/quiz/')) {
-      seoData = {
-        title: 'Teste și Exerciții | Vorbim Românește',
-        description: 'Verifică-ți cunoștințele prin testele și exercițiile noastre grilă create logic.'
-      };
-    } else if (path.startsWith('/copii/')) {
-      seoData = {
-        title: 'Jocuri Interactive | Vorbim Românește',
-        description: 'Jocuri captivante pentru învățarea limbii române, concepute special pentru utilizatorii mai mici preșcolari și clasele primare.'
-      };
-    } else {
-      // Default fallback
-      seoData = routeSeoMap['/'];
-    }
-  }
+/** Human-readable labels for breadcrumb segments. */
+const segmentLabels = {
+    copii: 'Copii',
+    propozitii: 'Construiește propoziția',
+    intrusul: 'Găsește intrusul',
+    'adevarat-fals': 'Adevărat sau Fals',
+    articole: 'Articole',
+    vorbeste: 'Joc de pronunție',
+    'intrebari-frecvente': 'Întrebări frecvente',
+    contact: 'Contact',
+    termeni: 'Termeni și condiții',
+    confidentialitate: 'Politica de confidențialitate',
+    cookies: 'Politica de cookies',
+    course: 'Cursuri',
+    adults_communication: 'Comunicare pentru adulți',
+    gymnasium_curriculum: 'Materie clasele V-VIII',
+    national_exam_prep: 'Evaluare Națională',
+    quiz: 'Teste',
+};
 
-  // Generate correct canonical
-  const canonicalUrl = `https://vorbim-romaneste.ro${path === '/' ? '' : path}`;
+function buildBreadcrumbLd(path) {
+    const segments = path.split('/').filter(Boolean);
+    if (segments.length === 0) return null;
 
-  return (
-    <Helmet>
-      <title>{seoData.title}</title>
-      <meta name="description" content={seoData.description} />
-      <link rel="canonical" href={canonicalUrl} />
-      <meta property="og:title" content={seoData.title} />
-      <meta property="og:description" content={seoData.description} />
-      <meta property="og:url" content={canonicalUrl} />
-    </Helmet>
-  );
+    const items = [{ '@type': 'ListItem', position: 1, name: 'Acasă', item: `${SITE_URL}/` }];
+    let acc = '';
+    segments.forEach((segment, i) => {
+        acc += `/${segment}`;
+        items.push({
+            '@type': 'ListItem',
+            position: i + 2,
+            name: segmentLabels[segment] || decodeURIComponent(segment),
+            item: `${SITE_URL}${acc}`,
+        });
+    });
+
+    return { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: items };
+}
+
+const faqLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.RO.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+    })),
+};
+
+const SEOWrapper = ({ lang = 'RO' }) => {
+    const location = useLocation();
+    const rawPath = location.pathname;
+    const path = rawPath !== '/' && rawPath.endsWith('/') ? rawPath.slice(0, -1) : rawPath;
+
+    const { title, description, index } = resolveSeo(path);
+    const canonicalUrl = canonicalFor(path);
+    const htmlLang = lang === 'HU' ? 'hu' : 'ro';
+
+    const breadcrumbLd = buildBreadcrumbLd(path);
+    const isHome = path === '/';
+    const isFaq = path === '/intrebari-frecvente';
+
+    return (
+        <Helmet prioritizeSeoTags>
+            <html lang={htmlLang} />
+            <title>{title}</title>
+            <meta name="description" content={description} />
+            <link rel="canonical" href={canonicalUrl} />
+            <meta
+                name="robots"
+                content={index ? 'index, follow, max-image-preview:large, max-snippet:-1' : 'noindex, follow'}
+            />
+
+            {/* Open Graph */}
+            <meta property="og:type" content={isHome ? 'website' : 'article'} />
+            <meta property="og:site_name" content={SITE_NAME} />
+            <meta property="og:title" content={title} />
+            <meta property="og:description" content={description} />
+            <meta property="og:url" content={canonicalUrl} />
+            <meta property="og:image" content={OG_IMAGE} />
+            <meta property="og:image:width" content="1200" />
+            <meta property="og:image:height" content="630" />
+            <meta property="og:image:alt" content={`${SITE_NAME} – meditații și resurse de limba română`} />
+            <meta property="og:locale" content={htmlLang === 'hu' ? 'hu_HU' : 'ro_RO'} />
+            <meta property="og:locale:alternate" content={htmlLang === 'hu' ? 'ro_RO' : 'hu_HU'} />
+
+            {/* Twitter */}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content={title} />
+            <meta name="twitter:description" content={description} />
+            <meta name="twitter:image" content={OG_IMAGE} />
+
+            {/* Structured data */}
+            <script type="application/ld+json">{JSON.stringify(organizationLd)}</script>
+            <script type="application/ld+json">{JSON.stringify(websiteLd)}</script>
+            {isHome ? <script type="application/ld+json">{JSON.stringify(serviceLd)}</script> : null}
+            {isFaq ? <script type="application/ld+json">{JSON.stringify(faqLd)}</script> : null}
+            {breadcrumbLd ? (
+                <script type="application/ld+json">{JSON.stringify(breadcrumbLd)}</script>
+            ) : null}
+        </Helmet>
+    );
 };
 
 export default SEOWrapper;

@@ -15,10 +15,15 @@ import FAQ from './pages/FAQ';
 import Contact from './pages/Contact';
 import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
+import Cookies from './pages/Cookies';
+import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ScrollToTop from './components/ScrollToTop';
 import SEOWrapper from './components/SEOWrapper';
+import CookieConsent from './components/CookieConsent';
+import { openCookieSettings } from './lib/analytics';
+import { anpc } from './lib/legalEntity';
 import { mockMaterials } from './data/mockMaterials';
 import { supabase } from './lib/supabaseClient';
 
@@ -103,11 +108,13 @@ function App() {
       teacherLabel: "Mentor Dedicat",
       searchPlaceholder: "Caută o lecție (ex: verbul, pronumele...)",
       noResultsSearch: "Nu am găsit nicio lecție cu acest nume.",
-      searchPlaceholder: "Caută o lecție (ex: verbul, pronumele...)",
-      noResultsSearch: "Nu am găsit nicio lecție cu acest nume.",
       allCategories: "Toate Categoriile",
       terms: "Termeni și Condiții",
-      privacy: "Politica de Confidențialitate"
+      privacy: "Politica de Confidențialitate",
+      contactPage: "Contact",
+      cookies: "Politica de Cookies",
+      cookieSettings: "Setări cookies",
+      consumerProtection: "Protecția consumatorului"
     },
     HU: {
       digitalShop: "Digitális Bolt",
@@ -133,11 +140,13 @@ function App() {
       teacherLabel: "Elkötelezett Mentor",
       searchPlaceholder: "Keress egy leckét (pl: ige, névmás...)",
       noResultsSearch: "Nem találtunk ilyen nevű leckét.",
-      searchPlaceholder: "Keress egy leckét (pl: ige, névmás...)",
-      noResultsSearch: "Nem találtunk ilyen nevű leckét.",
       allCategories: "Minden Kategória",
       terms: "Felhasználási Feltételek",
-      privacy: "Adatvédelmi Irányelvek"
+      privacy: "Adatvédelmi Irányelvek",
+      contactPage: "Kapcsolat",
+      cookies: "Süti Szabályzat",
+      cookieSettings: "Süti beállítások",
+      consumerProtection: "Fogyasztóvédelem"
     }
   };
 
@@ -213,7 +222,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop />
-      <SEOWrapper />
+      <SEOWrapper lang={lang} />
       <div className="min-h-screen bg-[#fafbfc] font-sans text-gray-900 selection:bg-brand-100 selection:text-brand-900 scroll-smooth flex flex-col">
         <Header lang={lang} setLang={setLang} user={user} />
 
@@ -291,6 +300,14 @@ function App() {
           <Route path="/register" element={
             <Register lang={lang} />
           } />
+
+          <Route path="/cookies" element={
+            <Cookies />
+          } />
+
+          <Route path="*" element={
+            <NotFound lang={lang} />
+          } />
         </Routes>
 
         <footer id="contact" className="bg-gray-900 text-white pt-24 pb-12 mt-auto rounded-t-[4rem]">
@@ -342,8 +359,11 @@ function App() {
                 <h4 className="text-sm font-black uppercase tracking-widest text-brand-500 mb-8 border-l-2 border-brand-600 pl-4">{currentT.support}</h4>
                 <ul className="space-y-4">
                   <li><Link to="/intrebari-frecvente" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.faq}</Link></li>
+                  <li><Link to="/contact" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.contactPage}</Link></li>
                   <li><Link to="/termeni" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.terms}</Link></li>
                   <li><Link to="/confidentialitate" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.privacy}</Link></li>
+                  <li><Link to="/cookies" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.cookies}</Link></li>
+                  <li><button onClick={openCookieSettings} className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group text-left"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.cookieSettings}</button></li>
                   <li className="pt-2">
                     <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">{currentT.contact}</p>
                     <div className="flex flex-col gap-3">
@@ -358,12 +378,29 @@ function App() {
                 </ul>
               </div>
             </div>
-            <div className="pt-12 border-t border-white/10 text-center text-gray-500 text-[11px] font-bold tracking-widest leading-loose uppercase">
+            <div className="pt-10 border-t border-white/10">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 mb-4 text-center">{currentT.consumerProtection}</p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <a href={anpc.sal} target="_blank" rel="noopener noreferrer" className="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-gray-300 hover:text-white transition-colors text-xs font-bold">
+                  ANPC – Soluționarea Alternativă a Litigiilor (SAL)
+                </a>
+                <a href={anpc.sol} target="_blank" rel="noopener noreferrer" className="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-gray-300 hover:text-white transition-colors text-xs font-bold">
+                  Soluționarea Online a Litigiilor (SOL)
+                </a>
+                <a href={anpc.site} target="_blank" rel="noopener noreferrer" className="px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-gray-300 hover:text-white transition-colors text-xs font-bold">
+                  anpc.ro
+                </a>
+              </div>
+            </div>
+
+            <div className="pt-10 mt-2 border-t border-white/10 text-center text-gray-500 text-[11px] font-bold tracking-widest leading-loose uppercase">
               <div>© 2026 Vorbim-Romaneste.ro. {currentT.rights}</div>
               <div className="text-gray-700 mt-2">{currentT.motto}</div>
             </div>
           </div>
         </footer>
+
+        <CookieConsent lang={lang} />
       </div>
     </Router>
   );

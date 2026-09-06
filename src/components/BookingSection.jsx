@@ -94,7 +94,7 @@ const BookingSection = ({ lang = 'RO', isSubscribed = false }) => {
                                 <div className="relative aspect-square rounded-[2.5rem] overflow-hidden border-8 border-white shadow-2xl">
                                     <img
                                         src="/profile.jpg"
-                                        alt="Beatrice Study Session"
+                                        alt="Ședință online de meditații la limba română cu Beatrice"
                                         className="w-full h-full object-cover"
                                     />
                                     {!isSubscribed && (

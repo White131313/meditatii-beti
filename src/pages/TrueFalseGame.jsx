@@ -161,6 +161,12 @@ const TrueFalseGame = ({ lang = 'RO' }) => {
             feedback === 'wrong' ? 'bg-red-50' :
                 'bg-indigo-50'
             }`}>
+            <h1 className="sr-only">
+                {lang === 'HU'
+                    ? 'Játék: Igaz vagy Hamis – román nyelvi gyakorlat'
+                    : 'Joc: Adevărat sau Fals – exerciții de limba română'}
+            </h1>
+
             {/* Header / Top Info */}
             <div className="max-w-3xl mx-auto px-4 flex items-center justify-between gap-3 mb-4 sm:mb-6">
                 <button
