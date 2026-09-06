@@ -18,6 +18,7 @@ export const WORD_EMOJIS = {
     'banana': '🍌',
     'portocala': '🍊',
     'căpșuna': '🍓',
+    'cireșele': '🍒',
     'ciresele': '🍒',
     'strugurele': '🍇',
 
@@ -59,7 +60,7 @@ export const WORD_EMOJIS = {
     'creion': '✏️',
     'carte': '📖',
     'ghiozdan': '🎒',
-    'gumă': '🧹',
+    'gumă': '🧽',
 
     // Alimente
     'pâine': '🍞',
@@ -75,8 +76,8 @@ export const WORD_EMOJIS = {
     'tren': '🚂',
 
     // Obiecte/Mobilier
-    'masă': '🪵',
-    'masa': '🪵',
+    'masă': '🍽️',
+    'masa': '🍽️',
     'scaun': '🪑',
     'soare': '☀️',
 
