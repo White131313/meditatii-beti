@@ -6,7 +6,7 @@ const PricingSection = ({ lang = 'RO', user }) => {
     const t = {
         RO: {
             title: "Acces Nelimitat la Educație",
-            price: "49 RON",
+            price: "49,99 RON",
             period: "/ lună",
             cta: "Activează Abonamentul",
             benefits: [
@@ -21,7 +21,7 @@ const PricingSection = ({ lang = 'RO', user }) => {
         },
         HU: {
             title: "Korlátlan Hozzáférés a Tanuláshoz",
-            price: "49 RON",
+            price: "49,99 RON",
             period: "/ hónap",
             cta: "Előfizetés Aktiválása",
             benefits: [

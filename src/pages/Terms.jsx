@@ -71,7 +71,7 @@ const Terms = () => (
 
         <Section number="5" title="Prețuri, plată și vânzătorul înregistrat" id="plati">
             <p>
-                Abonamentul Premium costă <strong>49 RON pe lună</strong>. Prețul afișat pe Site este prețul final
+                Abonamentul Premium costă <strong>49,99 RON pe lună</strong>. Prețul afișat pe Site este prețul final
                 perceput consumatorului. Eventualele taxe aplicabile (TVA) sunt calculate și afișate în pagina de
                 finalizare a comenzii, în funcție de țara ta.
             </p>

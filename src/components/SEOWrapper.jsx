@@ -56,7 +56,7 @@ const serviceLd = {
     areaServed: { '@type': 'Country', name: 'România' },
     offers: {
         '@type': 'Offer',
-        price: '49',
+        price: '49.99',
         priceCurrency: 'RON',
         url: `${SITE_URL}/#pricing-plan`,
         availability: 'https://schema.org/InStock',
