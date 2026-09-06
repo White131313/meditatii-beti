@@ -60,7 +60,8 @@ export const WORD_EMOJIS = {
     'creion': '✏️',
     'carte': '📖',
     'ghiozdan': '🎒',
-    'gumă': '🧽',
+    // "gumă" (de sters) nu are emoji propriu; 🧽 este burete, 🧹 matura.
+    // Ramane fara emoji, ca sa nu arate altceva decat este.
 
     // Alimente
     'pâine': '🍞',
@@ -76,8 +77,9 @@ export const WORD_EMOJIS = {
     'tren': '🚂',
 
     // Obiecte/Mobilier
-    'masă': '🍽️',
-    'masa': '🍽️',
+    // Nota: pentru "masă" nu exista emoji in Unicode (🪑 este scaun, iar
+    // "masa" si "scaun" apar impreuna in acelasi puzzle). Ramane fara emoji,
+    // cade pe simbolul neutru — cuvantul este oricum scris sub imagine.
     'scaun': '🪑',
     'soare': '☀️',
 
