@@ -12,10 +12,10 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'easy',
-        options: ["roșu", "verde", "galben", "masă"],
-        correctAnswer: "masă",
-        explanation: "Masa este un obiect. Celelalte sunt culori.",
-        explanation_hu: "Az asztal tárgy. A többi szín."
+        options: ["roșu", "verde", "galben", "ghiozdan"],
+        correctAnswer: "ghiozdan",
+        explanation: "Ghiozdanul este un obiect. Celelalte sunt culori.",
+        explanation_hu: "Az iskolatáska tárgy. A többi szín."
     },
     {
         difficulty: 'easy',
@@ -110,7 +110,7 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'easy',
-        options: ["masa", "scaun", "carte", "iepurele"],
+        options: ["creion", "scaun", "carte", "iepurele"],
         correctAnswer: "iepurele",
         explanation: "Iepurele este animal. Celelalte sunt obiecte.",
         explanation_hu: "A nyúl állat. A többi tárgy."
@@ -124,7 +124,7 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'easy',
-        options: ["creion", "caiet", "gumă", "vaca"],
+        options: ["creion", "caiet", "ghiozdan", "vaca"],
         correctAnswer: "vaca",
         explanation: "Vaca este animal. Celelalte sunt obiecte școlare.",
         explanation_hu: "A tehén állat. A többi iskolai eszköz."
@@ -152,10 +152,10 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'easy',
-        options: ["mărul", "para", "banana", "masa"],
-        correctAnswer: "masa",
-        explanation: "Masa este obiect. Celelalte sunt fructe.",
-        explanation_hu: "Az asztal tárgy. A többi gyümölcs."
+        options: ["mărul", "para", "banana", "caiet"],
+        correctAnswer: "caiet",
+        explanation: "Caietul este obiect. Celelalte sunt fructe.",
+        explanation_hu: "A füzet tárgy. A többi gyümölcs."
     },
     {
         difficulty: 'easy',
@@ -308,10 +308,10 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'medium',
-        options: ["pantof", "cizme", "sandale", "masa"],
-        correctAnswer: "masa",
-        explanation: "Masa este mobilier. Celelalte sunt încălțăminte.",
-        explanation_hu: "Az asztal bútor. A többi lábbeli."
+        options: ["pantof", "cizme", "sandale", "scaun"],
+        correctAnswer: "scaun",
+        explanation: "Scaunul este mobilier. Celelalte sunt încălțăminte.",
+        explanation_hu: "A szék bútor. A többi lábbeli."
     },
     {
         difficulty: 'medium',
@@ -329,7 +329,7 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'medium',
-        options: ["caiet", "carte", "gumă", "bicicleta"],
+        options: ["caiet", "carte", "creion", "bicicleta"],
         correctAnswer: "bicicleta",
         explanation: "Bicicleta este vehicul. Celelalte sunt obiecte școlare.",
         explanation_hu: "A kerékpár jármű. A többi iskolai eszköz."
@@ -534,10 +534,10 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'hard',
-        options: ["creion", "carte", "caiet", "gumă"],
+        options: ["creion", "carte", "caiet", "pix"],
         correctAnswer: "carte",
         explanation: "Cartea se citește. Celelalte se folosesc pentru scris/desenat.",
-        explanation_hu: "A könyv olvassák. A többi se folosesc pentru scris/desenat."
+        explanation_hu: "A könyv olvasásra való. A többi írásra és rajzolásra."
     },
     {
         difficulty: 'hard',
@@ -695,10 +695,10 @@ export const WORD_DETECTIVE_PUZZLES = [
     },
     {
         difficulty: 'hard',
-        options: ["creion", "caiet", "carte", "gumă"],
+        options: ["creion", "caiet", "carte", "stilou"],
         correctAnswer: "carte",
         explanation: "Cartea conține povestiri. Celelalte sunt pentru scris/desenat.",
-        explanation_hu: "A könyv történeteket tartalmaz. A többi vannak pentru scris/desenat."
+        explanation_hu: "A könyv történeteket tartalmaz. A többi írásra és rajzolásra való."
     },
     {
         difficulty: 'hard',

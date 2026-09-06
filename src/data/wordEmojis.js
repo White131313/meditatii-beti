@@ -60,6 +60,8 @@ export const WORD_EMOJIS = {
     'creion': '✏️',
     'carte': '📖',
     'ghiozdan': '🎒',
+    'pix': '🖊️',
+    'stilou': '🖋️',
     // "gumă" (de sters) nu are emoji propriu; 🧽 este burete, 🧹 matura.
     // Ramane fara emoji, ca sa nu arate altceva decat este.
 
