@@ -381,8 +381,8 @@ export const SENTENCE_BUILDER_PUZZLES = [
     },
     {
         difficulty: 'medium',
-        original: ["Bunicul", "spune", "despre", "război"],
-        scrambled: ["război", "despre", "Bunicul", "spune"],
+        original: ["Bunicul", "povestește", "despre", "război"],
+        scrambled: ["război", "despre", "Bunicul", "povestește"],
         translation_hu: "A nagyapa mesél a háborúról"
     },
     {
@@ -587,8 +587,8 @@ export const SENTENCE_BUILDER_PUZZLES = [
     },
     {
         difficulty: 'hard',
-        original: ["Bunicul", "spune", "despre", "vremurile", "vechi"],
-        scrambled: ["vechi", "vremurile", "despre", "Bunicul", "spune"],
+        original: ["Bunicul", "povestește", "despre", "vremurile", "vechi"],
+        scrambled: ["vechi", "vremurile", "despre", "Bunicul", "povestește"],
         translation_hu: "A nagyapa mesél a régi időkről"
     },
     {
