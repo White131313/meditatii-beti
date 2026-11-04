@@ -36,7 +36,7 @@ Decizii luate:
 
 - Vite 7 + React 19, SPA (`BrowserRouter`, react-router-dom 7), Tailwind 4. Fără TypeScript.
 - Hosting: Vercel (`vercel.json`: `cleanUrls` servește `dist/<cale>.html`; redirect-uri 301 pentru URL-urile vechi;
-  rewrite spre `spa.html` doar pentru login/register/admin/quiz; orice altă adresă → `404.html` cu status 404).
+  rewrite spre `/spa` (fișierul `spa.html`; cu `cleanUrls` destinația trebuie scrisă fără `.html`) doar pentru login/register/admin/quiz; orice altă adresă → `404.html` cu status 404).
   Repo GitHub `White131313/meditatii-beti`. `dist/` e în `.gitignore`, Vercel construiește din repo.
 - Backend: Supabase (proiect `npngltgflarmtbhjafpp`), cheia anon e în `src/lib/supabaseClient.js`.
   Tabele: `materials` (fișe PDF; `category` ∈ adults_communication, gymnasium_curriculum,

@@ -8,13 +8,13 @@
     { "source": "/course/practice_exercises", "destination": "/exercitii", "statusCode": 301 }
   ],
   "rewrites": [
-    { "source": "/admin", "destination": "/spa.html" },
-    { "source": "/login", "destination": "/spa.html" },
-    { "source": "/register", "destination": "/spa.html" },
-    { "source": "/hu/login", "destination": "/spa.html" },
-    { "source": "/hu/register", "destination": "/spa.html" },
-    { "source": "/quiz/:lessonId", "destination": "/spa.html" },
-    { "source": "/hu/quiz/:lessonId", "destination": "/spa.html" }
+    { "source": "/admin", "destination": "/spa" },
+    { "source": "/login", "destination": "/spa" },
+    { "source": "/register", "destination": "/spa" },
+    { "source": "/hu/login", "destination": "/spa" },
+    { "source": "/hu/register", "destination": "/spa" },
+    { "source": "/quiz/:lessonId", "destination": "/spa" },
+    { "source": "/hu/quiz/:lessonId", "destination": "/spa" }
   ],
   "headers": [
     {
