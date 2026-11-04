@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../components/LocalizedLink';
 import { Home, BookOpen, Gamepad2, Mail } from 'lucide-react';
 
 const copy = {
@@ -28,7 +28,7 @@ const NotFound = ({ lang = 'RO' }) => {
 
     const links = [
         { to: '/', icon: Home, label: t.home },
-        { to: '/course/gymnasium_curriculum', icon: BookOpen, label: t.courses },
+        { to: '/materie-gimnaziu', icon: BookOpen, label: t.courses },
         { to: '/copii', icon: Gamepad2, label: t.games },
         { to: '/contact', icon: Mail, label: t.contact },
     ];

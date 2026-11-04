@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Routes, Route, Navigate, useLocation, useParams } from 'react-router-dom';
+import { Link } from './components/LocalizedLink';
 import Header from './components/Header';
 import Home from './pages/Home';
 import CourseDetail from './pages/CourseDetail';
@@ -20,23 +21,35 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import ScrollToTop from './components/ScrollToTop';
-import SEOWrapper from './components/SEOWrapper';
+import SEOHead from './components/SEOHead';
+import GamePage from './components/GamePage';
+import LessonTopic from './pages/LessonTopic';
 import CookieConsent from './components/CookieConsent';
 import { openCookieSettings } from './lib/analytics';
 import { anpc } from './lib/legalEntity';
-import { mockMaterials } from './data/mockMaterials';
 import { supabase } from './lib/supabaseClient';
+import { lessonTopics } from './data/lessonTopics';
+import { CATEGORY_PATHS, categoryPath, topicPath, langFromPath, localizePath } from './lib/seoRoutes';
+import { useInitialData } from './lib/initialData';
 
 const ADMIN_EMAILS = ['bernad.beatrice23@gmail.com', 'bernad.beatrice23@gamil.com', 'cristian.balasa@gmail.com', 'balancionchrys13@gmail.com']; // Add your email here too
 
+// Vechile adrese /course/<categorie> → noile adrese (pe server o fac redirect-urile 301 din vercel.json).
+function LegacyCourseRedirect({ lang }) {
+  const { categoryId } = useParams();
+  if (!CATEGORY_PATHS[categoryId]) return <NotFound lang={lang} />;
+  return <Navigate replace to={localizePath(categoryPath(categoryId), lang)} />;
+}
+
 function App() {
-  const [materials, setMaterials] = useState([]);
-  const [filteredMaterials, setFilteredMaterials] = useState([]);
-  const [activeCategory, setActiveCategory] = useState('adults_communication');
-  const [lang, setLang] = useState('RO');
+  const location = useLocation();
+  // Limba vine din URL: /hu/... = maghiară, restul = română.
+  const lang = langFromPath(location.pathname);
+  const initialData = useInitialData();
+  const [materials, setMaterials] = useState(() => initialData.materials || []);
+  const [activeCategory, setActiveCategory] = useState('gymnasium_curriculum');
   const [user, setUser] = useState(null);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
 
   const isAdmin = user && ADMIN_EMAILS.includes(user.email);
@@ -98,6 +111,8 @@ function App() {
       nav_adults: "Comunicare Adulți",
       nav_gym: "Materie V-VIII",
       nav_exam: "Evaluare Națională",
+      nav_practice: "Exersează",
+      nav_kids: "Jocuri pentru copii",
       support: "Suport",
       faq: "Întrebări Frecvente",
       contact: "Contact Facilitat",
@@ -130,7 +145,9 @@ function App() {
       nav_adults: "Felnőtt Kommunikáció",
       nav_gym: "Tananyag V-VIII",
       nav_exam: "Nemzeti Értékelő",
-      support: "Támogátas",
+      nav_practice: "Gyakorlat",
+      nav_kids: "Játékok gyerekeknek",
+      support: "Támogatás",
       faq: "Gyakori Kérdések",
       contact: "Kapcsolat",
       rights: "Minden jog fenntartva.",
@@ -153,7 +170,6 @@ function App() {
   const currentT = t[lang];
 
   const fetchMaterials = async () => {
-    setIsLoading(true);
     const { data, error } = await supabase
       .from('materials')
       .select('*')
@@ -162,7 +178,6 @@ function App() {
     if (!error && data) {
       setMaterials(data);
     }
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -210,104 +225,127 @@ function App() {
     };
   }, [user, isAdmin]);
 
-  useEffect(() => {
-    const result = materials.filter(item => {
-      const matchesCategory = item.category === activeCategory;
-      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesCategory && matchesSearch;
-    });
-    setFilteredMaterials(result);
+  // Calculat sincron (nu în useEffect), ca pagina pre-randată să conțină deja lista.
+  const filteredMaterials = useMemo(() => {
+    const query = searchQuery.toLowerCase();
+    return materials.filter(item =>
+      item.category === activeCategory && (item.title || '').toLowerCase().includes(query)
+    );
   }, [materials, activeCategory, searchQuery]);
 
+  // Aceleași pagini sub "/" (română) și sub "/hu" (maghiară).
+  const pageRoutes = (
+    <>
+      <Route index element={
+        <Home
+          lang={lang}
+          user={user}
+          currentT={currentT}
+          activeCategory={activeCategory}
+          setActiveCategory={setActiveCategory}
+          filteredMaterials={filteredMaterials}
+          isSubscribed={hasAccess}
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
+      } />
+
+      {Object.entries(CATEGORY_PATHS).map(([categoryId, path]) => (
+        <Route key={categoryId} path={path.slice(1)} element={
+          <CourseDetail
+            key={categoryId}
+            categoryId={categoryId}
+            lang={lang}
+            isSubscribed={hasAccess}
+            user={user}
+            materials={materials}
+          />
+        } />
+      ))}
+
+      {lessonTopics.map((topic) => (
+        <Route key={topic.slug} path={topicPath(topic).slice(1)} element={
+          <LessonTopic topic={topic} lang={lang} isSubscribed={hasAccess} materials={materials} />
+        } />
+      ))}
+
+      <Route path="course/:categoryId" element={<LegacyCourseRedirect lang={lang} />} />
+
+      <Route path="quiz/:lessonId" element={
+        <QuizPage lang={lang} />
+      } />
+
+      <Route path="copii" element={
+        <KidsHub lang={lang} isSubscribed={hasAccess} />
+      } />
+
+      <Route path="copii/propozitii" element={
+        <GamePage gameId="propozitii" lang={lang}><SentenceBuilder lang={lang} /></GamePage>
+      } />
+
+      <Route path="copii/intrusul" element={
+        <GamePage gameId="intrusul" lang={lang}><WordDetective lang={lang} /></GamePage>
+      } />
+
+      <Route path="copii/adevarat-fals" element={
+        <GamePage gameId="adevarat-fals" lang={lang}><TrueFalseGame lang={lang} /></GamePage>
+      } />
+
+      <Route path="copii/vorbeste" element={
+        <GamePage gameId="vorbeste" lang={lang}><VoiceSpeakGame lang={lang} /></GamePage>
+      } />
+
+      <Route path="copii/articole" element={
+        <GamePage gameId="articole" lang={lang}><ArticleMatchGame lang={lang} /></GamePage>
+      } />
+
+      <Route path="intrebari-frecvente" element={
+        <FAQ lang={lang} />
+      } />
+
+      <Route path="contact" element={
+        <Contact lang={lang} />
+      } />
+
+      <Route path="termeni" element={
+        <Terms lang={lang} />
+      } />
+
+      <Route path="confidentialitate" element={
+        <Privacy lang={lang} />
+      } />
+
+      <Route path="cookies" element={
+        <Cookies />
+      } />
+
+      <Route path="login" element={
+        <Login lang={lang} />
+      } />
+
+      <Route path="register" element={
+        <Register lang={lang} />
+      } />
+
+      <Route path="*" element={
+        <NotFound lang={lang} />
+      } />
+    </>
+  );
+
   return (
-    <Router>
+    <>
       <ScrollToTop />
-      <SEOWrapper lang={lang} />
+      <SEOHead materials={materials} />
       <div className="min-h-screen bg-[#fafbfc] font-sans text-gray-900 selection:bg-brand-100 selection:text-brand-900 scroll-smooth flex flex-col">
-        <Header lang={lang} setLang={setLang} user={user} />
+        <Header lang={lang} user={user} />
 
         <Routes>
-          <Route path="/" element={
-            <Home
-              lang={lang}
-              user={user}
-              currentT={currentT}
-              activeCategory={activeCategory}
-              setActiveCategory={setActiveCategory}
-              filteredMaterials={filteredMaterials}
-              isSubscribed={hasAccess}
-              searchQuery={searchQuery}
-              setSearchQuery={setSearchQuery}
-            />
-          } />
-
-          <Route path="/course/:categoryId" element={
-            <CourseDetail lang={lang} isSubscribed={hasAccess} user={user} />
-          } />
-
-          <Route path="/quiz/:lessonId" element={
-            <QuizPage lang={lang} />
-          } />
-
-          <Route path="/admin" element={
-            <Admin user={user} />
-          } />
-
-          <Route path="/copii" element={
-            <KidsHub lang={lang} isSubscribed={hasAccess} />
-          } />
-
-          <Route path="/copii/propozitii" element={
-            <SentenceBuilder lang={lang} />
-          } />
-
-          <Route path="/copii/intrusul" element={
-            <WordDetective lang={lang} />
-          } />
-
-          <Route path="/copii/adevarat-fals" element={
-            <TrueFalseGame lang={lang} />
-          } />
-
-          <Route path="/copii/vorbeste" element={
-            <VoiceSpeakGame lang={lang} />
-          } />
-
-          <Route path="/copii/articole" element={
-            <ArticleMatchGame lang={lang} />
-          } />
-
-          <Route path="/intrebari-frecvente" element={
-            <FAQ lang={lang} />
-          } />
-
-          <Route path="/contact" element={
-            <Contact lang={lang} />
-          } />
-
-          <Route path="/termeni" element={
-            <Terms lang={lang} />
-          } />
-
-          <Route path="/confidentialitate" element={
-            <Privacy lang={lang} />
-          } />
-
-          <Route path="/login" element={
-            <Login lang={lang} />
-          } />
-
-          <Route path="/register" element={
-            <Register lang={lang} />
-          } />
-
-          <Route path="/cookies" element={
-            <Cookies />
-          } />
-
-          <Route path="*" element={
-            <NotFound lang={lang} />
-          } />
+          <Route path="/hu">{pageRoutes}</Route>
+          <Route path="/">
+            {pageRoutes}
+            <Route path="admin" element={<Admin user={user} />} />
+          </Route>
         </Routes>
 
         <footer id="contact" className="bg-gray-900 text-white pt-24 pb-12 mt-auto rounded-t-[4rem]">
@@ -349,9 +387,11 @@ function App() {
               <div>
                 <h4 className="text-sm font-black uppercase tracking-widest text-brand-500 mb-8 border-l-2 border-brand-600 pl-4">{currentT.quickLinks}</h4>
                 <ul className="space-y-4">
-                  <li><Link to="/course/adults_communication" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_adults}</Link></li>
-                  <li><Link to="/course/gymnasium_curriculum" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_gym}</Link></li>
-                  <li><Link to="/course/national_exam_prep" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_exam}</Link></li>
+                  <li><Link to="/comunicare-adulti" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_adults}</Link></li>
+                  <li><Link to="/materie-gimnaziu" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_gym}</Link></li>
+                  <li><Link to="/evaluare-nationala" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_exam}</Link></li>
+                  <li><Link to="/exercitii" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_practice}</Link></li>
+                  <li><Link to="/copii" className="text-gray-300 hover:text-white transition-colors font-bold flex items-center gap-2 group"><div className="w-1.5 h-1.5 bg-brand-600 rounded-full opacity-0 group-hover:opacity-100 transition-all"></div>{currentT.nav_kids}</Link></li>
                 </ul>
               </div>
 
@@ -402,7 +442,7 @@ function App() {
 
         <CookieConsent lang={lang} />
       </div>
-    </Router>
+    </>
   );
 }
 

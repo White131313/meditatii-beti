@@ -1,9 +1,9 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Puzzle, Sparkles, ArrowRight, Search, Lock, Mic } from 'lucide-react';
+import { Link } from '../components/LocalizedLink';
+import { localizePath } from '../lib/seoRoutes';
 
 const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
-    const navigate = useNavigate();
 
     const t = {
         RO: {
@@ -21,7 +21,12 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             game5Desc: "Vezi cuvântul, spune-l cu voce tare!",
             play: "Joacă Acum",
             locked: "Joc Premium (Pro)",
-            comingSoon: "În curând mai multe jocuri..."
+            comingSoon: "În curând mai multe jocuri...",
+            aboutTitle: "Jocuri de limba română pentru copiii vorbitori de maghiară",
+            about: [
+                "Jocurile sunt create de Beatrice pentru copiii din Harghita, Covasna și Mureș care învață limba română ca a doua limbă. Fiecare joc exersează o singură dificultate: genul substantivelor și articolul, ordinea cuvintelor în propoziție, vocabularul pe categorii, înțelegerea rapidă a frazelor și pronunția.",
+                "Toate funcționează direct în browser, pe telefon sau pe calculator, fără instalare. La fiecare răspuns copilul primește explicația, iar traducerea în maghiară îl ajută să nu se blocheze."
+            ]
         },
         HU: {
             hero: "Szia! Játsszunk együtt!",
@@ -38,7 +43,12 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
             game5Desc: "Nézd meg a szót, mondd ki hangosan!",
             play: "Játssz most",
             locked: "Prémium Játék (Pro)",
-            comingSoon: "Hamarosan még több játék..."
+            comingSoon: "Hamarosan még több játék...",
+            aboutTitle: "Román nyelvű játékok magyar anyanyelvű gyerekeknek",
+            about: [
+                "A játékokat Beatrice készítette Hargita, Kovászna és Maros megyei gyerekeknek, akik második nyelvként tanulják a románt. Minden játék egyetlen nehézséget gyakoroltat: a főnevek nemét és a névelőt, a mondat szórendjét, a szókincset kategóriák szerint, a mondatok gyors megértését és a kiejtést.",
+                "Mindegyik közvetlenül a böngészőben működik, telefonon vagy számítógépen, telepítés nélkül. A gyerek minden válasz után magyarázatot kap, a magyar fordítás pedig segít, hogy ne akadjon el."
+            ]
         }
     };
 
@@ -129,13 +139,14 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
                         const Icon = game.icon;
                         const hasAccess = game.isFree || isSubscribed;
                         return (
-                            <div
+                            <Link
                                 key={game.id}
-                                onClick={() => {
-                                    if (hasAccess) {
-                                        navigate(game.path);
-                                    } else {
-                                        window.location.href = '/#pricing-plan';
+                                to={game.path}
+                                onClick={(e) => {
+                                    // Link real (îl urmăresc și crawlerii); fără acces, ducem la abonament.
+                                    if (!hasAccess) {
+                                        e.preventDefault();
+                                        window.location.href = localizePath('/#pricing-plan', lang);
                                     }
                                 }}
                                 className={`h-full flex flex-col group relative bg-white rounded-[2rem] sm:rounded-[2.5rem] p-5 sm:p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-all duration-500 cursor-pointer border-b-6 border-gray-100 active:border-b-0 active:translate-y-1 ${!hasAccess && 'opacity-95'}`}
@@ -178,7 +189,7 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </Link>
                         );
                     })}
                 </div>
@@ -189,6 +200,15 @@ const KidsHub = ({ lang = 'RO', isSubscribed = false }) => {
                         🚀 {currentT.comingSoon}
                     </p>
                 </div>
+
+                <section className="max-w-3xl mx-auto mt-12 sm:mt-16 bg-white/80 rounded-[2rem] p-6 sm:p-10 shadow-lg shadow-gray-100">
+                    <h2 className="text-2xl sm:text-3xl font-black text-gray-800 mb-4">{currentT.aboutTitle}</h2>
+                    <div className="space-y-4 text-gray-600 leading-relaxed">
+                        {currentT.about.map((paragraph) => (
+                            <p key={paragraph}>{paragraph}</p>
+                        ))}
+                    </div>
+                </section>
             </div>
         </div>
     );

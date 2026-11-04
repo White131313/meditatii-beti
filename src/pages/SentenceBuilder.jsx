@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate as useNavigate } from '../lib/i18n';
 import { X, Check, RefreshCw, ArrowLeft, Users, Clock, ChevronDown } from 'lucide-react';
 import { getRandomSentence } from '../data/sentenceBuilderPuzzles';
 import { PERSONS, TENSES } from '../data/sentenceBuilderConjugated';

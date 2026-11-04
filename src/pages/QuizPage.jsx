@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import { Link } from '../components/LocalizedLink';
 import { supabase } from '../lib/supabaseClient';
 import { ChevronLeft, Check, X, RefreshCcw, Award, AlertCircle, CheckCircle2, XCircle, PenTool } from 'lucide-react';
 

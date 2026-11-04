@@ -6,6 +6,8 @@ Allow: /
 Disallow: /admin
 Disallow: /login
 Disallow: /register
+Disallow: /hu/login
+Disallow: /hu/register
 Disallow: /api/
 
 # Parametri de urmărire care ar genera duplicate

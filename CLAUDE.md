@@ -35,15 +35,15 @@ Decizii luate:
 ## Stack și unde stau lucrurile
 
 - Vite 7 + React 19, SPA (`BrowserRouter`, react-router-dom 7), Tailwind 4. Fără TypeScript.
-- Hosting: Vercel (`vercel.json`: `cleanUrls`, rewrite-uri explicite + fallback SPA pe `index.html`).
+- Hosting: Vercel (`vercel.json`: `cleanUrls` servește `dist/<cale>.html`; redirect-uri 301 pentru URL-urile vechi;
+  rewrite spre `spa.html` doar pentru login/register/admin/quiz; orice altă adresă → `404.html` cu status 404).
   Repo GitHub `White131313/meditatii-beti`. `dist/` e în `.gitignore`, Vercel construiește din repo.
 - Backend: Supabase (proiect `npngltgflarmtbhjafpp`), cheia anon e în `src/lib/supabaseClient.js`.
   Tabele: `materials` (fișe PDF; `category` ∈ adults_communication, gymnasium_curriculum,
   national_exam_prep, practice_exercises), `quizzes` (`material_id`, `questions` JSONB, `source_text`),
   `profiles` (`subscription_status`). Fișele și quiz-urile se încarcă din Admin (`/admin`).
 - Plăți: Lemon Squeezy (`src/lib/payments.js`, `api/lemon-webhook.js`).
-- Limba: starea `lang` ('RO' | 'HU') e un `useState` în `src/App.jsx`. Nu există URL-uri pentru HU.
-  Textele sunt dicționare `t = { RO: {...}, HU: {...} }` în fiecare pagină; paginile legale există doar în RO.
+- Limba: textele sunt dicționare `t = { RO: {...}, HU: {...} }` în fiecare pagină; paginile legale există doar în RO.
 - SEO și randare (după branch-ul `seo-prerender`):
   - `src/lib/seoRoutes.js`: registrul unic de pagini (căi, titluri/descrieri RO+HU, etichete breadcrumb),
     plus `splitLang`/`localizePath`/`switchLangPath` și `resolveSeo` (canonical, hreflang, robots).

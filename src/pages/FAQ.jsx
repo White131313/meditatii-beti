@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowLeft, ChevronDown, ChevronUp, MessageCircle, BookOpen, Clock, Calendar, Laptop } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate as useNavigate } from '../lib/i18n';
 import { faqs } from '../data/faqs';
 
 const FAQItem = ({ question, answer, isOpen, toggle }) => {

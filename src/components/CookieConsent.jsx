@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from './LocalizedLink';
 import { Cookie, X } from 'lucide-react';
 import { getConsent, setConsent, initAnalytics, OPEN_COOKIE_SETTINGS } from '../lib/analytics';
+import { useHydrated } from '../lib/useHydrated';
 
 const copy = {
     RO: {
@@ -24,20 +25,25 @@ const copy = {
 
 const CookieConsent = ({ lang = 'RO' }) => {
     // Shown on first visit only; a returning visitor's choice is already stored.
-    const [visible, setVisible] = useState(() => getConsent() === null);
+    // localStorage is read only after hydration: the prerendered HTML has no access
+    // to it, and reading it during the first render would make hydration mismatch.
+    const hydrated = useHydrated();
+    // null = follow the stored choice; true = reopened from the footer; false = just decided.
+    const [override, setOverride] = useState(null);
+    const visible = override ?? (hydrated && getConsent() === null);
     const t = copy[lang] || copy.RO;
 
     useEffect(() => {
         initAnalytics();
 
-        const reopen = () => setVisible(true);
+        const reopen = () => setOverride(true);
         window.addEventListener(OPEN_COOKIE_SETTINGS, reopen);
         return () => window.removeEventListener(OPEN_COOKIE_SETTINGS, reopen);
     }, []);
 
     const decide = (status) => {
         setConsent(status);
-        setVisible(false);
+        setOverride(false);
     };
 
     if (!visible) return null;

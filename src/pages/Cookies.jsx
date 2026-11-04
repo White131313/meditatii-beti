@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { LegalLayout, Section, Bullets, Callout, DataTable, Ext, Internal } from '../components/LegalLayout';
 import { legalEntity } from '../lib/legalEntity';
 import { getConsent, setConsent, CONSENT_EVENT } from '../lib/analytics';
+import { useHydrated } from '../lib/useHydrated';
 
 const statusLabels = {
     accepted: 'Ai acceptat cookie-urile de analiză.',
@@ -11,10 +12,13 @@ const statusLabels = {
 
 /** Lets the visitor change their mind without hunting for the banner. */
 const ConsentControls = () => {
-    const [status, setStatus] = useState(() => getConsent());
+    // localStorage se citește doar după hidratare, ca HTML-ul pre-randat să se hidrateze identic.
+    const hydrated = useHydrated();
+    const [changedTo, setChangedTo] = useState(undefined);
+    const status = changedTo !== undefined ? changedTo : hydrated ? getConsent() : null;
 
     useEffect(() => {
-        const sync = (e) => setStatus(e.detail ?? getConsent());
+        const sync = (e) => setChangedTo(e.detail ?? getConsent());
         window.addEventListener(CONSENT_EVENT, sync);
         return () => window.removeEventListener(CONSENT_EVENT, sync);
     }, []);

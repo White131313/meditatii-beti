@@ -1,9 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from './LocalizedLink';
 import { ArrowLeft } from 'lucide-react';
+import { useLang } from '../lib/i18n';
 
 /** Shared chrome for Termeni / Confidențialitate / Cookies. */
-export const LegalLayout = ({ title, intro, lastUpdated, children }) => (
+export const LegalLayout = ({ title, intro, lastUpdated, children }) => {
+    const lang = useLang();
+    return (
     <main className="min-h-screen bg-[#fafbfc] pt-28 sm:pt-36 pb-24 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto">
             <Link
@@ -11,8 +14,14 @@ export const LegalLayout = ({ title, intro, lastUpdated, children }) => (
                 className="inline-flex items-center gap-2 px-4 py-2 bg-white border border-gray-100 rounded-full text-gray-500 font-bold text-sm mb-8 hover:text-brand-600 transition-colors shadow-sm"
             >
                 <ArrowLeft size={16} />
-                Înapoi la pagina principală
+                {lang === 'HU' ? 'Vissza a főoldalra' : 'Înapoi la pagina principală'}
             </Link>
+
+            {lang === 'HU' ? (
+                <p lang="hu" className="mb-6 px-4 py-3 bg-amber-50 border border-amber-100 rounded-2xl text-sm font-bold text-amber-800">
+                    Ez a dokumentum csak román nyelven érhető el.
+                </p>
+            ) : null}
 
             <h1 className="text-3xl sm:text-5xl font-black text-gray-900 tracking-tight mb-4">{title}</h1>
 
@@ -27,7 +36,8 @@ export const LegalLayout = ({ title, intro, lastUpdated, children }) => (
             </div>
         </div>
     </main>
-);
+    );
+};
 
 export const Section = ({ id, number, title, children }) => (
     <section id={id} className="scroll-mt-28">

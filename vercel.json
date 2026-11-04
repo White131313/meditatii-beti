@@ -1,22 +1,20 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    { "source": "/course/gymnasium_curriculum", "destination": "/materie-gimnaziu", "statusCode": 301 },
+    { "source": "/course/national_exam_prep", "destination": "/evaluare-nationala", "statusCode": 301 },
+    { "source": "/course/adults_communication", "destination": "/comunicare-adulti", "statusCode": 301 },
+    { "source": "/course/practice_exercises", "destination": "/exercitii", "statusCode": 301 }
+  ],
   "rewrites": [
-    { "source": "/copii", "destination": "/copii.html" },
-    { "source": "/copii/propozitii", "destination": "/copii/propozitii.html" },
-    { "source": "/copii/intrusul", "destination": "/copii/intrusul.html" },
-    { "source": "/copii/adevarat-fals", "destination": "/copii/adevarat-fals.html" },
-    { "source": "/copii/articole", "destination": "/copii/articole.html" },
-    { "source": "/copii/vorbeste", "destination": "/copii/vorbeste.html" },
-    { "source": "/intrebari-frecvente", "destination": "/intrebari-frecvente.html" },
-    { "source": "/contact", "destination": "/contact.html" },
-    { "source": "/termeni", "destination": "/termeni.html" },
-    { "source": "/confidentialitate", "destination": "/confidentialitate.html" },
-    { "source": "/cookies", "destination": "/cookies.html" },
-    { "source": "/course/adults_communication", "destination": "/course/adults_communication.html" },
-    { "source": "/course/gymnasium_curriculum", "destination": "/course/gymnasium_curriculum.html" },
-    { "source": "/course/national_exam_prep", "destination": "/course/national_exam_prep.html" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/admin", "destination": "/spa.html" },
+    { "source": "/login", "destination": "/spa.html" },
+    { "source": "/register", "destination": "/spa.html" },
+    { "source": "/hu/login", "destination": "/spa.html" },
+    { "source": "/hu/register", "destination": "/spa.html" },
+    { "source": "/quiz/:lessonId", "destination": "/spa.html" },
+    { "source": "/hu/quiz/:lessonId", "destination": "/spa.html" }
   ],
   "headers": [
     {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate as useNavigate } from '../lib/i18n';
 import { Trophy, ArrowLeft, CheckCircle2, XCircle, Star, Sparkles } from 'lucide-react';
 import { getRandomTrivia } from '../data/trueFalseTrivia';
 

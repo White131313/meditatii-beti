@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate as useNavigate } from '../lib/i18n';
 import { ArrowLeft, Search, RefreshCw, Lightbulb, CheckCircle2 } from 'lucide-react';
 import { getRandomPuzzle } from '../data/wordDetectivePuzzles';
 import { getEmojiForWord } from '../data/wordEmojis';

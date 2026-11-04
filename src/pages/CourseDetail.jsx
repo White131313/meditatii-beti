@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { Link } from '../components/LocalizedLink';
 import { supabase } from '../lib/supabaseClient';
-import { BookOpen, Download, Lock, CheckCircle, ChevronLeft } from 'lucide-react';
+import { BookOpen, Download, Lock, CheckCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { categoryContent } from '../data/categoryContent';
+import { lessonTopics } from '../data/lessonTopics';
+import { topicPath } from '../lib/seoRoutes';
 
 // Sub-component for a single lesson row
 const LessonCard = ({ lesson, idx, categoryId, isSubscribed, user, currentT }) => {
@@ -36,7 +39,7 @@ const LessonCard = ({ lesson, idx, categoryId, isSubscribed, user, currentT }) =
                         </Link>
                     ) : (
                         <a
-                            href="/#pricing-plan"
+                            href={currentT.pricingHref}
                             className="px-6 py-3 bg-white text-gray-400 border-2 border-gray-100 rounded-xl font-bold text-sm hover:bg-gray-50 transition-all flex items-center gap-2"
                         >
                             <Lock size={16} />
@@ -57,7 +60,7 @@ const LessonCard = ({ lesson, idx, categoryId, isSubscribed, user, currentT }) =
                     </a>
                 ) : (
                     <a
-                        href="/#pricing-plan"
+                        href={currentT.pricingHref}
                         className="px-6 py-3 bg-gray-900 text-white rounded-xl font-bold text-sm hover:bg-brand-600 transition-all shadow-lg shadow-gray-200 flex items-center gap-2"
                     >
                         <Lock size={16} />
@@ -69,10 +72,11 @@ const LessonCard = ({ lesson, idx, categoryId, isSubscribed, user, currentT }) =
     );
 };
 
-const CourseDetail = ({ lang, isSubscribed, user }) => {
-    const { categoryId } = useParams();
-    const [lessons, setLessons] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+const CourseDetail = ({ categoryId, lang, isSubscribed, user, materials = [] }) => {
+    // Pornim de la materialele deja încărcate (la build sau de App), ca pagina
+    // pre-randată să conțină lista; apoi le reîncărcăm live mai jos.
+    const [lessons, setLessons] = useState(() => materials.filter((m) => m.category === categoryId));
+    const [isLoading, setIsLoading] = useState(() => materials.length === 0);
 
     const t = {
         RO: {
@@ -87,7 +91,12 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
             startQuiz: "Începe Quiz",
             noLessons: "Încă nu sunt lecții adăugate în această secțiune.",
             previewMode: "Mod Previzualizare (Pro)",
-            title_practice: "Exersează"
+            title_practice: "Exersează",
+            pricingHref: "/#pricing-plan",
+            topicsTitle: "Lecții explicate pas cu pas",
+            demoSection: "Materiale Demo (Gratis)",
+            premiumSection: "Materiale Premium (Pro)",
+            emptyTitle: "Încă nu sunt materiale"
         },
         HU: {
             back: "Vissza az összes anyaghoz",
@@ -101,16 +110,23 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
             startQuiz: "Quiz Indítása",
             noLessons: "Ebben a szekcióban még nincsenek feltöltött leckék.",
             previewMode: "Előnézet Mód (Pro)",
-            title_practice: "Gyakorlat"
+            title_practice: "Gyakorlat",
+            pricingHref: "/hu#pricing-plan",
+            topicsTitle: "Lépésről lépésre elmagyarázott leckék",
+            demoSection: "Demó anyagok (ingyenes)",
+            premiumSection: "Prémium anyagok (Pro)",
+            emptyTitle: "Még nincsenek anyagok"
         }
     };
 
     const currentT = t[lang] || t['RO'];
 
+    const intro = categoryContent[categoryId]?.[lang] || categoryContent[categoryId]?.RO;
+    const topics = lessonTopics.filter((topic) => topic.category === categoryId || topic.alsoIn.includes(categoryId));
+
     useEffect(() => {
         const fetchLessons = async () => {
-            setIsLoading(true);
-            const { data, error } = await supabase
+            const { data } = await supabase
                 .from('materials')
                 .select('*')
                 .eq('category', categoryId);
@@ -148,6 +164,9 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                             <p className="text-lg text-gray-500 font-medium">
                                 {lessons.length} {currentT.lessonsCount}
                             </p>
+                            {intro ? (
+                                <p className="text-gray-600 leading-relaxed mt-5 max-w-2xl">{intro}</p>
+                            ) : null}
                         </div>
                         {!(isSubscribed || (user && ['bernad.beatrice23@gmail.com', 'bernad.beatrice23@gamil.com', 'cristian.balasa@gmail.com'].includes(user?.email))) && (
                             <div className="bg-brand-600 text-white px-6 py-3 rounded-2xl font-black text-sm shadow-xl shadow-brand-100 flex items-center gap-2 animate-pulse">
@@ -157,6 +176,33 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                         )}
                     </div>
                 </div>
+
+                {topics.length > 0 && (
+                    <section className="mb-16">
+                        <div className="flex items-center gap-3 mb-6">
+                            <div className="w-2 h-8 bg-amber-400 rounded-full"></div>
+                            <h2 className="text-2xl font-black text-gray-900 tracking-tight">{currentT.topicsTitle}</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {topics.map((topic) => {
+                                const text = topic[lang] || topic.RO;
+                                return (
+                                    <Link
+                                        key={topic.slug}
+                                        to={topicPath(topic)}
+                                        className="group bg-white rounded-[2rem] p-6 shadow-lg shadow-gray-100 border border-transparent hover:border-brand-200 transition-all flex items-start justify-between gap-4"
+                                    >
+                                        <div>
+                                            <h3 className="text-lg font-black text-gray-900 mb-1 group-hover:text-brand-600 transition-colors">{text.label}</h3>
+                                            <p className="text-sm text-gray-500 leading-relaxed">{text.lead}</p>
+                                        </div>
+                                        <ChevronRight size={20} className="text-gray-300 group-hover:text-brand-600 shrink-0 mt-1 transition-colors" />
+                                    </Link>
+                                );
+                            })}
+                        </div>
+                    </section>
+                )}
 
                 {/* Lessons List organized by type */}
                 <div className="space-y-16">
@@ -171,7 +217,7 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                                 <div>
                                     <div className="flex items-center gap-3 mb-8">
                                         <div className="w-2 h-8 bg-emerald-500 rounded-full"></div>
-                                        <h2 className="text-2xl font-black text-gray-900 tracking-tight">Materiale Demo (Gratis)</h2>
+                                        <h2 className="text-2xl font-black text-gray-900 tracking-tight">{currentT.demoSection}</h2>
                                     </div>
                                     <div className="space-y-4">
                                         {lessons.filter(l => l.demo_file_url || l.title?.toLowerCase().includes('model evaluare naționala 1')).map((lesson, idx) => (
@@ -198,7 +244,7 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                                 <div>
                                     <div className="flex items-center gap-3 mb-8">
                                         <div className="w-2 h-8 bg-brand-600 rounded-full"></div>
-                                        <h2 className="text-2xl font-black text-gray-900 tracking-tight">Materiale Premium (Pro)</h2>
+                                        <h2 className="text-2xl font-black text-gray-900 tracking-tight">{currentT.premiumSection}</h2>
                                     </div>
                                     <div className="space-y-4">
                                         {lessons.filter(l => !l.demo_file_url && !l.title?.toLowerCase().includes('model evaluare naționala 1')).map((lesson, idx) => (
@@ -221,7 +267,7 @@ const CourseDetail = ({ lang, isSubscribed, user }) => {
                             <div className="inline-flex p-6 bg-white rounded-3xl shadow-sm mb-6">
                                 <BookOpen size={32} className="text-gray-300" />
                             </div>
-                            <h3 className="text-xl font-black text-gray-900 mb-2">Încă nu sunt materiale</h3>
+                            <h3 className="text-xl font-black text-gray-900 mb-2">{currentT.emptyTitle}</h3>
                             <p className="text-gray-500 font-medium max-w-xs mx-auto">{currentT.noLessons}</p>
                         </div>
                     )}

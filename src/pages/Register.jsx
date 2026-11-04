@@ -1,5 +1,6 @@
 import React from 'react';
 import { signInWithGoogle } from '../lib/auth';
+import { localizePath } from '../lib/seoRoutes';
 import { Chrome, ArrowRight, UserPlus, Sparkles } from 'lucide-react';
 
 const Register = ({ lang = 'RO' }) => {
@@ -46,7 +47,7 @@ const Register = ({ lang = 'RO' }) => {
                 </button>
 
                 <div className="mt-10 pt-8 border-t border-gray-50 text-center">
-                    <a href="/login" className="flex items-center justify-center gap-2 text-brand-600 font-bold text-xs uppercase tracking-widest hover:text-brand-700 transition-colors">
+                    <a href={localizePath('/login', lang)} className="flex items-center justify-center gap-2 text-brand-600 font-bold text-xs uppercase tracking-widest hover:text-brand-700 transition-colors">
                         <Sparkles size={14} />
                         <span>{currentT.hasAccount}</span>
                     </a>

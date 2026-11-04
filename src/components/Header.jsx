@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { User, Menu, X, ChevronRight, Globe, LogOut, Settings } from 'lucide-react';
 import { signInWithGoogle, signOut } from '../lib/auth';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
+import { Link } from './LocalizedLink';
 import { BILLING_URL } from '../lib/payments';
+import { switchLangPath } from '../lib/seoRoutes';
 
 const ADMIN_EMAILS = ['bernad.beatrice23@gmail.com', 'bernad.beatrice23@gamil.com', 'cristian.balasa@gmail.com', 'balancionchrys13@gmail.com'];
 
-const Header = ({ lang, setLang, user }) => {
+const Header = ({ lang, user }) => {
     const isAdmin = user && ADMIN_EMAILS.includes(user.email);
+    const location = useLocation();
+    // Comutatorul de limbă duce la aceeași pagină în cealaltă limbă (link real, urmărit și de crawleri).
+    const langHref = (target) => switchLangPath(location.pathname, target, location.search, location.hash);
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
@@ -50,10 +55,10 @@ const Header = ({ lang, setLang, user }) => {
     const currentT = t[lang] || t['RO'];
 
     const navLinks = [
-        { label: currentT.nav1, href: '/course/adults_communication' },
-        { label: currentT.nav2, href: '/course/gymnasium_curriculum' },
-        { label: currentT.nav3, href: '/course/national_exam_prep' },
-        { label: currentT.nav5, href: '/course/practice_exercises' },
+        { label: currentT.nav1, href: '/comunicare-adulti' },
+        { label: currentT.nav2, href: '/materie-gimnaziu' },
+        { label: currentT.nav3, href: '/evaluare-nationala' },
+        { label: currentT.nav5, href: '/exercitii' },
         { label: currentT.nav4, href: '/contact' }
     ];
 
@@ -98,24 +103,28 @@ const Header = ({ lang, setLang, user }) => {
 
                     {/* Premium Language Switcher - Moved Next to Logo */}
                     <div className="flex items-center p-0.5 sm:p-1 bg-gray-100 md:bg-gray-100/80 md:backdrop-blur-md rounded-lg border border-gray-200 shadow-inner mr-1 sm:mr-4 shrink-0">
-                        <button
-                            onClick={() => setLang('RO')}
+                        <RouterLink
+                            to={langHref('RO')}
+                            hrefLang="ro"
+                            aria-current={lang === 'RO' ? 'true' : undefined}
                             className={`flex items-center justify-center px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-[11px] font-black transition-all duration-300 ${lang === 'RO'
                                 ? 'bg-white text-brand-600 shadow-sm'
                                 : 'text-gray-400 hover:text-gray-600'
                                 }`}
                         >
                             RO
-                        </button>
-                        <button
-                            onClick={() => setLang('HU')}
+                        </RouterLink>
+                        <RouterLink
+                            to={langHref('HU')}
+                            hrefLang="hu"
+                            aria-current={lang === 'HU' ? 'true' : undefined}
                             className={`flex items-center justify-center px-2 py-1.5 sm:px-2.5 sm:py-1.5 rounded-md text-[10px] sm:text-[11px] font-black transition-all duration-300 ${lang === 'HU'
                                 ? 'bg-white text-brand-600 shadow-sm'
                                 : 'text-gray-400 hover:text-gray-600'
                                 }`}
                         >
                             HU
-                        </button>
+                        </RouterLink>
                     </div>
 
                     {/* Desktop Nav - Extra Compact for Laptops */}
@@ -331,8 +340,10 @@ const Header = ({ lang, setLang, user }) => {
 
                         {/* Modern Mobile Language Selector */}
                         <div className="mt-8 flex items-center justify-center p-1 bg-gray-50 rounded-2xl border border-gray-100">
-                            <button
-                                onClick={() => setLang('RO')}
+                            <RouterLink
+                                to={langHref('RO')}
+                                hrefLang="ro"
+                                onClick={() => setIsMenuOpen(false)}
                                 className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-black transition-all ${lang === 'RO'
                                     ? 'bg-white text-brand-600 shadow-lg shadow-gray-200/50'
                                     : 'text-gray-400'
@@ -340,9 +351,11 @@ const Header = ({ lang, setLang, user }) => {
                             >
                                 <Globe size={16} />
                                 <span>Română</span>
-                            </button>
-                            <button
-                                onClick={() => setLang('HU')}
+                            </RouterLink>
+                            <RouterLink
+                                to={langHref('HU')}
+                                hrefLang="hu"
+                                onClick={() => setIsMenuOpen(false)}
                                 className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-xl text-sm font-black transition-all ${lang === 'HU'
                                     ? 'bg-white text-brand-600 shadow-lg shadow-gray-200/50'
                                     : 'text-gray-400'
@@ -350,7 +363,7 @@ const Header = ({ lang, setLang, user }) => {
                             >
                                 <Globe size={16} />
                                 <span>Magyar</span>
-                            </button>
+                            </RouterLink>
                         </div>
                     </div>
                 </div>

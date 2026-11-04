@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate as useNavigate } from '../lib/i18n';
 import { ArrowLeft, Mic, MicOff, Star, CheckCircle2, XCircle, RefreshCw, Trophy, Eye, Keyboard } from 'lucide-react';
 import { getRandomRound } from '../data/speakingWords';
 

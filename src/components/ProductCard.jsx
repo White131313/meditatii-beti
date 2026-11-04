@@ -1,9 +1,10 @@
 import React from 'react';
 import { Download, Lock, Star, Clock, BookOpen, ChevronRight } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocalizedNavigate } from '../lib/i18n';
+import { categoryPath, localizePath } from '../lib/seoRoutes';
 
 const ProductCard = ({ material, lang = 'RO', isSubscribed = false, user }) => {
-    const navigate = useNavigate();
+    const navigate = useLocalizedNavigate();
 
     const t = {
         RO: {
@@ -33,13 +34,13 @@ const ProductCard = ({ material, lang = 'RO', isSubscribed = false, user }) => {
             if (pricingSection) {
                 pricingSection.scrollIntoView({ behavior: 'smooth' });
             } else {
-                window.location.href = '/#pricing-plan';
+                window.location.href = localizePath('/#pricing-plan', lang);
             }
             return;
         }
 
         // Otherwise, navigate to the dedicated course page
-        navigate(`/course/${material.category}`);
+        navigate(categoryPath(material.category));
     };
 
     return (

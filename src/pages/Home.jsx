@@ -1,5 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+import { Link } from '../components/LocalizedLink';
+import { categoryPath } from '../lib/seoRoutes';
 import { ChevronRight, Search, X } from 'lucide-react';
 import Hero from '../components/Hero';
 import FilterBar from '../components/FilterBar';
@@ -132,7 +134,7 @@ const Home = ({
                     {filteredMaterials.length > 4 && (
                         <div className="mt-16 text-center">
                             <Link
-                                to={`/course/${activeCategory}`}
+                                to={categoryPath(activeCategory)}
                                 className="inline-flex items-center gap-3 px-10 py-5 bg-white border-2 border-gray-100 text-gray-900 rounded-[2rem] font-black text-sm hover:bg-gray-50 hover:border-brand-200 transition-all shadow-xl shadow-gray-100 group"
                             >
                                 <span>{currentT.viewAll}</span>
@@ -161,7 +163,7 @@ const Home = ({
                                 </button>
                             ) : (
                                 <button
-                                    onClick={() => setActiveCategory('adults_communication')}
+                                    onClick={() => setActiveCategory('gymnasium_curriculum')}
                                     className="px-8 py-3 bg-gray-900 text-white rounded-2xl font-black text-sm hover:bg-brand-600 transition-all shadow-xl shadow-gray-200"
                                 >
                                     {currentT.seeAvailable}
